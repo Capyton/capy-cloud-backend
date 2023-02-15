@@ -2,7 +2,47 @@ version: "3.9"
 
 services:
   api:
-    container_name: capy-cloud-backend.api
     image: capy-cloud-backend.api:latest
+    container_name: capy-cloud-backend.api
+    restart: "on-failure"
     build:
       context: .
+    expose:
+      - "5000"
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - capy-cloud-backend.postgres.network
+
+  postgres:
+    container_name: capy-cloud-backend.postgres
+    image: "postgres:15-alpine"
+    hostname: capy-cloud-backend.postgres
+    restart: unless-stopped
+    expose:
+      - "5432"
+    ports:
+      - "127.0.0.1:15432:5432"
+    networks:
+      - capy-cloud-backend.postgres.network
+    environment:
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_USER: ${POSTGRES_USER:-$USER}
+      POSTGRES_DB: ${POSTGRES_DB:-${POSTGRES_USER:-$USER}}
+    volumes:
+      - capy-cloud-backend.postgres.data:/var/lib/postgresql/users:rw
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 60s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  capy-cloud-backend.postgres.data: {}
+
+networks:
+  capy-cloud-backend.postgres.network: {}
