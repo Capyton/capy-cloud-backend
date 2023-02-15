@@ -1,0 +1,27 @@
+{
+  "name": "capy-cloud-backend",
+  "version": "1.0.0",
+  "description": "Backend for Capy Cloud",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "yarn ts-node src/main.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Capyton/backend.git"
+  },
+  "author": "Capyton",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Capyton/backend/issues"
+  },
+  "homepage": "https://github.com/Capyton/backend#readme",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@types/node": "^18.13.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.2",
+    "typescript": "^4.9.5"
+  }
+}
