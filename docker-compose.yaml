@@ -1,0 +1,8 @@
+version: "3.9"
+
+services:
+  api:
+    container_name: capy-cloud-backend.api
+    image: capy-cloud-backend.api:latest
+    build:
+      context: .
