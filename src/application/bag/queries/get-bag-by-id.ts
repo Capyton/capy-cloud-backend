@@ -1,5 +1,5 @@
 import { Bag } from "@src/application/bag/dto/bag"
-import { BagRepoReader } from "@src/application/bag/interfaces/persistence"
+import { BagReader } from "@src/application/bag/interfaces/persistence"
 import { UUID } from "@src/domain/common/types"
 
 export class GetBagById {
@@ -10,7 +10,7 @@ export class GetBagById {
 
 export class GetBagByIdHandler {
     constructor(
-        readonly bagReader: BagRepoReader,
+        readonly bagReader: BagReader,
     ) { }
 
     async execute(command: GetBagById): Promise<Bag> {

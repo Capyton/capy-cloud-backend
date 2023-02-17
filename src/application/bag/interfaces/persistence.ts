@@ -10,6 +10,6 @@ export interface BagRepo {
   deleteBagById(id: UUID): Promise<void>
 }
 
-export interface BagRepoReader {
+export interface BagReader {
   getBagById(id: UUID): Promise<Bag>
 }
