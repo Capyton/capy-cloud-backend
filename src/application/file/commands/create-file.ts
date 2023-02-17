@@ -2,7 +2,7 @@ import { FileRepo } from "@src/application/file/interfaces/persistence"
 import { UUID } from "@src/domain/common/types"
 import { File } from "@src/domain/file/entities"
 
-export class CreateBag {
+export class CreateFile {
   constructor(
     readonly id: UUID,
     readonly filename: string,
@@ -12,12 +12,12 @@ export class CreateBag {
   ) { }
 }
 
-export class CreateBagHandler {
+export class CreateFileHandler {
   constructor(
     readonly fileRepo: FileRepo,
   ) { }
 
-  async execute(command: CreateBag): Promise<void> {
+  async execute(command: CreateFile): Promise<void> {
     const file = File.create(
       command.id, command.filename, command.description,
       command.size, command.is_cached,
