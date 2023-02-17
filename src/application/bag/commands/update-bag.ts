@@ -5,7 +5,6 @@ import { UUID } from "@src/domain/common/types"
 export class UpdateBagData {
   constructor(
     readonly is_uploaded: boolean | undefined = undefined,
-    readonly is_cached: boolean | undefined = undefined,
   ) { }
 }
 
@@ -29,7 +28,6 @@ export class UpdateBagHandler {
       bag.description,
       bag.size,
       (command.bag_data.is_uploaded != null) ? command.bag_data.is_uploaded : bag.is_uploaded,
-      (command.bag_data.is_cached != null) ? command.bag_data.is_cached : bag.is_cached,
     )
 
     await this.bagRepo.updateBad(updated_bag)
