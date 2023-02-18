@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/Capyton/backend#readme",
   "dependencies": {
+    "uuid": "^9.0.0",
+    "uuidv7": "^0.4.1"
   },
   "devDependencies": {
     "@types/node": "^18.13.0",
