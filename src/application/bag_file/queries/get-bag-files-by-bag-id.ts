@@ -1,10 +1,10 @@
 import { BagFile } from "@src/application/bag_file/dto/bag-file"
 import { BagFileReader } from "@src/application/bag_file/interfaces/persistence"
-import { BagId } from "@src/domain/bag/types"
+import { UUID } from "@src/domain/common/types"
 
 export class GetBagFilesByBagId {
     constructor(
-        readonly id: BagId,
+        readonly id: UUID,
     ) { }
 }
 
