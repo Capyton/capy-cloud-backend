@@ -9,7 +9,7 @@ export class CreateBag {
     readonly bagId: BagId,
     readonly description: string | null,
     readonly size: number,
-    readonly is_uploaded: boolean,
+    readonly isUploaded: boolean,
   ) { }
 }
 
@@ -21,7 +21,7 @@ export class CreateBagHandler {
   async execute(command: CreateBag): Promise<void> {
     const bag = Bag.create(
       command.id, command.bagId, command.description,
-      command.size, command.is_uploaded,
+      command.size, command.isUploaded,
     )
     await this.bagRepo.addBag(bag)
   }

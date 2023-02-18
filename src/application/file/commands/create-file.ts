@@ -8,7 +8,7 @@ export class CreateFile {
     readonly filename: string,
     readonly description: string | null,
     readonly size: number,
-    readonly is_cached: boolean,
+    readonly isCached: boolean,
   ) { }
 }
 
@@ -20,7 +20,7 @@ export class CreateFileHandler {
   async execute(command: CreateFile): Promise<void> {
     const file = File.create(
       command.id, command.filename, command.description,
-      command.size, command.is_cached,
+      command.size, command.isCached,
     )
     await this.fileRepo.addFile(file)
   }

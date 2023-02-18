@@ -5,7 +5,7 @@ import { StoragePath } from "@src/domain/storage_path/entities"
 export class CreateStoragePath {
   constructor(
     readonly id: UUID,
-    readonly file_id: UUID,
+    readonly fileId: UUID,
     readonly path: string,
   ) { }
 }
@@ -16,7 +16,7 @@ export class CreateStoragePathHandler {
   ) { }
 
   async execute(command: CreateStoragePath): Promise<void> {
-    const storagePath = StoragePath.create(command.id, command.file_id, command.path)
+    const storagePath = StoragePath.create(command.id, command.fileId, command.path)
     await this.storagePathRepo.addStoragePath(storagePath)
   }
 }

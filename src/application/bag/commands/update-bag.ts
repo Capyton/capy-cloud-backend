@@ -4,14 +4,14 @@ import { UUID } from "@src/domain/common/types"
 
 export class UpdateBagData {
   constructor(
-    readonly is_uploaded: boolean | undefined = undefined,
+    readonly isUploaded: boolean | undefined = undefined,
   ) { }
 }
 
 export class UpdateBag {
   constructor(
     readonly id: UUID,
-    readonly bag_data: UpdateBagData,
+    readonly bagData: UpdateBagData,
   ) { }
 }
 
@@ -27,7 +27,7 @@ export class UpdateBagHandler {
       bag.bagId,
       bag.description,
       bag.size,
-      (command.bag_data.is_uploaded != null) ? command.bag_data.is_uploaded : bag.is_uploaded,
+      (command.bagData.isUploaded != null) ? command.bagData.isUploaded : bag.isUploaded,
     )
 
     await this.bagRepo.updateBad(updated_bag)

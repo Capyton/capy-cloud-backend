@@ -5,14 +5,14 @@ import { File } from "@src/domain/file/entities"
 export class UpdateFileData {
   constructor(
     readonly description: string | undefined = undefined,
-    readonly is_cached: boolean | undefined = undefined,
+    readonly isCached: boolean | undefined = undefined,
   ) { }
 }
 
 export class UpdateFile {
   constructor(
     readonly id: UUID,
-    readonly file_data: UpdateFileData,
+    readonly fileData: UpdateFileData,
   ) { }
 }
 
@@ -26,9 +26,9 @@ export class UpdateFileHandler {
     const updated_file = File.create(
       file.id,
       file.filename,
-      (command.file_data.description != null) ? command.file_data.description : file.description,
+      (command.fileData.description != null) ? command.fileData.description : file.description,
       file.size,
-      (command.file_data.is_cached != null) ? command.file_data.is_cached : file.is_cached,
+      (command.fileData.isCached != null) ? command.fileData.isCached : file.isCached,
     )
 
     await this.fileRepo.updateFile(updated_file)

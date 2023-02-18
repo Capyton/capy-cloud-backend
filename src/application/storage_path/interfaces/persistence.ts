@@ -4,7 +4,7 @@ import { StoragePath } from "@src/domain/storage_path/entities"
 
 
 export interface StoragePathRepo {
-  addStoragePath(StoragePath: StoragePath): Promise<void>
+  addStoragePath(storagePath: StoragePath): Promise<void>
   deleteStoragePathById(id: UUID): Promise<void>
 }
 

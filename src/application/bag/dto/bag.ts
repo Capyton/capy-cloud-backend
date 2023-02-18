@@ -7,7 +7,7 @@ export class Bag {
         readonly bagId: BagId,
         readonly description: string | null,
         readonly size: number,
-        readonly is_uploaded: boolean,
+        readonly isUploaded: boolean,
         readonly createdAt: Date,
     ) { }
 
@@ -16,9 +16,9 @@ export class Bag {
         bagId: BagId,
         description: string | null,
         size: number,
-        is_uploaded: boolean,
+        isUploaded: boolean,
         createdAt: Date,
     ): Bag {
-        return new Bag(id, bagId, description, size, is_uploaded, createdAt)
+        return new Bag(id, bagId, description, size, isUploaded, createdAt)
     }
 }

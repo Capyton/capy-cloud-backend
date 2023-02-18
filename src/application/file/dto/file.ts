@@ -7,7 +7,7 @@ export class File {
         readonly filename: string,
         readonly description: string | null,
         readonly size: number,
-        readonly is_cached: boolean,
+        readonly isCached: boolean,
         readonly createdAt: Date,
     ) { }
 
@@ -16,9 +16,9 @@ export class File {
         filename: string,
         description: string | null,
         size: number,
-        is_cached: boolean,
+        isCached: boolean,
         createdAt: Date,
     ): File {
-        return new File(id, filename, description, size, is_cached, createdAt)
+        return new File(id, filename, description, size, isCached, createdAt)
     }
 }
