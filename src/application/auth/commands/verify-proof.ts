@@ -1,6 +1,7 @@
 import * as dto from "@src/application/auth/dto"
 import { AuthManager, JwtManager, UserRepo } from "@src/application/auth/interfaces"
 import { UnitOfWork } from "@src/application/common/interfaces"
+import { UserAddressNotFound } from "@src/application/user/exceptions"
 import { User } from "@src/domain/user/entities"
 import { TonAddress, TonNetwork } from "@src/domain/user/types"
 import { uuidv7 } from "uuidv7"
@@ -49,9 +50,17 @@ export class VerifyProofHandler {
       // workchain, walletAddress,
     )
 
-    const user = User.create(uuidv7(), command.address)
-    await this.userRepo.addUser(user)
-    await this.uow.commit()
+    let user: User
+    try {
+      user = await this.userRepo.getUserByAddress(command.address)
+    } catch (error: any) {
+      if (!(error instanceof UserAddressNotFound)) {
+        throw error
+      }
+      user = User.create(uuidv7(), command.address)
+      await this.userRepo.addUser(user)
+      await this.uow.commit()
+    }
 
     const token = this.jwtManager.generateToken(user)
     return new dto.AuthToken(token)
