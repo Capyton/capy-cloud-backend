@@ -1,18 +1,18 @@
 import { FileRepo } from "@src/application/file/interfaces/persistence"
 import { UUID } from "@src/domain/common/types"
 
-export class DeleteFile {
+export class DeleteFileById {
     constructor(
         readonly id: UUID,
     ) { }
 }
 
-export class DeleteFileHandler {
+export class DeleteFileByIdHandler {
     constructor(
         readonly fileRepo: FileRepo,
     ) { }
 
-    async execute(command: DeleteFile): Promise<void> {
+    async execute(command: DeleteFileById): Promise<void> {
         await this.fileRepo.deleteFileById(command.id)
     }
 }
