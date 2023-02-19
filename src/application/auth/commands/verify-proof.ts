@@ -47,6 +47,7 @@ export class VerifyProofHandler {
       command.address,
       command.network,
       command.proof.nonce,
+      command.proof.signature,
       // workchain, walletAddress,
     )
 
