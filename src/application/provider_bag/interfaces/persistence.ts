@@ -4,8 +4,6 @@ import { ProviderBag } from "@src/domain/provider_bag/entities"
 
 
 export interface ProviderBagRepo {
-  acquireProviderBagById(id: UUID): Promise<ProviderBag>
-
   addProviderBag(providerBag: ProviderBag): Promise<void>
   deleteProviderBagById(id: UUID): Promise<void>
   deleteProviderBagsByProviderId(providerId: UUID): Promise<void>

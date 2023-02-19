@@ -4,8 +4,6 @@ import { UserBag } from "@src/domain/user_bag/entities"
 
 
 export interface UserBagRepo {
-  acquireUserBagById(id: UUID): Promise<UserBag>
-
   addUserBag(userBag: UserBag): Promise<void>
   deleteUserBagById(id: UUID): Promise<void>
   deleteUserBagsByUserId(userId: UUID): Promise<void>

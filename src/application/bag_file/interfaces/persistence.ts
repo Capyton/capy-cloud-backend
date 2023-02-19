@@ -4,8 +4,6 @@ import { UUID } from "@src/domain/common/types"
 
 
 export interface BagFileRepo {
-  acquireBagFileById(id: UUID): Promise<BagFile>
-
   addBagFile(BagFile: BagFile): Promise<void>
   deleteBagFileById(id: UUID): Promise<void>
   deleteBagFilesByBagId(bagId: UUID): Promise<void>
