@@ -6,6 +6,7 @@ export class File {
         readonly id: UUID,
         readonly filename: string,
         readonly description: string | null,
+        readonly pathDir: string,
         readonly size: number,
         readonly isCached: boolean,
         readonly createdAt: Date,
@@ -15,9 +16,10 @@ export class File {
         id: UUID,
         filename: string,
         description: string | null,
+        pathDir: string,
         size: number,
         isCached: boolean,
     ): File {
-        return new File(id, filename, description, size, isCached, new Date())
+        return new File(id, filename, description, pathDir, size, isCached, new Date())
     }
 }
