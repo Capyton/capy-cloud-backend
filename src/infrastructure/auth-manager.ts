@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken"
 import { AuthManager } from "@src/application/auth/interfaces"
 import { TonNetwork } from "@src/domain/user/types"
 import * as crypto from "crypto"
+import { InvalidNonce, InvalidProofSignature, NonceIsExpired, UnknownNonceError } from "@src/application/auth/exceptions"
 
 export class AuthManagerImpl implements AuthManager {
   constructor(
@@ -24,16 +25,16 @@ export class AuthManagerImpl implements AuthManager {
         if (err) {
           // Handle verification errors
           if (err instanceof jwt.TokenExpiredError) {
-            throw NonceIsExpired()
+            throw new NonceIsExpired(err)
           } else if (err instanceof jwt.JsonWebTokenError) {
-            throw NonceIsNotVerified()
+            throw new InvalidNonce(err)
           } else {
-            throw WrongNonce()
+            throw new UnknownNonceError(err)
           }
         } else {
-          // Token is valid
-          console.log("Token is valid")
-          console.log(decoded)  // This is the decoded payload of the token
+          // Nonce is valid
+          console.log("Nonce is valid")
+          console.log(decoded)  // This is the decoded payload of the nonce
         }
       },
     )
