@@ -1,5 +1,6 @@
 import { Bag as BagDTO } from "@src/application/bag/dto/bag"
 import { Bag } from "@src/domain/bag/entities"
+import { BagId } from "@src/domain/bag/types"
 import { UUID } from "@src/domain/common/types"
 
 
@@ -13,4 +14,5 @@ export interface BagRepo {
 
 export interface BagReader {
   getBagById(id: UUID): Promise<BagDTO>
+  getBagByBagId(bagId: BagId): Promise<BagDTO>
 }
