@@ -12,9 +12,7 @@ export class GenereatePayloadHandler {
   ) {}
 
   async execute(command: GenereatePayload): Promise<AuthPayload> {
-    const seed = this.authManager.generateSeed()
-    const expirationTime = this.authManager.getExpirationTime()
-    const nonce = this.authManager.signSeed(seed, expirationTime)
+    const nonce = this.authManager.generateNonce()
     return new AuthPayload(nonce)
   }
 }
