@@ -13,4 +13,3 @@ export class Bag {
   @Column()
   fileId: string;
 }
-git remote set-url origin https://OdysseusReturn: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@github.com/OdysseusReturn/Capyton/capy-cloud-backend.git

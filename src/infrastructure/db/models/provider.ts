@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
-import { Bag } from "./Bag";
+import { Bag } from "./bag";
 
 // @Entity({ name: "providers" })
 @Entity()

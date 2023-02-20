@@ -5,7 +5,7 @@ import {
   ManyToMany,
   JoinTable,
 } from "typeorm";
-import { Bag } from "./Bag";
+import { Bag } from "./bag";
 
 // @Entity({ name: "users" })
 @Entity()
