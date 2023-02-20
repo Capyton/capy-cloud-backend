@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Capyton/backend#readme",
   "dependencies": {
     "jsonwebtoken": "^9.0.0",
+    "typeorm": "^0.3.12",
     "uuidv7": "^0.4.1"
   },
   "devDependencies": {
