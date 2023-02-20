@@ -5,7 +5,6 @@ import { File } from "@src/domain/file/entities"
 export class UpdateFileData {
   constructor(
     readonly description: string | undefined = undefined,
-    readonly isCached: boolean | undefined = undefined,
   ) { }
 }
 
@@ -25,10 +24,11 @@ export class UpdateFileHandler {
     const file = await this.fileRepo.acquireFileById(command.id)
     const updated_file = File.create(
       file.id,
+      file.bag_id,
       file.filename,
       (command.fileData.description != null) ? command.fileData.description : file.description,
+      file.pathDir,
       file.size,
-      (command.fileData.isCached != null) ? command.fileData.isCached : file.isCached,
     )
 
     await this.fileRepo.updateFile(updated_file)
