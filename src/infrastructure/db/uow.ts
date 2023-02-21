@@ -8,6 +8,7 @@ export class TypeORMUnitOfWork implements UnitOfWork {
 
     async commit(): Promise<void> {
         await this.queryRunner.commitTransaction()
+        await this.queryRunner.startTransaction()
     }
 
     async rollback(): Promise<void> {
