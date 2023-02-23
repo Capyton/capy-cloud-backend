@@ -1,25 +1,26 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
+import { UUID } from "@src/domain/common/types";
+import { ProviderAddress } from "@src/domain/provider/types";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
 import { Bag } from "./bag";
 
-// @Entity({ name: "providers" })
-@Entity()
+@Entity({ name: "providers" })
 export class Provider {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  id: UUID
 
   @Column()
-  address: number;
+  address: ProviderAddress
 
   @Column()
-  maxContracts: number;
+  maxContracts: number | null
 
   @Column()
-  maxTotalSize: number;
+  maxTotalSize: number | null
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-  createdAt: Date;
+  createdAt: Date
 
-  @ManyToMany(() => Bag)
+  @ManyToMany(() => Bag, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   @JoinTable({ name: "providers_bags" })
-  bagId: Bag[];
+  providerBags: Bag[]
 }

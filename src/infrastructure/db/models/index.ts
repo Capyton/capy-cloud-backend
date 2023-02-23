@@ -1,4 +1,6 @@
 export { Bag } from "./bag"
-export { User } from "./user"
-export { Provider } from "./provider"
 export { File } from "./file"
+export { Provider } from "./provider"
+export { ProviderBag } from "./provider-bag"
+export { User } from "./user"
+export { UserBag } from "./user-bag"

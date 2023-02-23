@@ -1,23 +1,31 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { UUID } from "@src/domain/common/types";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
+import { Bag } from "./bag";
 
-// @Entity({ name: "files" })
-@Entity()
+@Entity({ name: "files" })
 export class File {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  id: UUID
 
-  @Column()
-  filename: string;
+  @OneToOne(() => Bag)
+  @JoinColumn({ name: "bag_id" })
+  bag: Bag
 
-  @Column()
-  description: string;
+  @Column("bag_id")
+  bagId: UUID
 
-  @Column()
-  size: number;
+  @Column("filename")
+  filename: string
 
-  @Column()
-  isCached: boolean;
+  @Column("description")
+  description: string | null
+
+  @Column("path_dir")
+  pathDir: string
+
+  @Column("size")
+  size: number
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-  registeredAt: Date;
+  createdAt: Date
 }

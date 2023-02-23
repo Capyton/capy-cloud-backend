@@ -1,25 +1,20 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToMany,
-  JoinTable,
-} from "typeorm";
+import { UUID } from "@src/domain/common/types";
+import { TonAddress } from "@src/domain/user/types";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
 import { Bag } from "./bag";
 
-// @Entity({ name: "users" })
-@Entity()
+@Entity({ name: "users" })
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  id: UUID
 
   @Column()
-  walletAddress: string;
+  walletAddress: TonAddress
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-  registeredAt: Date;
+  registeredAt: Date
 
-  @ManyToMany(() => Bag)
+  @ManyToMany(() => Bag, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   @JoinTable({ name: "users_bags" })
-  bagId: Bag[];
+  userBags: Bag[]
 }

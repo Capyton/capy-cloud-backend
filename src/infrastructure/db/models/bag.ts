@@ -1,15 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { BagId } from "@src/domain/bag/types";
+import { UUID } from "@src/domain/common/types";
+import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import { File } from "./file";
 
-// @Entity({ name: "bags" })
-@Entity()
+@Entity({ name: "bags" })
 export class Bag {
-  //
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  id: UUID
 
   @Column()
-  bagId: string;
+  bagId: BagId
 
-  @Column()
-  fileId: string;
+  @OneToMany(() => File, file => file.bag, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+  bagFiles: File[]
 }
