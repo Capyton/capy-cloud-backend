@@ -4,7 +4,7 @@ import { UUID } from "@src/domain/common/types"
 export class File {
     constructor(
         readonly id: UUID,
-        readonly bag_id: UUID,
+        readonly bagId: UUID,
         readonly filename: string,
         readonly description: string | null,
         readonly pathDir: string,
@@ -14,12 +14,12 @@ export class File {
 
     static create(
         id: UUID,
-        bag_id: UUID,
+        bagId: UUID,
         filename: string,
         description: string | null,
         pathDir: string,
         size: number,
     ): File {
-        return new File(id, bag_id, filename, description, pathDir, size, new Date())
+        return new File(id, bagId, filename, description, pathDir, size, new Date())
     }
 }
