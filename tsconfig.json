@@ -12,6 +12,7 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "resolveJsonModule": true,
+    "strictPropertyInitialization": false,
     "allowJs": true,
     "paths": {
       "@src/*": ["src/*"]
