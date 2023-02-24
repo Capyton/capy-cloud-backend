@@ -9,7 +9,7 @@ export class User {
   id: UUID
 
   @Column()
-  walletAddress: TonAddress
+  address: TonAddress
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   registeredAt: Date

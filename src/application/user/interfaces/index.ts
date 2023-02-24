@@ -1,1 +1,1 @@
-export { UserRepo } from "./persistence"
+export { UserReader, UserRepo } from "./persistence";

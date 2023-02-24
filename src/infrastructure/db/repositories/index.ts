@@ -1,5 +1,6 @@
+export { UserRepoImpl as AuthUserRepoImpl } from "./auth-user"
 export { FileReaderImpl, FileRepoImpl } from "./file"
 export { ProviderReaderImpl, ProviderRepoImpl } from "./provider"
 export { ProviderBagReaderImpl, ProviderBagRepoImpl } from "./provider-bag"
-export { UserRepo } from "./user"; // refactor this
+export { UserReaderImpl, UserRepoImpl } from "./user"
 export { UserBagReaderImpl, UserBagRepoImpl } from "./user-bag"
