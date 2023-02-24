@@ -1,25 +1,25 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common"
-import { UserReaderImpl, UserRepoImpl } from "@src/infrastructure/db/repositories"
+import { UserBagReaderImpl, UserBagRepoImpl } from "@src/infrastructure/db/repositories"
 import { QueryRunner } from "typeorm"
 
-export const UserRepo = createParamDecorator(
+export const UserBagRepo = createParamDecorator(
     (_data: unknown, ctx: ExecutionContext) => {
         const request = ctx.switchToHttp().getRequest()
         // Get the `QueryRunner` from the request, which was set in a database middleware
         const queryRunner: QueryRunner = request.queryRunner
-        const user = new UserRepoImpl(queryRunner)
+        const userBag = new UserBagRepoImpl(queryRunner)
 
-        return user
+        return userBag
     }
 )
 
-export const UserReader = createParamDecorator(
+export const UserBagReader = createParamDecorator(
     (_data: unknown, ctx: ExecutionContext) => {
         const request = ctx.switchToHttp().getRequest()
         // Get the `QueryRunner` from the request, which was set in a database middleware
         const queryRunner: QueryRunner = request.queryRunner
-        const user = new UserReaderImpl(queryRunner)
+        const userBag = new UserBagReaderImpl(queryRunner)
 
-        return user
+        return userBag
     }
 )
