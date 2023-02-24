@@ -1,4 +1,4 @@
-import { APIConfig, Config } from "@src/api/config"
+import { APIConfig, AuthAndTokensConfig, Config } from "@src/api/config"
 import { Config as DatabaseConfig } from "@src/infrastructure/db/config"
 
 export function loadConfigFromEnv(): Config {
@@ -15,5 +15,11 @@ export function loadConfigFromEnv(): Config {
         process.env.API_PORT ? parseInt(process.env.API_PORT) : undefined,
     )
 
-    return new Config(databaseConfig, apiConfig)
+    const authAndTokensConfig = new AuthAndTokensConfig(
+        process.env.AUTH_PRIVATE_KEY,
+        process.env.AUTH_EXPIRATION_TIME ? parseInt(process.env.AUTH_EXPIRATION_TIME) : undefined,
+        process.env.TOKEN_EXPIRATION_TIME ? parseInt(process.env.TOKEN_EXPIRATION_TIME) : undefined,
+    )
+
+    return new Config(databaseConfig, apiConfig, authAndTokensConfig)
 }

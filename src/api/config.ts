@@ -1,4 +1,4 @@
-import { Config as DatabaseConfig } from "@src/infrastructure/db/config"
+import { Config as DatabaseConfig } from "@src/infrastructure/db/config";
 
 export class APIConfig {
     constructor(
@@ -7,9 +7,18 @@ export class APIConfig {
     ) { }
 }
 
+export class AuthAndTokensConfig {
+    constructor(
+        public readonly privateKey: string = "",
+        public readonly nonceExpirationTime: number = 10 * 60 * 1000, // 10 minutes in milliseconds
+        public readonly accessTokenExpirationTime: number = 3600, // 1 hour in seconds
+    ) { }
+}
+
 export class Config {
     constructor(
         public readonly database: DatabaseConfig,
         public readonly api: APIConfig,
+        public readonly authAndTokens: AuthAndTokensConfig,
     ) { }
 }
