@@ -4,8 +4,6 @@ import { File } from "@src/domain/file/entities"
 
 
 export interface FileRepo {
-  acquireFileById(id: UUID): Promise<File>
-
   addFile(file: File): Promise<void>
   updateFile(file: File): Promise<void>
   deleteFileById(id: UUID): Promise<void>

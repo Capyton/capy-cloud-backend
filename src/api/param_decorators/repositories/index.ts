@@ -1,4 +1,5 @@
 export { AuthUserRepo } from "./auth-user"
+export { BagReader, BagRepo } from "./bag"
 export { FileReader, FileRepo } from "./file"
 export { ProviderReader, ProviderRepo } from "./provider"
 export { ProviderBagReader, ProviderBagRepo } from "./provider-bag"

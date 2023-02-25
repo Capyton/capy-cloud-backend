@@ -8,10 +8,10 @@ export class User {
   @PrimaryColumn()
   id: UUID
 
-  @Column()
+  @Column({ name: "address", unique: true, nullable: false })
   address: TonAddress
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ name: "registered_at", nullable: false, type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   registeredAt: Date
 
   @ManyToMany(() => Bag, { onDelete: "CASCADE", onUpdate: "CASCADE" })

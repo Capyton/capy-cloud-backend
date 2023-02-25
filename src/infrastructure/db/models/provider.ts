@@ -8,16 +8,16 @@ export class Provider {
   @PrimaryColumn()
   id: UUID
 
-  @Column()
+  @Column({ name: "address", unique: true, nullable: false })
   address: ProviderAddress
 
-  @Column()
+  @Column({ name: "max_contracts", nullable: true })
   maxContracts: number | null
 
-  @Column()
+  @Column({ name: "max_total_size", nullable: true })
   maxTotalSize: number | null
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ name: "created_at", nullable: false, type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date
 
   @ManyToMany(() => Bag, { onDelete: "CASCADE", onUpdate: "CASCADE" })

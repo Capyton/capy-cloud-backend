@@ -14,18 +14,18 @@ export class File {
   @Column("bag_id")
   bagId: UUID
 
-  @Column("filename")
+  @Column({ name: "filename", nullable: false })
   filename: string
 
-  @Column("description")
+  @Column({ name: "description", nullable: true })
   description: string | null
 
-  @Column("path_dir")
+  @Column({ name: "path_dir", nullable: false, default: "/" })
   pathDir: string
 
   @Column("size")
   size: number
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ name: "created_at", nullable: false, type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date
 }
