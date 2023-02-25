@@ -8,7 +8,7 @@ export class AuthManagerImpl implements AuthManager {
   constructor(
     private readonly privateKey: string,
     private readonly nonceExpirationTime: number = 10 * 60 * 1000,  // 10 minutes in milliseconds
-  ) {}
+  ) { }
 
   generateNonce(): string {
     // payload of this nonce after sign will contain { iat: Date.now(), exp: iap + this.nonceExpirationTime }
@@ -20,7 +20,7 @@ export class AuthManagerImpl implements AuthManager {
   validateNonce(nonce: string): void {
     jwt.verify(
       nonce, this.privateKey,
-      { algorithm: "HS256" },
+      { algorithms: ["HS256"], complete: true },
       (err: jwt.VerifyErrors | null, decoded: object | undefined) => {
         if (err) {
           // Handle verification errors
