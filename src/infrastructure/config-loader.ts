@@ -1,4 +1,4 @@
-import { APIConfig, AuthAndTokensConfig, Config } from "@src/api/config"
+import { APIConfig, AuthAndTokensConfig, Config, FilesConfig } from "@src/api/config"
 import { Config as DatabaseConfig } from "@src/infrastructure/db/config"
 
 export function loadConfigFromEnv(): Config {
@@ -21,5 +21,11 @@ export function loadConfigFromEnv(): Config {
         process.env.TOKEN_EXPIRATION_TIME ? parseInt(process.env.TOKEN_EXPIRATION_TIME) : undefined,
     )
 
-    return new Config(databaseConfig, apiConfig, authAndTokensConfig)
+    const filesConfig = new FilesConfig(
+        process.env.UPLOAD_DIR,
+        process.env.MAX_FILE_SIZE ? parseInt(process.env.MAX_FILE_SIZE) : undefined,
+        process.env.MAX_FILES_COUNT ? parseInt(process.env.MAX_FILES_COUNT) : undefined,
+    )
+
+    return new Config(databaseConfig, apiConfig, authAndTokensConfig, filesConfig)
 }
