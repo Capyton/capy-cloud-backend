@@ -16,5 +16,5 @@ RUN yarn install
 # Copy project dir
 COPY ./ ./
 
-# Launc app
+# Launch app
 CMD ["yarn", "start"]

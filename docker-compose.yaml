@@ -5,6 +5,8 @@ services:
     image: capy-cloud-backend.api:latest
     container_name: capy-cloud-backend.api
     restart: "on-failure"
+    env_file:
+      - ".env"
     build:
       context: .
     expose:
