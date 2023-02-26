@@ -5,13 +5,13 @@ import { File } from "./file";
 
 @Entity({ name: "bags" })
 export class Bag {
-  @PrimaryColumn()
+  @PrimaryColumn({ name: "id" })
   id: UUID
 
   @Column({ name: "bag_id", unique: true, nullable: false })
   bagId: BagId
 
-  @Column({ name: "description", nullable: true })
+  @Column({ type: String, name: "description", nullable: true })
   description: string | null
 
   @Column({ name: "size", nullable: false })

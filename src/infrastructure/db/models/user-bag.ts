@@ -12,13 +12,13 @@ export class UserBag {
     @JoinColumn({ name: "user_id" })
     user: User
 
-    @Column("user_id")
+    @Column({ name: "user_id" })
     userId: UUID
 
     @OneToOne(() => Bag)
     @JoinColumn({ name: "bag_id" })
     bag: Bag
 
-    @Column("bag_id")
+    @Column({ name: "bag_id" })
     bagId: UUID
 }

@@ -1,11 +1,11 @@
-import { UUID } from "@src/utils/uuid";
 import { TonAddress } from "@src/domain/user/types";
+import { UUID } from "@src/utils/uuid";
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
 import { Bag } from "./bag";
 
 @Entity({ name: "users" })
 export class User {
-  @PrimaryColumn()
+  @PrimaryColumn({ name: "id" })
   id: UUID
 
   @Column({ name: "address", unique: true, nullable: false })
