@@ -1,6 +1,6 @@
 import { BagRepo } from "@src/application/bag/interfaces/persistence"
 import { Bag } from "@src/domain/bag/entities"
-import { UUID } from "@src/domain/common/types"
+import { UUID } from "@src/utils/uuid"
 
 export class UpdateBagData {
   constructor(

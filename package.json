@@ -17,14 +17,15 @@
   },
   "homepage": "https://github.com/Capyton/backend#readme",
   "dependencies": {
+    "@kripod/uuidv7": "^0.3.4",
     "@nestjs/common": "^9.3.9",
     "@nestjs/core": "^9.3.9",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
+    "pg": "^8.9.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
-    "typeorm": "^0.3.12",
-    "uuidv7": "^0.4.1"
+    "typeorm": "^0.3.12"
   },
   "devDependencies": {
     "@types/express": "^4.17.17",

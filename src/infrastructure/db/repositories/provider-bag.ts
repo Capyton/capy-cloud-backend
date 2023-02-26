@@ -1,7 +1,7 @@
 import { ProviderBag as ProviderBagDTO } from "@src/application/provider_bag/dto"
 import { ProviderBagIdNotFound } from "@src/application/provider_bag/exceptions"
 import { ProviderBagReader, ProviderBagRepo } from "@src/application/provider_bag/interfaces"
-import { UUID } from "@src/domain/common/types"
+import { UUID } from "@src/utils/uuid"
 import { ProviderBag } from "@src/domain/provider_bag/entities"
 import { ProviderBag as ProviderBagModel } from "@src/infrastructure/db/models"
 import { QueryRunner } from "typeorm"

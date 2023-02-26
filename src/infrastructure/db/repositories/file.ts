@@ -1,7 +1,7 @@
 import { File as FileDTO } from "@src/application/file/dto"
 import { FileIdNotFound } from "@src/application/file/exceptions"
 import { FileReader, FileRepo } from "@src/application/file/interfaces"
-import { UUID } from "@src/domain/common/types"
+import { UUID } from "@src/utils/uuid"
 import { File } from "@src/domain/file/entities"
 import { File as FileModel } from "@src/infrastructure/db/models"
 import { QueryRunner } from "typeorm"

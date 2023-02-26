@@ -1,5 +1,5 @@
 import { File as FileDTO } from "@src/application/file/dto/file"
-import { UUID } from "@src/domain/common/types"
+import { UUID } from "@src/utils/uuid"
 import { File } from "@src/domain/file/entities"
 
 

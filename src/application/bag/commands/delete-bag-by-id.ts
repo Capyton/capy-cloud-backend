@@ -1,5 +1,5 @@
 import { BagRepo } from "@src/application/bag/interfaces/persistence"
-import { UUID } from "@src/domain/common/types"
+import { UUID } from "@src/utils/uuid"
 
 export class DeleteBagById {
     constructor(

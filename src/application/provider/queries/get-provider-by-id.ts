@@ -1,6 +1,6 @@
 import { Provider } from "@src/application/provider/dto/provider"
 import { ProviderReader } from "@src/application/provider/interfaces/persistence"
-import { UUID } from "@src/domain/common/types"
+import { UUID } from "@src/utils/uuid"
 
 export class GetProviderById {
     constructor(

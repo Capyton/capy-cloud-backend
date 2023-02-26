@@ -1,5 +1,5 @@
 import { FileRepo } from "@src/application/file/interfaces/persistence"
-import { UUID } from "@src/domain/common/types"
+import { UUID } from "@src/utils/uuid"
 
 export class DeleteFileById {
     constructor(

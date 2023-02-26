@@ -1,6 +1,6 @@
 import { ProviderBag } from "@src/application/provider_bag/dto/provider-bag"
 import { ProviderBagReader } from "@src/application/provider_bag/interfaces/persistence"
-import { UUID } from "@src/domain/common/types"
+import { UUID } from "@src/utils/uuid"
 
 export class GetProviderBagById {
     constructor(

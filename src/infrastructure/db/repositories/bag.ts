@@ -3,7 +3,7 @@ import { BagBagIdNotFound, BagIdNotFound } from "@src/application/bag/exceptions
 import { BagReader, BagRepo } from "@src/application/bag/interfaces"
 import { Bag } from "@src/domain/bag/entities"
 import { BagId } from "@src/domain/bag/types"
-import { UUID } from "@src/domain/common/types"
+import { UUID } from "@src/utils/uuid"
 import { Bag as BagModel } from "@src/infrastructure/db/models"
 import { QueryRunner } from "typeorm"
 

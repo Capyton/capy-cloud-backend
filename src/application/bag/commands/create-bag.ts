@@ -1,7 +1,7 @@
 import { BagRepo } from "@src/application/bag/interfaces/persistence"
 import { Bag } from "@src/domain/bag/entities"
 import { BagId } from "@src/domain/bag/types"
-import { UUID } from "@src/domain/common/types"
+import { UUID } from "@src/utils/uuid"
 
 export class CreateBag {
   constructor(

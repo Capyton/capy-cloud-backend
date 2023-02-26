@@ -1,5 +1,5 @@
 import { ProviderBagRepo } from "@src/application/provider_bag/interfaces/persistence"
-import { UUID } from "@src/domain/common/types"
+import { UUID } from "@src/utils/uuid"
 
 export class DeleteProviderBagById {
     constructor(

@@ -1,4 +1,4 @@
-import { UUID } from "@src/domain/common/types";
+import { UUID } from "@src/utils/uuid";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
 import { Bag } from "./bag";
 import { User } from "./user";

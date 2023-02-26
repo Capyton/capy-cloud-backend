@@ -1,4 +1,4 @@
-import { UUID } from "@src/domain/common/types";
+import { UUID } from "@src/utils/uuid";
 import { ProviderAddress } from "@src/domain/provider/types";
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
 import { Bag } from "./bag";

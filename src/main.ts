@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core'
 import { ConfigMiddleware, DatabaseMiddleware } from "@src/api/middlewares"
 import { AppModule } from "@src/api/modules"
-import { loadConfigFromEnv } from "@src/infrastructure/config_loader"
+import { loadConfigFromEnv } from "@src/infrastructure/config-loader"
 import { Config as DatabaseConfig } from "@src/infrastructure/db/config"
 import { Bag, File, Provider, ProviderBag, User, UserBag } from "@src/infrastructure/db/models"
 import { DataSource } from "typeorm"

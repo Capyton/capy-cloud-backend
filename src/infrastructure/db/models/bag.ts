@@ -1,5 +1,5 @@
 import { BagId } from "@src/domain/bag/types";
-import { UUID } from "@src/domain/common/types";
+import { UUID } from "@src/utils/uuid";
 import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
 import { File } from "./file";
 

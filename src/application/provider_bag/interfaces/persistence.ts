@@ -1,5 +1,5 @@
 import { ProviderBag as ProviderBagDTO } from "@src/application/provider_bag/dto/provider-bag"
-import { UUID } from "@src/domain/common/types"
+import { UUID } from "@src/utils/uuid"
 import { ProviderBag } from "@src/domain/provider_bag/entities"
 
 

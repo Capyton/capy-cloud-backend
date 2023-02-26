@@ -1,5 +1,5 @@
 import { Provider as ProviderDTO } from "@src/application/provider/dto/provider"
-import { UUID } from "@src/domain/common/types"
+import { UUID } from "@src/utils/uuid"
 import { ProviderAddress } from "@src/domain/provider/types"
 
 

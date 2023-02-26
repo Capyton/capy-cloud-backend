@@ -4,7 +4,7 @@ import { UnitOfWork } from "@src/application/common/interfaces"
 import { UserAddressNotFound } from "@src/application/user/exceptions"
 import { User } from "@src/domain/user/entities"
 import { TonAddress, TonNetwork } from "@src/domain/user/types"
-import { uuidv7 } from "uuidv7"
+import { uuid7 } from "@src/utils/uuid"
 
 
 export class Proof {
@@ -58,7 +58,7 @@ export class VerifyProofHandler {
       if (!(error instanceof UserAddressNotFound)) {
         throw error
       }
-      user = User.create(uuidv7(), command.address)
+      user = User.create(uuid7(), command.address)
       await this.userRepo.addUser(user)
       await this.uow.commit()
     }

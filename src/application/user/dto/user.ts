@@ -1,4 +1,4 @@
-import { UUID } from "@src/domain/common/types"
+import { UUID } from "@src/utils/uuid"
 import { TonAddress } from "@src/domain/user/types"
 
 

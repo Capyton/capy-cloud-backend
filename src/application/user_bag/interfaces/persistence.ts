@@ -1,5 +1,5 @@
 import { UserBag as UserBagDTO } from "@src/application/user_bag/dto/user-bag"
-import { UUID } from "@src/domain/common/types"
+import { UUID } from "@src/utils/uuid"
 import { UserBag } from "@src/domain/user_bag/entities"
 
 

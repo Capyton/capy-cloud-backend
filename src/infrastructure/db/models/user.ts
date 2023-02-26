@@ -1,4 +1,4 @@
-import { UUID } from "@src/domain/common/types";
+import { UUID } from "@src/utils/uuid";
 import { TonAddress } from "@src/domain/user/types";
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
 import { Bag } from "./bag";
