@@ -2,8 +2,8 @@ import { Config as DatabaseConfig } from "@src/infrastructure/db/config";
 
 export class APIConfig {
     constructor(
-        public readonly host: string = "localhost",
-        public readonly port: number = 8080,
+        public readonly host: string = "127.0.0.1",
+        public readonly port: number = 5000,
     ) { }
 }
 

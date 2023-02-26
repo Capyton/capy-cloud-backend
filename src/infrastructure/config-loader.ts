@@ -3,11 +3,11 @@ import { Config as DatabaseConfig } from "@src/infrastructure/db/config"
 
 export function loadConfigFromEnv(): Config {
     const databaseConfig = new DatabaseConfig(
-        process.env.DATABASE_HOST,
-        process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : undefined,
-        process.env.DATABASE_USER,
-        process.env.DATABASE_PASSWORD,
-        process.env.DATABASE_NAME,
+        process.env.POSTGRES_HOST,
+        process.env.POSTGRES_PORT ? parseInt(process.env.POSTGRES_PORT) : undefined,
+        process.env.POSTGRES_USER,
+        process.env.POSTGRES_PASSWORD,
+        process.env.POSTGRES_DB,
     )
 
     const apiConfig = new APIConfig(
@@ -16,9 +16,9 @@ export function loadConfigFromEnv(): Config {
     )
 
     const authAndTokensConfig = new AuthAndTokensConfig(
-        process.env.AUTH_PRIVATE_KEY,
-        process.env.AUTH_EXPIRATION_TIME ? parseInt(process.env.AUTH_EXPIRATION_TIME) : undefined,
-        process.env.TOKEN_EXPIRATION_TIME ? parseInt(process.env.TOKEN_EXPIRATION_TIME) : undefined,
+        process.env.PRIVATE_KEY,
+        process.env.NONCE_EXPIRATION_TIME ? parseInt(process.env.NONCE_EXPIRATION_TIME) : undefined,
+        process.env.ACCESS_TOKEN_EXPIRATION_TIME ? parseInt(process.env.ACCESS_TOKEN_EXPIRATION_TIME) : undefined,
     )
 
     const filesConfig = new FilesConfig(
