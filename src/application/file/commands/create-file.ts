@@ -1,11 +1,12 @@
+import { UnitOfWork } from "@src/application/common/interfaces"
 import { FileRepo } from "@src/application/file/interfaces/persistence"
-import { UUID } from "@src/utils/uuid"
 import { File } from "@src/domain/file/entities"
+import { UUID } from "@src/utils/uuid"
 
 export class CreateFile {
   constructor(
     readonly id: UUID,
-    readonly bag_id: UUID,
+    readonly bagId: UUID,
     readonly filename: string,
     readonly pathDir: string,
     readonly description: string | null,
@@ -16,13 +17,15 @@ export class CreateFile {
 export class CreateFileHandler {
   constructor(
     readonly fileRepo: FileRepo,
+    readonly uow: UnitOfWork,
   ) { }
 
   async execute(command: CreateFile): Promise<void> {
     const file = File.create(
-      command.id, command.bag_id, command.filename, command.description,
+      command.id, command.bagId, command.filename, command.description,
       command.pathDir, command.size,
     )
     await this.fileRepo.addFile(file)
+    await this.uow.commit()
   }
 }

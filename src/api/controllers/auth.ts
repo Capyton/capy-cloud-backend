@@ -21,8 +21,8 @@ export class AuthController {
         @ParamJwtManager() jwtManager: JwtManager,
         @ParamUnitOfWork() uow: UnitOfWork,
     ): Promise<AuthToken> {
-        const payload_handler = new GenereatePayloadHandler(authManager)
-        const payload = await payload_handler.execute(new GenereatePayload())
+        const payloadHandler = new GenereatePayloadHandler(authManager)
+        const payload = await payloadHandler.execute(new GenereatePayload())
 
         // Test variables, should be taken from wallet SDK
         const signatute = "test"
@@ -31,8 +31,8 @@ export class AuthController {
         // End of test variables
 
         const proof = new Proof(signatute, payload.nonce)
-        const token_handler = new VerifyProofHandler(authManager, jwtManager, userRepo, uow)
-        const token = await token_handler.execute(new VerifyProof(address, network, proof))
+        const tokenHandler = new VerifyProofHandler(authManager, jwtManager, userRepo, uow)
+        const token = await tokenHandler.execute(new VerifyProof(address, network, proof))
 
         return token
     }

@@ -9,6 +9,14 @@ import { QueryRunner } from "typeorm"
 export class FileRepoImpl implements FileRepo {
     constructor(private readonly queryRunner: QueryRunner) { }
 
+    async getFileById(id: UUID): Promise<File> {
+        const file = await this.queryRunner.manager.findOne(FileModel, { where: { id: id } })
+        if (!file) {
+            throw new FileIdNotFound(`File with id ${id} not found`)
+        }
+        return file
+    }
+
     async addFile(file: File): Promise<void> {
         await this.queryRunner.manager.insert(FileModel, file)
     }

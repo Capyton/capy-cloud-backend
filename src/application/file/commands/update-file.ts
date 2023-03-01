@@ -21,10 +21,10 @@ export class UpdateFileHandler {
   ) { }
 
   async execute(command: UpdateFile): Promise<void> {
-    const file = await this.fileRepo.acquireFileById(command.id)
+    const file = await this.fileRepo.getFileById(command.id)
     const updated_file = File.create(
       file.id,
-      file.bag_id,
+      file.bagId,
       file.filename,
       (command.fileData.description != null) ? command.fileData.description : file.description,
       file.pathDir,
