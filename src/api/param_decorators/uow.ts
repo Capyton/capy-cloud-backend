@@ -1,11 +1,12 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common"
 import { UnitOfWork as BaseUnitOfWork } from "@src/application/common/interfaces"
+import { Request } from "express"
 
 export const UnitOfWork = createParamDecorator(
     (_data: unknown, ctx: ExecutionContext) => {
-        const request = ctx.switchToHttp().getRequest()
+        const request: Request = ctx.switchToHttp().getRequest()
         // Get the `UnitOfWork` from the request, which was set in a database middleware
-        const uow: BaseUnitOfWork = request.uow
+        const uow: BaseUnitOfWork = request.app.locals.uow
 
         return uow
     }

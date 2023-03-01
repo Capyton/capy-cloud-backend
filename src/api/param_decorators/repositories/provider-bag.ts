@@ -1,12 +1,13 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common"
 import { ProviderBagReaderImpl, ProviderBagRepoImpl } from "@src/infrastructure/db/repositories"
+import { Request } from "express"
 import { QueryRunner } from "typeorm"
 
 export const ProviderBagRepo = createParamDecorator(
     (_data: unknown, ctx: ExecutionContext) => {
-        const request = ctx.switchToHttp().getRequest()
+        const request: Request = ctx.switchToHttp().getRequest()
         // Get the `QueryRunner` from the request, which was set in a database middleware
-        const queryRunner: QueryRunner = request.queryRunner
+        const queryRunner: QueryRunner = request.app.locals.queryRunner
         const providerBag = new ProviderBagRepoImpl(queryRunner)
 
         return providerBag
@@ -15,9 +16,9 @@ export const ProviderBagRepo = createParamDecorator(
 
 export const ProviderBagReader = createParamDecorator(
     (_data: unknown, ctx: ExecutionContext) => {
-        const request = ctx.switchToHttp().getRequest()
+        const request: Request = ctx.switchToHttp().getRequest()
         // Get the `QueryRunner` from the request, which was set in a database middleware
-        const queryRunner: QueryRunner = request.queryRunner
+        const queryRunner: QueryRunner = request.app.locals.queryRunner
         const providerBag = new ProviderBagReaderImpl(queryRunner)
 
         return providerBag

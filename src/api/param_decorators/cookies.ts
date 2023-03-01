@@ -1,4 +1,5 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { createParamDecorator, ExecutionContext } from "@nestjs/common";
+import { Request } from "express";
 
 /**
  * Decorator for injecting the cookies from the request
@@ -6,7 +7,7 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
  */
 export const Cookies = createParamDecorator(
     (cookieKey: string, ctx: ExecutionContext) => {
-        const request = ctx.switchToHttp().getRequest()
+        const request: Request = ctx.switchToHttp().getRequest()
         const cookies = request.cookies
 
         return cookieKey ? cookies[cookieKey] : cookies
