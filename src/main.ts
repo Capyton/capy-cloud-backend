@@ -1,5 +1,7 @@
-import { NestFactory } from '@nestjs/core'
-import { ConfigMiddleware, DatabaseMiddleware } from "@src/api/middlewares"
+import { ValidationPipe } from "@nestjs/common"
+import { NestFactory } from "@nestjs/core"
+import { DatabaseInterceptor, FilesInterceptor } from "@src/api/interceptors"
+import { ConfigMiddleware } from "@src/api/middlewares"
 import { AppModule } from "@src/api/modules"
 import { loadConfigFromEnv } from "@src/infrastructure/config-loader"
 import { Config as DatabaseConfig } from "@src/infrastructure/db/config"
@@ -34,10 +36,26 @@ async function main(): Promise<void> {
     .catch((err) => console.error(`Database initialization failed with error: \`${err}\``))
 
   const app = await NestFactory.create(AppModule)
-  app.use(new ConfigMiddleware(config))
-  app.use(new DatabaseMiddleware(dataSource))
 
-  console.log("Launch app")
+  const configMiddleware = new ConfigMiddleware(config)
+
+  app.use(configMiddleware.use.bind(configMiddleware))
+  console.log("Middlewares registered")
+
+  app.useGlobalInterceptors(new DatabaseInterceptor(dataSource))
+  app.useGlobalInterceptors(new FilesInterceptor(config.files))
+  console.log("Global interceptors registered")
+
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true,
+    disableErrorMessages: false,
+    transformOptions: {
+      enableImplicitConversion: true,
+    }
+  }))
+  console.log("Global pipes registered")
+
+  console.log(`Starting server on \`${config.api.host}:${config.api.port}\``)
   await app.listen(config.api.port, config.api.host)
 }
 
