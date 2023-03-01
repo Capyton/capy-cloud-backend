@@ -17,7 +17,7 @@ export class AuthAndTokensConfig {
 
 export class FilesConfig {
     constructor(
-        public readonly uploadDir: string = "/tmp/capy_cloud_backend/uploads",
+        public readonly uploadDir: string = "uploads",
         public readonly maxFileSize: number = 524 * 1024 * 1024, // 524 MB in bytes
         public readonly maxFilesCount: number = 64,
     ) { }

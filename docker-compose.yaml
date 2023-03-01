@@ -18,6 +18,8 @@ services:
         condition: service_healthy
     networks:
       - capy-cloud-backend.postgres.network
+    volumes:
+      - capy-cloud-backend.api.data:/usr/src/app/${UPLOAD_DIR}:rw
 
   postgres:
     container_name: capy-cloud-backend.postgres
@@ -44,6 +46,7 @@ services:
       start_period: 10s
 
 volumes:
+  capy-cloud-backend.api.data: {}
   capy-cloud-backend.postgres.data: {}
 
 networks:
