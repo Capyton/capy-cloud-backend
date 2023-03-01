@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Capyton/backend.git"
+    "url": "git+https://github.com/Capyton/capy-cloud-backend.git"
   },
   "author": "Capyton",
   "license": "UNLICENSED",
   "bugs": {
     "url": "https://github.com/Capyton/backend/issues"
   },
-  "homepage": "https://github.com/Capyton/backend#readme",
+  "homepage": "https://github.com/Capyton/capy-cloud-backend#readme",
   "dependencies": {
     "@kripod/uuidv7": "^0.3.4",
     "@nestjs/common": "^9.3.9",
