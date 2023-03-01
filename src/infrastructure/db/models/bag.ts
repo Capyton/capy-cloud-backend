@@ -1,7 +1,7 @@
-import { BagId } from "@src/domain/bag/types";
-import { UUID } from "@src/utils/uuid";
-import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
-import { File } from "./file";
+import { BagId } from "@src/domain/bag/types"
+import { UUID } from "@src/utils/uuid"
+import { Column, Entity, JoinTable, OneToMany, PrimaryColumn } from "typeorm"
+import { File } from "./file"
 
 @Entity({ name: "bags" })
 export class Bag {
@@ -24,5 +24,6 @@ export class Bag {
   createdAt: Date
 
   @OneToMany(() => File, file => file.bag, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+  @JoinTable({ name: "files" })
   bagFiles: File[]
 }

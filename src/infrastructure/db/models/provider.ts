@@ -1,7 +1,7 @@
-import { ProviderAddress } from "@src/domain/provider/types";
-import { UUID } from "@src/utils/uuid";
-import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
-import { Bag } from "./bag";
+import { ProviderAddress } from "@src/domain/provider/types"
+import { UUID } from "@src/utils/uuid"
+import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm"
+import { Bag } from "./bag"
 
 @Entity({ name: "providers" })
 export class Provider {

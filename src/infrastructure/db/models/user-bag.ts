@@ -1,7 +1,7 @@
-import { UUID } from "@src/utils/uuid";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
-import { Bag } from "./bag";
-import { User } from "./user";
+import { UUID } from "@src/utils/uuid"
+import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm"
+import { Bag } from "./bag"
+import { User } from "./user"
 
 @Entity({ name: "users_bags" })
 export class UserBag {

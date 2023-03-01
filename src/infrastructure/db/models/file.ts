@@ -1,13 +1,13 @@
-import { UUID } from "@src/utils/uuid";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
-import { Bag } from "./bag";
+import { UUID } from "@src/utils/uuid"
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm"
+import { Bag } from "./bag"
 
 @Entity({ name: "files" })
 export class File {
   @PrimaryColumn({ name: "id" })
   id: UUID
 
-  @OneToOne(() => Bag)
+  @ManyToOne(() => Bag)
   @JoinColumn({ name: "bag_id" })
   bag: Bag
 
