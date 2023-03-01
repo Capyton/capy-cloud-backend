@@ -1,10 +1,11 @@
-import { Injectable, NestMiddleware } from "@nestjs/common"
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common"
 import { TypeORMUnitOfWork } from "@src/infrastructure/db/uow"
-import { NextFunction, Request, Response } from "express"
+import { Request } from "express"
+import { Observable, tap } from "rxjs"
 import { DataSource, QueryRunner } from "typeorm"
 
 @Injectable()
-export class DatabaseMiddleware implements NestMiddleware {
+export class DatabaseInterceptor implements NestInterceptor {
     constructor(private readonly dataSource: DataSource) { }
 
     /**
@@ -20,16 +21,21 @@ export class DatabaseMiddleware implements NestMiddleware {
         return queryRunner
     }
 
-    async use(req: Request, _res: Response, next: NextFunction) {
+    async intercept(context: ExecutionContext, next: CallHandler<any>): Promise<Observable<any>> {
         const queryRunner = await this.getQueryRunner()
         const uow = new TypeORMUnitOfWork(queryRunner)
+
+        const ctx = context.switchToHttp()
+        const req = ctx.getRequest<Request>()
 
         req.app.locals.queryRunner = queryRunner
         req.app.locals.uow = uow
 
-        next()
-
-        // Release the `QueryRunner` after the request is done
-        await queryRunner.release()
+        return next.handle().pipe(
+            tap(() => {
+                // Release the `QueryRunner` after the request is done
+                queryRunner.release()
+            })
+        )
     }
 }
