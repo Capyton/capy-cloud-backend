@@ -35,9 +35,13 @@ export class FilesInterceptor implements NestInterceptor {
     getStorageEngine(bagDir: string): multer.StorageEngine {
         return multer.diskStorage({
             destination: (_req, _file, cb) => {
+                console.log(`file: (json \`${JSON.stringify(_file)})\``)
+
                 cb(null, bagDir)
             },
             filename: (_req, file, cb) => {
+                console.log(`file: (json \`${JSON.stringify(file)})\``)
+
                 cb(null, file.originalname)
             }
         })
