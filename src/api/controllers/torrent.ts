@@ -1,6 +1,7 @@
-import { Body, Controller, Post, UploadedFiles } from "@nestjs/common"
+import { Body, Controller, Post, UploadedFiles, UseInterceptors } from "@nestjs/common"
+import { FilesInterceptor } from "@src/api/interceptors"
 import {
-    BagDir as ParamBagDir,
+    BagDir,
     BagId as ParamBagId,
     BagRepo as ParamBagRepo,
     FileRepo as ParamFileRepo,
@@ -16,8 +17,9 @@ import { FileInfoNotFound, FileNotFound } from "@src/application/file/exceptions
 import { FileRepo } from "@src/application/file/interfaces"
 import { CreateTorrent, CreateTorrentHandler } from "@src/application/torrent/commands/create-torrent"
 import { TorrentManager } from "@src/application/torrent/interfaces"
+import { BagId } from "@src/domain/bag/types"
 import { Torrent } from "@src/domain/torrent/entities"
-import { UUID, uuid7 } from "@src/utils/uuid"
+import { uuid7 } from "@src/utils/uuid"
 import { IsOptional, IsString } from "class-validator"
 
 class BagInfoDTO {
@@ -47,13 +49,14 @@ export class TorrentController {
      * @returns The created torrent, which contains the bag id and progress information of the torrent.
      */
     @Post()
+    @UseInterceptors(FilesInterceptor)
     async createTorrent(
         @ParamUnitOfWork() uow: UnitOfWork,
         @ParamFileRepo() fileRepo: FileRepo,
         @ParamBagRepo() bagRepo: BagRepo,
         @ParamTorrentManager() torrentManager: TorrentManager,
-        @ParamBagId() bagId: UUID,
-        @ParamBagDir() bagDir: string,
+        @ParamBagId() bagId: BagId,
+        @BagDir() bagDir: string,
         @UploadedFiles() files: Array<Express.Multer.File>,
         @Body("bagInfo") bagInfo: BagInfoDTO,
         @Body("filesInfo") filesInfo: Array<FileInfoDTO>,
@@ -74,7 +77,7 @@ export class TorrentController {
         } else if (filesLength > filesInfoLength) {
             const difference = filesLength - filesInfoLength
 
-            throw new FileInfoNotFound(`No files info found for \`${difference}\``)
+            throw new FileInfoNotFound(`No files info found for \`${difference}\` file(s)`)
         }
 
         const createTorrentHandler = new CreateTorrentHandler(torrentManager)

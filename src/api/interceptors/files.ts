@@ -1,6 +1,8 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common"
+import { CallHandler, ExecutionContext, Inject, Injectable, NestInterceptor } from "@nestjs/common"
 import { FilesConfig } from "@src/api/config"
-import { UUID, uuid7 } from "@src/utils/uuid"
+import { BagId } from "@src/domain/bag/types"
+import { FILES_CONFIG, FILES_FIELD_KEY } from "@src/inject-constants"
+import { uuid7 } from "@src/utils/uuid"
 import { Request, Response } from "express"
 import * as fs from "fs"
 import multer from "multer"
@@ -19,11 +21,11 @@ import { Observable } from "rxjs"
 @Injectable()
 export class FilesInterceptor implements NestInterceptor {
     constructor(
-        private readonly config: FilesConfig,
-        private readonly fieldName: string = "files", // field name in the request
+        @Inject(FILES_CONFIG) private readonly config: FilesConfig,
+        @Inject(FILES_FIELD_KEY) private readonly fieldName: string, // field name in the request
     ) { }
 
-    getBagDir(bagId: UUID): string {
+    getBagDir(bagId: BagId): string {
         const path = `${this.config.uploadDir}/${bagId}`
 
         // Create the directory for the files, if it doesn't exist

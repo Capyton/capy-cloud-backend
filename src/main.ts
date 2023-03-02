@@ -1,8 +1,8 @@
 import { ValidationPipe } from "@nestjs/common"
 import { NestFactory } from "@nestjs/core"
-import { DatabaseInterceptor, FilesInterceptor } from "@src/api/interceptors"
+import { DatabaseInterceptor } from "@src/api/interceptors"
 import { ConfigMiddleware } from "@src/api/middlewares"
-import { AppModule } from "@src/api/modules"
+import { APIModule } from "@src/api/modules"
 import { loadConfigFromEnv } from "@src/infrastructure/config-loader"
 import { Config as DatabaseConfig } from "@src/infrastructure/db/config"
 import { Bag, File, Provider, ProviderBag, User, UserBag } from "@src/infrastructure/db/models"
@@ -35,7 +35,7 @@ async function main(): Promise<void> {
     .then(() => console.log("Database initialized"))
     .catch((err) => console.error(`Database initialization failed with error: \`${err}\``))
 
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create(APIModule.forRoot(config, dataSource))
 
   const configMiddleware = new ConfigMiddleware(config)
 
@@ -43,7 +43,6 @@ async function main(): Promise<void> {
   console.log("Middlewares registered")
 
   app.useGlobalInterceptors(new DatabaseInterceptor(dataSource))
-  app.useGlobalInterceptors(new FilesInterceptor(config.files))
   console.log("Global interceptors registered")
 
   app.useGlobalPipes(new ValidationPipe({

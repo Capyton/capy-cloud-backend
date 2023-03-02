@@ -1,12 +1,13 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common"
+import { CallHandler, ExecutionContext, Inject, Injectable, NestInterceptor } from "@nestjs/common"
 import { TypeORMUnitOfWork } from "@src/infrastructure/db/uow"
+import { DATA_SOURCE } from "@src/inject-constants"
 import { Request } from "express"
 import { Observable, tap } from "rxjs"
 import { DataSource, QueryRunner } from "typeorm"
 
 @Injectable()
 export class DatabaseInterceptor implements NestInterceptor {
-    constructor(private readonly dataSource: DataSource) { }
+    constructor(@Inject(DATA_SOURCE) private readonly dataSource: DataSource) { }
 
     /**
      * Get a `QueryRunner` from the `DataSource` and start a transaction

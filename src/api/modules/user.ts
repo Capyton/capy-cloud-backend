@@ -1,7 +1,12 @@
-import { Module } from "@nestjs/common"
+import { DynamicModule, Module } from "@nestjs/common"
 import { UserController } from "@src/api/controllers"
 
-@Module({
-    controllers: [UserController],
-})
-export class UserModule { }
+@Module({})
+export class UserModule {
+    static forRoot(): DynamicModule {
+        return {
+            module: UserModule,
+            controllers: [UserController],
+        }
+    }
+}
