@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UploadedFiles, UseInterceptors } from "@nestjs/common"
+import { BadRequestException, Body, Controller, Post, UploadedFiles, UseInterceptors } from "@nestjs/common"
 import { FilesInterceptor } from "@src/api/interceptors"
 import {
     BagDir,
@@ -7,46 +7,92 @@ import {
     FileRepo as ParamFileRepo,
     TorrentManager as ParamTorrentManager,
     TorrentReader as ParamTorrentReader,
-    UnitOfWork as ParamUnitOfWork,
+    UnitOfWork as ParamUnitOfWork
 } from "@src/api/param_decorators"
 import { CreateBag, CreateBagHandler } from "@src/application/bag/commands/create-bag"
 import { BagRepo } from "@src/application/bag/interfaces"
 import { UnitOfWork } from "@src/application/common/interfaces"
 import { CreateFile, CreateFileHandler } from "@src/application/file/commands/create-file"
-import { FileInfoNotFound, FileNotFound } from "@src/application/file/exceptions"
 import { FileRepo } from "@src/application/file/interfaces"
 import { CreateTorrent, CreateTorrentHandler } from "@src/application/torrent/commands/create-torrent"
 import { TorrentManager } from "@src/application/torrent/interfaces"
 import { BagId } from "@src/domain/bag/types"
 import { Torrent } from "@src/domain/torrent/entities"
 import { uuid7 } from "@src/utils/uuid"
-import { IsOptional, IsString } from "class-validator"
-
-class BagInfoDTO {
-    @IsOptional()
-    @IsString({ message: "Description must be a string" })
-    readonly description: string | null
-}
+import { IsNotEmpty, IsOptional, IsString, validateOrReject } from "class-validator"
 
 class FileInfoDTO {
-    @IsString({ message: "Filename must be a string" })
+    @IsNotEmpty()
+    @IsString()
     readonly filename: string
     @IsOptional()
-    @IsString({ message: "Description must be a string" })
-    readonly description: string | null
-    @IsString({ message: "Path must be a string" })
-    readonly pathDir: string
+    @IsString()
+    readonly description: string | null = null
+    @IsOptional()
+    @IsNotEmpty()
+    @IsString()
+    readonly pathDir: string = "/"
+}
+
+function convertAttrsToFilesInfo(
+    filenames: Array<string> | string,
+    descriptions: Array<string | null> | string | null = null,
+    pathDirs: Array<string> | string = "/",
+): FileInfoDTO[] {
+    let filesNamesLength: number
+    let descriptionsLength: number
+    let pathDirsLength: number
+
+    if (typeof filenames === "string") {
+        filenames = [filenames]
+        filesNamesLength = 1
+    } else {
+        filesNamesLength = filenames.length
+    }
+    if (typeof descriptions === "string" || descriptions === null) {
+        descriptions = [descriptions]
+        descriptionsLength = 1
+    } else {
+        descriptionsLength = descriptions.length
+    }
+    if (typeof pathDirs === "string") {
+        pathDirs = [pathDirs]
+        pathDirsLength = 1
+    } else {
+        pathDirsLength = pathDirs.length
+    }
+
+    const equalsLength = (
+        filesNamesLength === descriptionsLength
+        && descriptionsLength === pathDirsLength
+    )
+
+    if (!equalsLength) {
+        throw new BadRequestException("Filenames, descriptions and path dirs should have the same length")
+    }
+
+    let filesInfo: FileInfoDTO[] = []
+    for (let index = 0; index < filesNamesLength; index++) {
+        const filename = filenames[index]
+        const description = descriptions[index]
+        const pathDir = pathDirs[index]
+
+        filesInfo.push({ filename, description, pathDir })
+    }
+
+    return filesInfo
 }
 
 @Controller("torrent")
 export class TorrentController {
     /**
-     * Create a torrent.
-     * User should upload files, send bag info and files info for each upload file.
-     * @param files - The files to upload as files of a bag.
-     * @param bagInfo - The bag info to create a bag with some information.
-     * @param filesInfo - The files info for each upload file to save files with some information.
-     * @returns The created torrent, which contains the bag id and progress information of the torrent.
+     * Create a torrent from a bag of files
+     * @param files - Files to upload as files of a bag
+     * @param bagDescription - Description of bag of files
+     * @param filenames - Filenames of files of a bag. If only one file is uploaded, this can be a string.
+     * @param descriptions - Descriptions of files of a bag. If only one file is uploaded, this can be a string.
+     * @param pathDirs - Path dirs of files of a bag. If only one file is uploaded, this can be a string.
+     * @returns Created torrent
      */
     @Post()
     @UseInterceptors(FilesInterceptor)
@@ -57,37 +103,30 @@ export class TorrentController {
         @ParamTorrentManager() torrentManager: TorrentManager,
         @ParamBagId() bagId: BagId,
         @BagDir() bagDir: string,
-        @UploadedFiles() files: Array<Express.Multer.File>,
-        @Body("bagInfo") bagInfo: BagInfoDTO,
-        @Body("filesInfo") filesInfo: Array<FileInfoDTO>,
+        @UploadedFiles() files: Express.Multer.File[],
+        @Body("bagDescription") bagDescription: string | null = null,
+        @Body("filenames") filenames?: Array<string> | string,
+        @Body("descriptions") descriptions: Array<string | null> | string | null = null,
+        @Body("pathDirs") pathDirs: Array<string> | string = "/",
     ): Promise<Torrent> {
-        console.log(
-            `files: json \`${JSON.stringify(files)}\`)\n`
-            + `bagInfo: (json \`${JSON.stringify(bagInfo)}\`)\n`
-            + `filesInfo: (json \`${JSON.stringify(filesInfo)}\`)\n`
-        )
+        if (!filenames) {
+            throw new BadRequestException("Filename(s) are required")
+        }
 
-        const filesLength = files.length
-        const filesInfoLength = filesInfo.length
-
-        if (filesLength <= 0) {
-            throw new FileNotFound("No files found")
-        } else if (filesInfoLength <= 0) {
-            throw new FileInfoNotFound("No files info found")
-        } else if (filesLength > filesInfoLength) {
-            const difference = filesLength - filesInfoLength
-
-            throw new FileInfoNotFound(`No files info found for \`${difference}\` file(s)`)
+        const filesInfo = convertAttrsToFilesInfo(filenames, descriptions, pathDirs)
+        if (files.length !== filesInfo.length) {
+            throw new BadRequestException("Files and files info should have the same length")
+        } else {
+            validateOrReject(filesInfo).catch(errors => {
+                throw new BadRequestException(`Files info validation failed: \`${JSON.stringify(errors)}\``)
+            })
         }
 
         const createTorrentHandler = new CreateTorrentHandler(torrentManager)
         const createBagHandler = new CreateBagHandler(bagRepo, uow)
         const createFileHandler = new CreateFileHandler(fileRepo, uow)
 
-        const bagDescription = bagInfo.description
-
         const torrent = await createTorrentHandler.execute(new CreateTorrent(bagDescription, bagDir))
-        console.log(`torrent: (json \`${JSON.stringify(torrent)}\``)
 
         const bagIdDaemon = torrent.bagId
         const bagSize = torrent.totalSize
@@ -95,8 +134,6 @@ export class TorrentController {
         await createBagHandler.execute(new CreateBag(bagId, bagIdDaemon, bagDescription, bagSize, false))
 
         for (const [fileIndex, file] of files.entries()) {
-            console.log("fileIndex: ", fileIndex)
-
             const fileInfo = filesInfo[fileIndex]
 
             const fileId = uuid7()
