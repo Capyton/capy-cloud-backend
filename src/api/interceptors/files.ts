@@ -6,7 +6,7 @@ import { uuid7 } from "@src/utils/uuid"
 import { Request, Response } from "express"
 import * as fs from "fs"
 import multer from "multer"
-import { Observable } from "rxjs"
+import { catchError, Observable, throwError } from "rxjs"
 
 /**
  * Files interceptor.
@@ -37,13 +37,9 @@ export class FilesInterceptor implements NestInterceptor {
     getStorageEngine(bagDir: string): multer.StorageEngine {
         return multer.diskStorage({
             destination: (_req, _file, cb) => {
-                console.log(`file: (json \`${JSON.stringify(_file)})\``)
-
                 cb(null, bagDir)
             },
             filename: (_req, file, cb) => {
-                console.log(`file: (json \`${JSON.stringify(file)})\``)
-
                 cb(null, file.originalname)
             }
         })
@@ -107,7 +103,7 @@ export class FilesInterceptor implements NestInterceptor {
 
                     res.status(500).send(err.message)
                 } else {
-                    console.log(`Files uploaded successfully`)
+                    console.debug(`Files uploaded successfully`)
 
                     resolve()
                 }
@@ -117,6 +113,20 @@ export class FilesInterceptor implements NestInterceptor {
         req.app.locals.bagId = bagId
         req.app.locals.bagDir = bagDir
 
-        return next.handle()
+        return next.handle().pipe(
+            catchError((err) => {
+                console.error(`Error in handler: ${err.message}`)
+
+                fs.rm(bagDir, { recursive: true }, (err) => {
+                    if (err) {
+                        console.error(`Error deleting directory \`${bagDir}\`: ${err.message}`)
+                    } else {
+                        console.debug(`Directory \`${bagDir}\` deleted successfully`)
+                    }
+                })
+
+                return throwError(() => err)
+            })
+        )
     }
 }
