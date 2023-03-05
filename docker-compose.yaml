@@ -16,6 +16,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      storage-daemon:
+        condition: service_started
     networks:
       - capy-cloud-backend.postgres.network
     volumes:
@@ -44,6 +46,20 @@ services:
       timeout: 60s
       retries: 5
       start_period: 10s
+
+  storage-daemon:
+    container_name: capy-cloud-backend.storage-daemon
+    restart: "unless-stopped"
+    build:
+      context: .
+      dockerfile: storage-daemon/Dockerfile
+    environment:
+      TON_STORAGE_ADNL_PORT: $TON_STORAGE_ADNL_PORT
+      TON_STORAGE_CONTROL_PORT: $TON_STORAGE_CONTROL_PORT
+      TON_STORAGE_VERBOSITY_LEVEL: $TON_STORAGE_VERBOSITY_LEVEL
+      TON_STORAGE_GLOBAL_CONFIG: $TON_STORAGE_GLOBAL_CONFIG
+      TON_STORAGE_DATABASE_NAME: $TON_STORAGE_DATABASE_NAME
+      TON_PUBLIC_IP: $TON_PUBLIC_IP
 
 volumes:
   capy-cloud-backend.api.data: {}
