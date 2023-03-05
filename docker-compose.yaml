@@ -49,6 +49,7 @@ services:
       start_period: 10s
 
   storage-daemon:
+    image: "meamone/ton-storage-daemon:latest"
     container_name: capy-cloud-backend.storage-daemon
     restart: "unless-stopped"
     build:
