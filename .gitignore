@@ -1,3 +1,5 @@
 *.env
 
 node_modules/
+global_configs/mainnet.json
+global_configs/testnet.json

@@ -32,7 +32,6 @@ COPY --from=builder /ton/build/storage/storage-daemon/storage-daemon /usr/local/
 
 WORKDIR /app
 
-COPY storage-daemon/private /private
 COPY storage-daemon/scripts /scripts
 COPY storage-daemon/supervisord.conf /etc/supervisor/supervisord.conf
 

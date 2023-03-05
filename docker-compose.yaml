@@ -22,6 +22,7 @@ services:
       - capy-cloud-backend.postgres.network
     volumes:
       - capy-cloud-backend.api.data:/usr/src/app/${UPLOAD_DIR}:rw
+      - capy-cloud-backend.storage-daemon.data:/usr/src/app/global_configs:rw
 
   postgres:
     container_name: capy-cloud-backend.postgres
@@ -54,16 +55,20 @@ services:
       context: .
       dockerfile: storage-daemon/Dockerfile
     environment:
-      TON_STORAGE_ADNL_PORT: $TON_STORAGE_ADNL_PORT
-      TON_STORAGE_CONTROL_PORT: $TON_STORAGE_CONTROL_PORT
-      TON_STORAGE_VERBOSITY_LEVEL: $TON_STORAGE_VERBOSITY_LEVEL
-      TON_STORAGE_GLOBAL_CONFIG: $TON_STORAGE_GLOBAL_CONFIG
-      TON_STORAGE_DATABASE_NAME: $TON_STORAGE_DATABASE_NAME
-      TON_PUBLIC_IP: $TON_PUBLIC_IP
+      TON_STORAGE_ADNL_PORT: ${TON_STORAGE_ADNL_PORT:-3333}
+      TON_STORAGE_CONTROL_PORT: ${TON_STORAGE_CONTROL_PORT:-5555}
+      TON_STORAGE_VERBOSITY_LEVEL: ${TON_STORAGE_VERBOSITY_LEVEL:-3}
+      TON_STORAGE_GLOBAL_CONFIG: ${TON_STORAGE_GLOBAL_CONFIG:?}
+      TON_STORAGE_DATABASE_NAME: ${TON_STORAGE_DATABASE_NAME:-ton-storage}
+      TON_PUBLIC_IP: ${TON_PUBLIC_IP:?}
+    volumes:
+      - capy-cloud-backend.storage-daemon.data:/usr/src/app/global_configs:rw
+      - capy-cloud-backend.storage-daemon.data:/data:rw
 
 volumes:
   capy-cloud-backend.api.data: {}
   capy-cloud-backend.postgres.data: {}
+  capy-cloud-backend.storage-daemon.data: {}
 
 networks:
   capy-cloud-backend.postgres.network: {}
