@@ -62,7 +62,7 @@ services:
       TON_STORAGE_DATABASE_NAME: ${TON_STORAGE_DATABASE_NAME:-ton-storage}
       TON_PUBLIC_IP: ${TON_PUBLIC_IP:?}
     volumes:
-      - capy-cloud-backend.storage-daemon.data:/usr/src/app/global_configs:rw
+      - ./global_configs:/usr/src/app/global_configs:ro
       - capy-cloud-backend.storage-daemon.data:/data:rw
 
 volumes:
