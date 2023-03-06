@@ -52,9 +52,6 @@ services:
     image: "meamone/ton-storage-daemon:latest"
     container_name: capy-cloud-backend.storage-daemon
     restart: "unless-stopped"
-    build:
-      context: .
-      dockerfile: storage-daemon/Dockerfile
     environment:
       TON_STORAGE_ADNL_PORT: ${TON_STORAGE_ADNL_PORT:-3333}
       TON_STORAGE_CONTROL_PORT: ${TON_STORAGE_CONTROL_PORT:-5555}
