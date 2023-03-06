@@ -22,7 +22,6 @@ services:
       - capy-cloud-backend.postgres.network
     volumes:
       - capy-cloud-backend.api.data:/usr/src/app/${UPLOAD_DIR}:rw
-      - capy-cloud-backend.storage-daemon.data:/usr/src/app/global_configs:rw
 
   postgres:
     container_name: capy-cloud-backend.postgres
