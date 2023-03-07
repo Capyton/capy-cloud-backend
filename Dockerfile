@@ -1,5 +1,5 @@
 # Specify a base image
-FROM node:18.4.0-buster-slim
+FROM node:19-bullseye-slim
 
 # Specify a working directory
 WORKDIR /usr/src/app

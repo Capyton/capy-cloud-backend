@@ -20,8 +20,11 @@ services:
         condition: service_started
     networks:
       - capy-cloud-backend.postgres.network
+      - capy-cloud-backend.storage-daemon.network
     volumes:
       - capy-cloud-backend.api.data:/usr/src/app/${UPLOAD_DIR}:rw
+      - capy-cloud-backend.storage-daemon.bin:/usr/local/bin/ton-storage:ro
+      - capy-cloud-backend.storage-daemon.data:/data:rw
 
   postgres:
     container_name: capy-cloud-backend.postgres
@@ -58,14 +61,19 @@ services:
       TON_STORAGE_GLOBAL_CONFIG: ${TON_STORAGE_GLOBAL_CONFIG:?}
       TON_STORAGE_DATABASE_NAME: ${TON_STORAGE_DATABASE_NAME:-ton-storage}
       TON_PUBLIC_IP: ${TON_PUBLIC_IP:?}
+    networks:
+      - capy-cloud-backend.storage-daemon.network
     volumes:
       - ./global_configs:/usr/src/app/global_configs:ro
       - capy-cloud-backend.storage-daemon.data:/data:rw
+      - capy-cloud-backend.storage-daemon.bin:/usr/local/bin:ro
 
 volumes:
   capy-cloud-backend.api.data: {}
   capy-cloud-backend.postgres.data: {}
   capy-cloud-backend.storage-daemon.data: {}
+  capy-cloud-backend.storage-daemon.bin: {}
 
 networks:
   capy-cloud-backend.postgres.network: {}
+  capy-cloud-backend.storage-daemon.network: {}
