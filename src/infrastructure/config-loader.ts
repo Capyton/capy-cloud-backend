@@ -1,4 +1,4 @@
-import { APIConfig, AuthAndTokensConfig, Config, FilesConfig } from "@src/api/config"
+import { APIConfig, AuthAndTokensConfig, Config, FilesConfig, TonStorageDaemonCLI } from "@src/api/config"
 import { Config as DatabaseConfig } from "@src/infrastructure/db/config"
 
 export function loadConfigFromEnv(): Config {
@@ -15,6 +15,14 @@ export function loadConfigFromEnv(): Config {
         process.env.API_PORT ? parseInt(process.env.API_PORT) : undefined,
     )
 
+    const tonStorageDaemonCLI = new TonStorageDaemonCLI(
+        process.env.TON_STORAGE_CLI_BIN,
+        process.env.TON_STORAGE_CLI_HOST,
+        process.env.TON_STORAGE_CLI_PORT ? parseInt(process.env.TON_STORAGE_CLI_PORT) : undefined,
+        process.env.TON_STORAGE_CLI_DATABASE,
+        process.env.TON_STORAGE_CLI_TIMEOUT ? parseInt(process.env.TON_STORAGE_CLI_TIMEOUT) : undefined,
+    )
+
     const authAndTokensConfig = new AuthAndTokensConfig(
         process.env.PRIVATE_KEY,
         process.env.NONCE_EXPIRATION_TIME ? parseInt(process.env.NONCE_EXPIRATION_TIME) : undefined,
@@ -27,5 +35,5 @@ export function loadConfigFromEnv(): Config {
         process.env.MAX_FILES_COUNT ? parseInt(process.env.MAX_FILES_COUNT) : undefined,
     )
 
-    return new Config(databaseConfig, apiConfig, authAndTokensConfig, filesConfig)
+    return new Config(databaseConfig, tonStorageDaemonCLI, apiConfig, authAndTokensConfig, filesConfig)
 }

@@ -7,6 +7,16 @@ export class APIConfig {
     ) { }
 }
 
+export class TonStorageDaemonCLI {
+    constructor(
+        public readonly bin: string = "/usr/local/bin/ton-storage/storage-daemon-cli",
+        public readonly host: string = "capy-cloud-backend.storage-daemon",
+        public readonly port: number = 5555,
+        public readonly database: string = "/data/capy_cloud_ton_storage",
+        public readonly timeout: number = 5000,
+    ) { }
+}
+
 export class AuthAndTokensConfig {
     constructor(
         public readonly privateKey: string = "",
@@ -26,6 +36,7 @@ export class FilesConfig {
 export class Config {
     constructor(
         public readonly database: DatabaseConfig,
+        public readonly tonStorageDaemonCLI: TonStorageDaemonCLI,
         public readonly api: APIConfig,
         public readonly authAndTokens: AuthAndTokensConfig,
         public readonly files: FilesConfig,
