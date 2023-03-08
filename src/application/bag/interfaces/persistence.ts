@@ -5,6 +5,7 @@ import { UUID } from "@src/utils/uuid"
 
 
 export interface BagRepo {
+  getBagById(id: UUID): Promise<Bag>
   addBag(bag: Bag): Promise<void>
   updateBad(bag: Bag): Promise<void>
   deleteBagById(id: UUID): Promise<void>

@@ -21,8 +21,8 @@ export class UpdateBagHandler {
   ) { }
 
   async execute(command: UpdateBag): Promise<void> {
-    const bag = await this.bagRepo.acquireBagById(command.id)
-    const updated_bag = Bag.create(
+    const bag = await this.bagRepo.getBagById(command.id)
+    const updatedBag = Bag.create(
       bag.id,
       bag.bagId,
       bag.description,
@@ -30,6 +30,6 @@ export class UpdateBagHandler {
       (command.bagData.isUploaded != null) ? command.bagData.isUploaded : bag.isUploaded,
     )
 
-    await this.bagRepo.updateBad(updated_bag)
+    await this.bagRepo.updateBad(updatedBag)
   }
 }
