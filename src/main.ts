@@ -1,7 +1,7 @@
 import { ValidationPipe } from "@nestjs/common"
 import { NestFactory } from "@nestjs/core"
 import { DatabaseInterceptor } from "@src/api/interceptors"
-import { ConfigMiddleware } from "@src/api/middlewares"
+import { ConfigMiddleware, TonStorageMiddleware } from "@src/api/middlewares"
 import { APIModule } from "@src/api/modules"
 import { loadConfigFromEnv } from "@src/infrastructure/config-loader"
 import { Config as DatabaseConfig } from "@src/infrastructure/db/config"
@@ -31,23 +31,25 @@ async function main(): Promise<void> {
   const config = loadConfigFromEnv()
   console.log(`Loaded config: \`${JSON.stringify(config, null, 0)}\`\n`)
 
-  const _storageDaemonCLI = new TonstorageCLI({
-    bin: config.tonStorageDaemonCLI.bin,
-    host: `${config.tonStorageDaemonCLI.host}:${config.tonStorageDaemonCLI.port}`,
-    database: config.tonStorageDaemonCLI.database,
-    timeout: config.tonStorageDaemonCLI.timeout,
-  });
-
   const dataSource = getDataSource(config.database)
   dataSource.initialize()
     .then(() => console.log("Database initialized"))
     .catch((err) => console.error(`Database initialization failed with error: \`${err}\``))
 
-  const app = await NestFactory.create(APIModule.forRoot(config, dataSource))
+  const storageDaemonCLI = new TonstorageCLI({
+    bin: config.tonStorageDaemonCLI.bin,
+    host: `${config.tonStorageDaemonCLI.host}:${config.tonStorageDaemonCLI.port}`,
+    database: config.tonStorageDaemonCLI.database,
+    timeout: config.tonStorageDaemonCLI.timeout,
+  })
+
+  const app = await NestFactory.create(APIModule.forRoot(config, dataSource, storageDaemonCLI))
 
   const configMiddleware = new ConfigMiddleware(config)
+  const tonStorageMiddleware = new TonStorageMiddleware(storageDaemonCLI)
 
   app.use(configMiddleware.use.bind(configMiddleware))
+  app.use(tonStorageMiddleware.use.bind(tonStorageMiddleware))
   console.log("Middlewares registered")
 
   app.useGlobalInterceptors(new DatabaseInterceptor(dataSource))

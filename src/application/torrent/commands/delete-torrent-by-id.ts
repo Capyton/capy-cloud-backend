@@ -13,6 +13,6 @@ export class DeleteTorrentHandler {
     ) { }
 
     async execute(command: DeleteTorrent): Promise<void> {
-        this.torrentManager.deleteTorrentByBagId(command.bagId)
+        await this.torrentManager.deleteTorrentByBagId(command.bagId)
     }
 }

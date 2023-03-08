@@ -1,5 +1,4 @@
 import { BagHash, BagId } from "@src/domain/bag/types"
-import { TorrentFile } from "@src/domain/torrent_file/entities"
 
 export class Torrent {
     constructor(
@@ -16,6 +15,27 @@ export class Torrent {
         readonly downloadSpeed: number,
         readonly uploadSpeed: number,
         readonly fatalError: string | null,
-        readonly files: TorrentFile[],
     ) { }
+
+    static create(
+        bagId: BagId,
+        badHash: BagHash,
+        totalSize: number,
+        description: string | null,
+        filesCount: number,
+        includedSize: number,
+        downloadedSize: number,
+        activeDownload: boolean,
+        activeUpload: boolean,
+        completed: boolean,
+        downloadSpeed: number,
+        uploadSpeed: number,
+        fatalError: string | null,
+    ): Torrent {
+        return new Torrent(
+            bagId, badHash, totalSize, description, filesCount,
+            includedSize, downloadedSize, activeDownload, activeUpload,
+            completed, downloadSpeed, uploadSpeed, fatalError,
+        )
+    }
 }

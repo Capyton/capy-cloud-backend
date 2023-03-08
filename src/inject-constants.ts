@@ -11,3 +11,6 @@ export const DATA_SOURCE: InjectionToken = "DATA_SOURCE"
 
 // Interceptors, middlewares, etc.
 export const FILES_FIELD_KEY: InjectionToken = "FILES_FIELD_KEY"
+
+// Ton storage
+export const STORAGE_DAEMON_CLI_KEY: InjectionToken = "STORAGE_DAEMON_CLI_KEY"

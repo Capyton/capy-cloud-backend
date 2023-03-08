@@ -1,4 +1,7 @@
-import { BadRequestException, Body, Controller, Post, UploadedFiles, UseInterceptors } from "@nestjs/common"
+import {
+    BadRequestException, Body, Controller, Get,
+    Inject, Post, Query, UploadedFiles, UseInterceptors
+} from "@nestjs/common"
 import { FilesInterceptor } from "@src/api/interceptors"
 import {
     BagDir,
@@ -15,11 +18,16 @@ import { UnitOfWork } from "@src/application/common/interfaces"
 import { CreateFile, CreateFileHandler } from "@src/application/file/commands/create-file"
 import { FileRepo } from "@src/application/file/interfaces"
 import { CreateTorrent, CreateTorrentHandler } from "@src/application/torrent/commands/create-torrent"
-import { TorrentManager } from "@src/application/torrent/interfaces"
+import { TorrentCreateError, TorrentGetByBagIdError, TorrentRemoveByBagIdError } from "@src/application/torrent/exceptions"
+import { TorrentManager, TorrentReader } from "@src/application/torrent/interfaces"
+import { GetTorrentByBagId, GetTorrentByBagIdHandler } from "@src/application/torrent/queries/get-torrent-by-bag-id"
 import { BagId } from "@src/domain/bag/types"
-import { Torrent } from "@src/domain/torrent/entities"
+import { TorrentFull } from "@src/domain/torrent/entities"
+import { STORAGE_DAEMON_CLI_KEY } from "@src/inject-constants"
 import { uuid7 } from "@src/utils/uuid"
 import { IsNotEmpty, IsOptional, IsString, validateOrReject } from "class-validator"
+import TonStorageDaemonCLI from "tonstorage-cli"
+import { ApplicationException } from "../../application/common/exceptions"
 
 class FileInfoDTO {
     @IsNotEmpty()
@@ -85,6 +93,10 @@ function convertAttrsToFilesInfo(
 
 @Controller("torrent")
 export class TorrentController {
+    constructor(
+        @Inject(STORAGE_DAEMON_CLI_KEY) private readonly storageDaemonCli: TonStorageDaemonCLI,
+    ) { }
+
     /**
      * Create a torrent from a bag of files
      * @param files - Files to upload as files of a bag
@@ -108,7 +120,7 @@ export class TorrentController {
         @Body("filenames") filenames?: Array<string> | string,
         @Body("descriptions") descriptions: Array<string | null> | string | null = null,
         @Body("pathDirs") pathDirs: Array<string> | string = "/",
-    ): Promise<Torrent> {
+    ): Promise<TorrentFull> {
         if (!filenames) {
             throw new BadRequestException("Filename(s) are required")
         }
@@ -127,6 +139,14 @@ export class TorrentController {
         const createFileHandler = new CreateFileHandler(fileRepo, uow)
 
         const torrent = await createTorrentHandler.execute(new CreateTorrent(bagDescription, bagDir))
+            .catch(err => {
+                console.error("Failed to create torrent", err)
+
+                if (err instanceof TorrentCreateError) {
+                    throw err
+                }
+                throw new ApplicationException("Failed to create torrent", err)
+            })
 
         const bagIdDaemon = torrent.bagId
         const bagSize = torrent.totalSize
@@ -144,6 +164,35 @@ export class TorrentController {
 
             await createFileHandler.execute(new CreateFile(fileId, bagId, filename, pathDir, description, size))
         }
+
+        return torrent
+    }
+
+    /**
+     * Get a torrent by bag id
+     * @param bagId - Bag id of torrent
+     * @returns Torrent
+     */
+    @Get()
+    getTorrent(
+        @ParamTorrentReader() torrentReader: TorrentReader,
+        @Query("bagId") bagId: BagId | undefined,
+    ): Promise<TorrentFull> {
+        if (!bagId) {
+            throw new BadRequestException("Bag id is required")
+        }
+
+        const getTorrentByBagIdHandler = new GetTorrentByBagIdHandler(torrentReader)
+
+        const torrent = getTorrentByBagIdHandler.execute(new GetTorrentByBagId(bagId))
+            .catch(err => {
+                console.error("Failed to get torrent", err)
+
+                if (err instanceof TorrentGetByBagIdError) {
+                    throw err
+                }
+                throw new ApplicationException("Failed to get torrent", err)
+            })
 
         return torrent
     }
