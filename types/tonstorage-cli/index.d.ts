@@ -24,6 +24,33 @@ declare module "tonstorage-cli" {
 
         response(cmd: string): Promise<CLIResult<JSONResult>>
 
+        /**
+         * @returns
+         * Example return value
+         * ```json
+         * {
+         *     "@type" : "storage.daemon.torrentList",
+         *     "torrents" : [{
+         *         "@type" : "storage.daemon.torrent",
+         *         "hash" : "HZzHVhC7ayP02Inwe2r7CpVgHEriyz6BcpM6+tf/75A=",
+         *         "flags" : 3,
+         *         "total_size" : "49",
+         *         "description" : "",
+         *         "files_count" : "1",
+         *         "included_size" : "49",
+         *         "dir_name" : "",
+         *         "downloaded_size" : "49",
+         *         "root_dir" : "/usr/src/app/uploads/",
+         *         "active_download" : false,
+         *         "active_upload" : true,
+         *         "completed" : true,
+         *         "download_speed" : 0.000000,
+         *         "upload_speed" : 0.000000,
+         *         "fatal_error" : ""
+         *     }]
+         * }
+         * ```
+         */
         list(): Promise<CLIResult<JSONResult>>
 
         get(index: string | number): Promise<CLIResult<JSONResult>>
@@ -34,6 +61,38 @@ declare module "tonstorage-cli" {
          * @param upload - Default `true`
          * @param copy - Default `false`
          * @param description - Default `null`
+         * @returns
+         * Example return value
+         * ```json
+         * {
+         *     "@type" : "storage.daemon.torrentFull",
+         *     "torrent" : {
+         *         "@type" : "storage.daemon.torrent",
+         *         "hash" : "HZzHVhC7ayP02Inwe2r7CpVgHEriyz6BcpM6+tf/75A=",
+         *         "flags" : 3,
+         *         "total_size" : "49",
+         *         "description" : "",
+         *         "files_count" : "1",
+         *         "included_size" : "49",
+         *         "dir_name" : "",
+         *         "downloaded_size" : "49",
+         *         "root_dir" : "/usr/src/app/uploads/",
+         *         "active_download" : false,
+         *         "active_upload" : true,
+         *         "completed" : true,
+         *         "download_speed" : 0.000000,
+         *         "upload_speed" : 0.000000,
+         *         "fatal_error" : ""
+         *     },
+         *     "files" : [{
+         *         "@type" : "storage.daemon.fileInfo",
+         *         "name" : "a",
+         *         "size" : "0",
+         *         "priority" : 1,
+         *         "downloaded_size" : "0"
+         *     }]
+         * }
+         * ```
          */
         create(path: string, options?: {
             upload: boolean,
