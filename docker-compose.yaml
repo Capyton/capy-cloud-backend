@@ -65,6 +65,7 @@ services:
       - capy-cloud-backend.storage-daemon.network
     volumes:
       - ./global_configs:/usr/src/app/global_configs:ro
+      - capy-cloud-backend.api.data:/usr/src/app/${UPLOAD_DIR}:ro
       - capy-cloud-backend.storage-daemon.data:/data:rw
       - capy-cloud-backend.storage-daemon.bin:/usr/local/bin:ro
 
