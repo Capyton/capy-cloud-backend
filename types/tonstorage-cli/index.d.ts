@@ -7,7 +7,7 @@ type CLIResult<T> = (
 )
 
 declare module "tonstorage-cli" {
-    export class TonstorageCLI {
+    export default class TonstorageCLI {
         constructor(options: {
             bin: string,
             host: string,

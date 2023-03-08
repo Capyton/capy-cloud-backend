@@ -6,7 +6,7 @@ import { APIModule } from "@src/api/modules"
 import { loadConfigFromEnv } from "@src/infrastructure/config-loader"
 import { Config as DatabaseConfig } from "@src/infrastructure/db/config"
 import { Bag, File, Provider, ProviderBag, User, UserBag } from "@src/infrastructure/db/models"
-import { TonstorageCLI } from "tonstorage-cli"
+import TonstorageCLI from "tonstorage-cli"
 import { DataSource } from "typeorm"
 
 function getDataSource(config: DatabaseConfig): DataSource {
@@ -36,7 +36,7 @@ async function main(): Promise<void> {
     host: `${config.tonStorageDaemonCLI.host}:${config.tonStorageDaemonCLI.port}`,
     database: config.tonStorageDaemonCLI.database,
     timeout: config.tonStorageDaemonCLI.timeout,
-  })
+  });
 
   const dataSource = getDataSource(config.database)
   dataSource.initialize()
