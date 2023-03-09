@@ -25,7 +25,7 @@ export class AuthController {
     }
 
     @Post("login")
-    async loginUser(
+    loginUser(
         @ParamAuthUserRepo() userRepo: UserRepo,
         @ParamAuthManager() authManager: AuthManager,
         @ParamJwtManager() jwtManager: JwtManager,
@@ -51,7 +51,7 @@ export class AuthController {
 
         const proof = new Proof(signature, payload.nonce)
         const tokenHandler = new VerifyProofHandler(authManager, jwtManager, userRepo, uow)
-        const token = await tokenHandler.execute(new VerifyProof(address, network, proof))
+        const token = tokenHandler.execute(new VerifyProof(address, network, proof))
 
         return token
     }

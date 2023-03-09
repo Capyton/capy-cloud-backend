@@ -18,7 +18,6 @@ import { UnitOfWork } from "@src/application/common/interfaces"
 import { CreateFile, CreateFileHandler } from "@src/application/file/commands/create-file"
 import { FileRepo } from "@src/application/file/interfaces"
 import { CreateTorrent, CreateTorrentHandler } from "@src/application/torrent/commands/create-torrent"
-import { TorrentCreateError, TorrentGetByBagIdError, TorrentRemoveByBagIdError } from "@src/application/torrent/exceptions"
 import { TorrentManager, TorrentReader } from "@src/application/torrent/interfaces"
 import { GetTorrentByBagId, GetTorrentByBagIdHandler } from "@src/application/torrent/queries/get-torrent-by-bag-id"
 import { BagId } from "@src/domain/bag/types"
@@ -27,7 +26,6 @@ import { STORAGE_DAEMON_CLI_KEY } from "@src/inject-constants"
 import { uuid7 } from "@src/utils/uuid"
 import { IsNotEmpty, IsOptional, IsString, validateOrReject } from "class-validator"
 import TonStorageDaemonCLI from "tonstorage-cli"
-import { ApplicationException } from "../../application/common/exceptions"
 
 class FileInfoDTO {
     @IsNotEmpty()
@@ -139,14 +137,6 @@ export class TorrentController {
         const createFileHandler = new CreateFileHandler(fileRepo, uow)
 
         const torrent = await createTorrentHandler.execute(new CreateTorrent(bagDescription, bagDir))
-            .catch(err => {
-                console.error("Failed to create torrent", err)
-
-                if (err instanceof TorrentCreateError) {
-                    throw err
-                }
-                throw new ApplicationException("Failed to create torrent", err)
-            })
 
         const bagIdDaemon = torrent.bagId
         const bagSize = torrent.totalSize
@@ -185,14 +175,6 @@ export class TorrentController {
         const getTorrentByBagIdHandler = new GetTorrentByBagIdHandler(torrentReader)
 
         const torrent = getTorrentByBagIdHandler.execute(new GetTorrentByBagId(bagId))
-            .catch(err => {
-                console.error("Failed to get torrent", err)
-
-                if (err instanceof TorrentGetByBagIdError) {
-                    throw err
-                }
-                throw new ApplicationException("Failed to get torrent", err)
-            })
 
         return torrent
     }

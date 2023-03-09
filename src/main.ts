@@ -1,5 +1,6 @@
 import { ValidationPipe } from "@nestjs/common"
 import { NestFactory } from "@nestjs/core"
+import { ApplicationExceptionFilter } from "@src/api/filters"
 import { DatabaseInterceptor } from "@src/api/interceptors"
 import { ConfigMiddleware, TonStorageMiddleware } from "@src/api/middlewares"
 import { APIModule } from "@src/api/modules"
@@ -43,19 +44,22 @@ async function main(): Promise<void> {
     timeout: config.tonStorageDaemonCLI.timeout,
   })
 
-  const app = await NestFactory.create(APIModule.forRoot(config, dataSource, storageDaemonCLI))
+  const api = await NestFactory.create(APIModule.forRoot(config, dataSource, storageDaemonCLI))
 
   const configMiddleware = new ConfigMiddleware(config)
   const tonStorageMiddleware = new TonStorageMiddleware(storageDaemonCLI)
 
-  app.use(configMiddleware.use.bind(configMiddleware))
-  app.use(tonStorageMiddleware.use.bind(tonStorageMiddleware))
+  api.use(configMiddleware.use.bind(configMiddleware))
+  api.use(tonStorageMiddleware.use.bind(tonStorageMiddleware))
   console.log("Middlewares registered")
 
-  app.useGlobalInterceptors(new DatabaseInterceptor(dataSource))
+  api.useGlobalInterceptors(new DatabaseInterceptor(dataSource))
   console.log("Global interceptors registered")
 
-  app.useGlobalPipes(new ValidationPipe({
+  api.useGlobalFilters(new ApplicationExceptionFilter())
+  console.log("Global filters registered")
+
+  api.useGlobalPipes(new ValidationPipe({
     transform: true,
     disableErrorMessages: false,
     transformOptions: {
@@ -65,7 +69,7 @@ async function main(): Promise<void> {
   console.log("Global pipes registered")
 
   console.log(`Starting server on \`${config.api.host}:${config.api.port}\``)
-  await app.listen(config.api.port, config.api.host)
+  await api.listen(config.api.port, config.api.host)
 }
 
 
