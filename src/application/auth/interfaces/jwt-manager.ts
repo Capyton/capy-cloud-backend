@@ -1,6 +1,7 @@
-import { User } from "@src/domain/user/entities";
+import { UserPayload } from "@src/application/auth/dto"
 
 
 export interface JwtManager {
-  generateToken(user: User): string
+  generateToken(userPayload: UserPayload): string
+  validateToken(token: string): UserPayload
 }

@@ -13,7 +13,7 @@ export class Proof {
     // readonly domain: {lengthBytes: number, value: string},
     readonly signature: string,
     readonly nonce: string,
-  ) {}
+  ) { }
 }
 
 
@@ -38,7 +38,7 @@ export class VerifyProofHandler {
     private readonly jwtManager: JwtManager,
     private readonly userRepo: UserRepo,
     private readonly uow: UnitOfWork,
-  ) {}
+  ) { }
 
   async execute(command: VerifyProof): Promise<dto.AuthToken> {
     this.authManager.validateNonce(command.proof.nonce)
@@ -63,7 +63,7 @@ export class VerifyProofHandler {
       await this.uow.commit()
     }
 
-    const token = this.jwtManager.generateToken(user)
+    const token = this.jwtManager.generateToken(new dto.UserPayload(user.id, user.address))
     return new dto.AuthToken(token)
   }
 }

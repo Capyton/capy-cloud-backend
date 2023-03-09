@@ -23,3 +23,21 @@ export class InvalidProofSignature extends ApplicationException {
     super("Invalid proof signature", undefined, meatadata)
   }
 }
+
+export class JwtTokenIsExpired extends ApplicationException {
+  constructor(cause?: Error, meatadata?: unknown) {
+    super("JWT token is expired", cause, meatadata)
+  }
+}
+
+export class InvalidJwtToken extends ApplicationException {
+  constructor(cause?: Error, meatadata?: unknown) {
+    super("Invalid JWT token", cause, meatadata)
+  }
+}
+
+export class UnknownJwtTokenError extends ApplicationException {
+  constructor(cause?: Error, meatadata?: unknown) {
+    super("Unknown JWT token error", cause, meatadata)
+  }
+}
