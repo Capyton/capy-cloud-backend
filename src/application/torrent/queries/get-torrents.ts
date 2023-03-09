@@ -1,4 +1,4 @@
-import { TorrentFull } from "@src/application/torrent/dto/torrent-full"
+import { Torrent } from "@src/application/torrent/dto/torrent"
 import { TorrentReader } from "@src/application/torrent/interfaces"
 
 export class GetTorrents { }
@@ -8,7 +8,7 @@ export class GetTorrentsHandler {
         readonly torrentReader: TorrentReader,
     ) { }
 
-    async execute(command: GetTorrents): Promise<TorrentFull[]> {
+    async execute(command: GetTorrents): Promise<Torrent[]> {
         return await this.torrentReader.getTorrents()
     }
 }

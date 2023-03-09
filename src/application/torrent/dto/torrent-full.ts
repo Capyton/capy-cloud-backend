@@ -1,5 +1,5 @@
 import { BagHash, BagId } from "@src/domain/bag/types"
-import { TorrentFile } from "@src/domain/torrent_file/entities"
+import { TorrentFile } from "./torrent-file"
 
 export class TorrentFull {
     constructor(
