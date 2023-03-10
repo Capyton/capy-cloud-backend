@@ -27,12 +27,10 @@ export class ApplicationExceptionFilter implements ExceptionFilter {
         switch (exception.constructor) {
             case (
                 NonceIsExpired || InvalidNonce || JwtTokenIsExpired ||
-                InvalidJwtToken || InvalidProofSignature
+                InvalidJwtToken || InvalidProofSignature || UnknownNonceError ||
+                UnknownJwtTokenError
             ):
                 status = 401
-                break
-            case UnknownNonceError || UnknownJwtTokenError:
-                status = 500
                 break
             case (
                 BagIdNotFound || BagBagIdNotFound || FileIdNotFound ||
