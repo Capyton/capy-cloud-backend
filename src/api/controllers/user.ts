@@ -1,11 +1,20 @@
 import { Controller, Get } from "@nestjs/common"
-import { UserRepo as ParamUserRepo } from "@src/api/param_decorators/repositories"
-import { UserRepo } from "@src/application/user/interfaces"
+import { UserPayloadFromAuthToken, UserReader as ParamUserReader } from "@src/api/param_decorators"
+import { UserPayload } from "@src/application/auth/dto"
+import { User } from "@src/application/user/dto"
+import { UserReader } from "@src/application/user/interfaces"
+import { GetUserById, GetUserByIdHandler } from "@src/application/user/queries/get-user-by-id"
 
 @Controller("user")
 export class UserController {
-    @Get()
-    async getUser(@ParamUserRepo() userRepo: UserRepo) {
-        return "Hello World"
+    @Get("me")
+    getMe(
+        @ParamUserReader() userReader: UserReader,
+        @UserPayloadFromAuthToken() userPayload: UserPayload,
+    ): Promise<User> {
+        const userHandler = new GetUserByIdHandler(userReader)
+        const user = userHandler.execute(new GetUserById(userPayload.id))
+
+        return user
     }
 }

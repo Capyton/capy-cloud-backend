@@ -1,6 +1,7 @@
+import { UnitOfWork } from "@src/application/common/interfaces"
 import { UserBagRepo } from "@src/application/user_bag/interfaces/persistence"
-import { UUID } from "@src/utils/uuid"
 import { UserBag } from "@src/domain/user_bag/entities"
+import { UUID } from "@src/utils/uuid"
 
 export class CreateUserBag {
   constructor(
@@ -13,6 +14,7 @@ export class CreateUserBag {
 export class CreateUserBagHandler {
   constructor(
     readonly userBagRepo: UserBagRepo,
+    readonly uow: UnitOfWork,
   ) { }
 
   async execute(command: CreateUserBag): Promise<void> {
@@ -20,5 +22,6 @@ export class CreateUserBagHandler {
       command.id, command.userId, command.bagId
     )
     await this.userBagRepo.addUserBag(userBag)
+    await this.uow.commit()
   }
 }
