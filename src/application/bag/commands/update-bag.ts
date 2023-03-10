@@ -1,4 +1,5 @@
 import { BagRepo } from "@src/application/bag/interfaces/persistence"
+import { UnitOfWork } from "@src/application/common/interfaces"
 import { Bag } from "@src/domain/bag/entities"
 import { UUID } from "@src/utils/uuid"
 
@@ -18,6 +19,7 @@ export class UpdateBag {
 export class UpdateBagHandler {
   constructor(
     readonly bagRepo: BagRepo,
+    readonly uow: UnitOfWork,
   ) { }
 
   async execute(command: UpdateBag): Promise<void> {
@@ -29,7 +31,7 @@ export class UpdateBagHandler {
       bag.size,
       (command.bagData.isUploaded != null) ? command.bagData.isUploaded : bag.isUploaded,
     )
-
     await this.bagRepo.updateBad(updatedBag)
+    await this.uow.commit()
   }
 }

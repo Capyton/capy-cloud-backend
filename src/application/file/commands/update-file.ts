@@ -1,6 +1,7 @@
+import { UnitOfWork } from "@src/application/common/interfaces"
 import { FileRepo } from "@src/application/file/interfaces/persistence"
-import { UUID } from "@src/utils/uuid"
 import { File } from "@src/domain/file/entities"
+import { UUID } from "@src/utils/uuid"
 
 export class UpdateFileData {
   constructor(
@@ -18,6 +19,7 @@ export class UpdateFile {
 export class UpdateFileHandler {
   constructor(
     readonly fileRepo: FileRepo,
+    readonly uow: UnitOfWork,
   ) { }
 
   async execute(command: UpdateFile): Promise<void> {
@@ -30,7 +32,7 @@ export class UpdateFileHandler {
       file.pathDir,
       file.size,
     )
-
     await this.fileRepo.updateFile(updated_file)
+    await this.uow.commit()
   }
 }
