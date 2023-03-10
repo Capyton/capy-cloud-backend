@@ -1,3 +1,4 @@
+export { UserPayloadFromAuthToken } from "./auth-token"
 export { BagDir } from "./bag-dir"
 export { BagId } from "./bag-id"
 export { Config } from "./config"

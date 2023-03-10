@@ -2,7 +2,7 @@ import { ValidationPipe } from "@nestjs/common"
 import { NestFactory } from "@nestjs/core"
 import { ApplicationExceptionFilter } from "@src/api/filters"
 import { DatabaseInterceptor } from "@src/api/interceptors"
-import { ConfigMiddleware, TonStorageMiddleware } from "@src/api/middlewares"
+import { ConfigMiddleware, JwtManagerMiddleware, TonStorageMiddleware } from "@src/api/middlewares"
 import { APIModule } from "@src/api/modules"
 import { loadConfigFromEnv } from "@src/infrastructure/config-loader"
 import { Config as DatabaseConfig } from "@src/infrastructure/db/config"
@@ -48,9 +48,11 @@ async function main(): Promise<void> {
 
   const configMiddleware = new ConfigMiddleware(config)
   const tonStorageMiddleware = new TonStorageMiddleware(storageDaemonCLI)
+  const jwtManagerMiddleware = new JwtManagerMiddleware(config.authAndTokens)
 
   api.use(configMiddleware.use.bind(configMiddleware))
   api.use(tonStorageMiddleware.use.bind(tonStorageMiddleware))
+  api.use(jwtManagerMiddleware.use.bind(jwtManagerMiddleware))
   console.log("Middlewares registered")
 
   api.useGlobalInterceptors(new DatabaseInterceptor(dataSource))
