@@ -1,6 +1,6 @@
 import {
     BadRequestException, Body, Controller, Get,
-    Post, Query, UploadedFiles, UseInterceptors
+    Param, Post, UploadedFiles, UseInterceptors
 } from "@nestjs/common"
 import { FilesInterceptor } from "@src/api/interceptors"
 import {
@@ -92,15 +92,15 @@ function convertAttrsToFilesInfo(
     return filesInfo
 }
 
-@Controller("torrent")
+@Controller("torrens")
 export class TorrentController {
     /**
      * Create a torrent from a bag of files
-     * @param files - Files to upload as files of a bag
-     * @param bagDescription - Description of bag of files
-     * @param filenames - Filenames of files of a bag. If only one file is uploaded, this can be a string.
-     * @param descriptions - Descriptions of files of a bag. If only one file is uploaded, this can be a string.
-     * @param pathDirs - Path dirs of files of a bag. If only one file is uploaded, this can be a string.
+     * @param files - Files to upload as files of the bag
+     * @param bagDescription - Description of the bag
+     * @param filenames - Filenames of files of the bag. If only one file is uploaded, this can be a string.
+     * @param descriptions - Descriptions of files of the bag. If only one file is uploaded, this can be a string.
+     * @param pathDirs - Path dirs of files of the bag. If only one file is uploaded, this can be a string.
      * @returns Created torrent
      */
     @Post()
@@ -164,18 +164,14 @@ export class TorrentController {
 
     /**
      * Get a torrent by bag id
-     * @param bagId - Bag id of torrent
+     * @param bagId - Bag id of the torrent
      * @returns Torrent
      */
-    @Get()
+    @Get(":bagId")
     getTorrent(
         @ParamTorrentReader() torrentReader: TorrentReader,
-        @Query("bagId") bagId?: BagId,
+        @Param("bagId") bagId: BagId,
     ): Promise<TorrentFull> {
-        if (!bagId) {
-            throw new BadRequestException("Bag id is required")
-        }
-
         const getTorrentByBagIdHandler = new GetTorrentByBagIdHandler(torrentReader)
 
         const torrent = getTorrentByBagIdHandler.execute(new GetTorrentByBagId(bagId))
