@@ -1,4 +1,4 @@
-export { APIModule } from "./api"
+export { ApiModule } from "./api"
 export { AuthModule } from "./auth"
 export { BagModule } from "./bags"
 export { TorrentModule } from "./torrents"

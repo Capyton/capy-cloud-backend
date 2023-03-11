@@ -1,9 +1,10 @@
 import { ValidationPipe } from "@nestjs/common"
 import { NestFactory } from "@nestjs/core"
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 import { ApplicationExceptionFilter } from "@src/api/filters"
 import { DatabaseInterceptor } from "@src/api/interceptors"
 import { ConfigMiddleware, JwtManagerMiddleware, TonStorageMiddleware } from "@src/api/middlewares"
-import { APIModule } from "@src/api/modules"
+import { ApiModule } from "@src/api/modules"
 import { loadConfigFromEnv } from "@src/infrastructure/config-loader"
 import { Config as DatabaseConfig } from "@src/infrastructure/db/config"
 import { Bag, File, Provider, ProviderBag, User, UserBag } from "@src/infrastructure/db/models"
@@ -44,24 +45,25 @@ async function main(): Promise<void> {
     timeout: config.tonStorageDaemonCLI.timeout,
   })
 
-  const api = await NestFactory.create(APIModule.forRoot(config, dataSource, storageDaemonCLI))
+  const app = await NestFactory.create(ApiModule.forRoot(config, dataSource, storageDaemonCLI))
+  app.setGlobalPrefix("/api/v1")
 
   const configMiddleware = new ConfigMiddleware(config)
   const tonStorageMiddleware = new TonStorageMiddleware(storageDaemonCLI)
   const jwtManagerMiddleware = new JwtManagerMiddleware(config.authAndTokens)
 
-  api.use(configMiddleware.use.bind(configMiddleware))
-  api.use(tonStorageMiddleware.use.bind(tonStorageMiddleware))
-  api.use(jwtManagerMiddleware.use.bind(jwtManagerMiddleware))
+  app.use(configMiddleware.use.bind(configMiddleware))
+  app.use(tonStorageMiddleware.use.bind(tonStorageMiddleware))
+  app.use(jwtManagerMiddleware.use.bind(jwtManagerMiddleware))
   console.log("Middlewares registered")
 
-  api.useGlobalInterceptors(new DatabaseInterceptor(dataSource))
+  app.useGlobalInterceptors(new DatabaseInterceptor(dataSource))
   console.log("Global interceptors registered")
 
-  api.useGlobalFilters(new ApplicationExceptionFilter())
+  app.useGlobalFilters(new ApplicationExceptionFilter())
   console.log("Global filters registered")
 
-  api.useGlobalPipes(new ValidationPipe({
+  app.useGlobalPipes(new ValidationPipe({
     transform: true,
     disableErrorMessages: false,
     transformOptions: {
@@ -70,8 +72,27 @@ async function main(): Promise<void> {
   }))
   console.log("Global pipes registered")
 
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle("CapyCloud API")
+    .setDescription("Endpoints of CapyCloud API")
+    .setVersion("1.0.0-dev")
+    .setLicense("Apache 2.0", "https://www.apache.org/licenses/LICENSE-2.0")
+    .setBasePath("/api/v1")
+    .addBearerAuth({
+      type: "http",
+      description: "JWT token",
+      name: "Authorization",
+      scheme: "bearer",
+      bearerFormat: "JWT",
+    })
+    .build()
+  const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup("swagger", app, swaggerDocument, {
+    useGlobalPrefix: true,
+  })
+
   console.log(`Starting server on \`${config.api.host}:${config.api.port}\``)
-  await api.listen(config.api.port, config.api.host)
+  await app.listen(config.api.port, config.api.host)
 }
 
 

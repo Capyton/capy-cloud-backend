@@ -9,14 +9,14 @@ import { TorrentModule } from "./torrents"
 import { UserModule } from "./users"
 
 @Module({})
-export class APIModule {
+export class ApiModule {
     static forRoot(
         config: Config,
         dataSource: DataSource,
         storageDaemonCLI: TonstorageCLI,
     ): DynamicModule {
         return {
-            module: APIModule,
+            module: ApiModule,
             imports: [
                 AuthModule.forRoot(config.authAndTokens, dataSource),
                 TorrentModule.forRoot(config.files, dataSource, storageDaemonCLI),

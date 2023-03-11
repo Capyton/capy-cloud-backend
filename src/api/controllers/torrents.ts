@@ -2,6 +2,7 @@ import {
     BadRequestException, Body, Controller, Get,
     Param, Post, UploadedFiles, UseInterceptors
 } from "@nestjs/common"
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse } from "@nestjs/swagger"
 import { FilesInterceptor } from "@src/api/interceptors"
 import {
     BagDir,
@@ -99,10 +100,212 @@ export class TorrentController {
      * @param files - Files to upload as files of the bag
      * @param bagDescription - Description of the bag
      * @param filenames - Filenames of files of the bag. If only one file is uploaded, this can be a string.
-     * @param descriptions - Descriptions of files of the bag. If only one file is uploaded, this can be a string.
-     * @param pathDirs - Path dirs of files of the bag. If only one file is uploaded, this can be a string.
+     * @param descriptions - Descriptions of files of the bag. If only one file is uploaded, this can be a string and have default value.
+     * @param pathDirs - Path dirs of files of the bag. If only one file is uploaded, this can be a string and have default value.
      * @returns Created torrent
      */
+    @ApiOperation({ summary: "Create a torrent from a bag of files" })
+    @ApiBearerAuth()
+    @ApiBody({
+        schema: {
+            type: "object",
+            properties: {
+                files: {
+                    nullable: false,
+                    title: "Files",
+                    type: "array",
+                    items: {
+                        type: "string",
+                        format: "binary",
+                    },
+                    description: "Files to upload as files of the bag",
+                },
+                bagDescription: {
+                    nullable: true,
+                    title: "Bag description",
+                    type: "string",
+                    description: "Description of the bag",
+                },
+                filenames: {
+                    nullable: false,
+                    title: "Filenames",
+                    type: "array",
+                    items: {
+                        type: "string",
+                    },
+                    description: "Filenames of files of the bag. If only one file is uploaded, this can be a string.",
+                },
+                descriptions: {
+                    nullable: true,
+                    title: "Descriptions",
+                    type: "array",
+                    items: {
+                        type: "string",
+                    },
+                    description: (
+                        "Descriptions of files of the bag. " +
+                        "If only one file is uploaded, this can be a string and have default value."
+                    ),
+                    default: null,
+                },
+                pathDirs: {
+                    nullable: true,
+                    title: "Path dirs",
+                    type: "array",
+                    items: {
+                        type: "string",
+                    },
+                    description: (
+                        "Path dirs of files of the bag. " +
+                        "If only one file is uploaded, this can be a string and have default value."
+                    ),
+                    default: "/",
+                },
+            },
+        },
+    })
+    @ApiResponse({
+        status: 201,
+        description: "Created torrent",
+        schema: {
+            nullable: false,
+            type: "object",
+            properties: {
+                bagId: {
+                    nullable: false,
+                    title: "Bag id",
+                    type: "string",
+                    description: "Id of the bag",
+                },
+                bagHash: {
+                    nullable: false,
+                    title: "Bag hash",
+                    type: "string",
+                    description: "Hash of the bag",
+                },
+                totalSize: {
+                    nullable: false,
+                    title: "Total size",
+                    type: "number",
+                    description: "Total size of the bag",
+                },
+                description: {
+                    nullable: true,
+                    title: "Description",
+                    type: "string",
+                    description: "Description of the bag",
+                },
+                filesCount: {
+                    nullable: false,
+                    title: "Files count",
+                    type: "number",
+                    description: "Count of files of the bag",
+                },
+                includedSize: {
+                    nullable: false,
+                    title: "Included size",
+                    type: "number",
+                    description: "Included size of the bag",
+                },
+                downloadedSize: {
+                    nullable: false,
+                    title: "Downloaded size",
+                    type: "number",
+                    description: "Downloaded size of the bag",
+                },
+                activeDownload: {
+                    nullable: false,
+                    title: "Active download",
+                    type: "boolean",
+                    description: "Active download of the bag",
+                },
+                activeUpload: {
+                    nullable: false,
+                    title: "Active upload",
+                    type: "boolean",
+                    description: "Active upload of the bag",
+                },
+                completed: {
+                    nullable: false,
+                    title: "Completed",
+                    type: "boolean",
+                    description: "Completed of the bag",
+                },
+                downloadSpeed: {
+                    nullable: false,
+                    title: "Download speed",
+                    type: "number",
+                    description: "Download speed of the bag",
+                },
+                uploadSpeed: {
+                    nullable: false,
+                    title: "Upload speed",
+                    type: "number",
+                    description: "Upload speed of the bag",
+                },
+                fatalError: {
+                    nullable: true,
+                    title: "Fatal error",
+                    type: "string",
+                    description: "Fatal error of the bag",
+                },
+                files: {
+                    nullable: false,
+                    title: "Files",
+                    type: "array",
+                    items: {
+                        nullable: false,
+                        type: "object",
+                        properties: {
+                            name: {
+                                nullable: false,
+                                title: "Name",
+                                type: "string",
+                                description: "Name of the file",
+                            },
+                            size: {
+                                nullable: false,
+                                title: "Size",
+                                type: "number",
+                                description: "Size of the file",
+                            },
+                            priority: {
+                                nullable: false,
+                                title: "Priority",
+                                type: "number",
+                                description: "Priority of the file",
+                            },
+                            downloadedSize: {
+                                nullable: false,
+                                title: "Downloaded size",
+                                type: "number",
+                                description: "Downloaded size of the file",
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    })
+    @ApiResponse({
+        status: 400,
+        description: (
+            "Filename(s) are required | " +
+            "Filenames, descriptions and path dirs should have the same length | " +
+            "Files and files info should have the same length | " +
+            "Files info validation failed | " +
+            "Torrent create error"
+        ),
+    })
+    @ApiResponse({
+        status: 401,
+        description: (
+            "Unauthorized | " +
+            "JWT token is expired | " +
+            "Invalid JWT token | " +
+            "Unknown JWT token error"
+        ),
+    })
     @Post()
     @UseInterceptors(FilesInterceptor)
     async createTorrent(
@@ -129,7 +332,9 @@ export class TorrentController {
             throw new BadRequestException("Files and files info should have the same length")
         } else {
             validateOrReject(filesInfo).catch(errors => {
-                throw new BadRequestException(`Files info validation failed: \`${JSON.stringify(errors)}\``)
+                console.error(`Files info validation failed: \`${JSON.stringify(errors)}\``)
+
+                throw new BadRequestException("Files info validation failed")
             })
         }
 
@@ -167,6 +372,143 @@ export class TorrentController {
      * @param bagId - Bag id of the torrent
      * @returns Torrent
      */
+    @ApiOperation({ summary: "Get a torrent by bag id" })
+    @ApiParam({
+        schema: {
+            nullable: false,
+            title: "Bag id",
+            type: "string",
+            description: "Bag id of the torrent",
+        },
+        name: "bagId",
+    })
+    @ApiResponse({
+        status: 200,
+        description: "Torrent",
+        schema: {
+            nullable: false,
+            type: "object",
+            properties: {
+                bagId: {
+                    nullable: false,
+                    title: "Bag id",
+                    type: "string",
+                    description: "Id of the bag",
+                },
+                bagHash: {
+                    nullable: false,
+                    title: "Bag hash",
+                    type: "string",
+                    description: "Hash of the bag",
+                },
+                totalSize: {
+                    nullable: false,
+                    title: "Total size",
+                    type: "number",
+                    description: "Total size of the bag",
+                },
+                description: {
+                    nullable: true,
+                    title: "Description",
+                    type: "string",
+                    description: "Description of the bag",
+                },
+                filesCount: {
+                    nullable: false,
+                    title: "Files count",
+                    type: "number",
+                    description: "Count of files of the bag",
+                },
+                includedSize: {
+                    nullable: false,
+                    title: "Included size",
+                    type: "number",
+                    description: "Included size of the bag",
+                },
+                downloadedSize: {
+                    nullable: false,
+                    title: "Downloaded size",
+                    type: "number",
+                    description: "Downloaded size of the bag",
+                },
+                activeDownload: {
+                    nullable: false,
+                    title: "Active download",
+                    type: "boolean",
+                    description: "Active download of the bag",
+                },
+                activeUpload: {
+                    nullable: false,
+                    title: "Active upload",
+                    type: "boolean",
+                    description: "Active upload of the bag",
+                },
+                completed: {
+                    nullable: false,
+                    title: "Completed",
+                    type: "boolean",
+                    description: "Completed of the bag",
+                },
+                downloadSpeed: {
+                    nullable: false,
+                    title: "Download speed",
+                    type: "number",
+                    description: "Download speed of the bag",
+                },
+                uploadSpeed: {
+                    nullable: false,
+                    title: "Upload speed",
+                    type: "number",
+                    description: "Upload speed of the bag",
+                },
+                fatalError: {
+                    nullable: true,
+                    title: "Fatal error",
+                    type: "string",
+                    description: "Fatal error of the bag",
+                },
+                files: {
+                    nullable: false,
+                    title: "Files",
+                    type: "array",
+                    items: {
+                        nullable: false,
+                        type: "object",
+                        properties: {
+                            name: {
+                                nullable: false,
+                                title: "Name",
+                                type: "string",
+                                description: "Name of the file",
+                            },
+                            size: {
+                                nullable: false,
+                                title: "Size",
+                                type: "number",
+                                description: "Size of the file",
+                            },
+                            priority: {
+                                nullable: false,
+                                title: "Priority",
+                                type: "number",
+                                description: "Priority of the file",
+                            },
+                            downloadedSize: {
+                                nullable: false,
+                                title: "Downloaded size",
+                                type: "number",
+                                description: "Downloaded size of the file",
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    })
+    @ApiResponse({
+        status: 400,
+        description: "Torrent get by bag id error",
+    })
     @Get(":bagId")
     getTorrent(
         @ParamTorrentReader() torrentReader: TorrentReader,

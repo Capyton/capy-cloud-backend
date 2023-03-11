@@ -25,23 +25,32 @@ export class ApplicationExceptionFilter implements ExceptionFilter {
 
         let status: number
         switch (exception.constructor) {
-            case (
-                NonceIsExpired || InvalidNonce || JwtTokenIsExpired ||
-                InvalidJwtToken || InvalidProofSignature || UnknownNonceError ||
-                UnknownJwtTokenError
-            ):
+            case NonceIsExpired:
+            case InvalidNonce:
+            case JwtTokenIsExpired:
+            case InvalidJwtToken:
+            case InvalidProofSignature:
+            case UnknownNonceError:
+            case UnknownJwtTokenError:
                 status = 401
                 break
-            case (
-                BagIdNotFound || BagBagIdNotFound || FileIdNotFound ||
-                ProviderIdNotFound || ProviderAddressNotFound || ProviderBagIdNotFound ||
-                TorrentBagIdNotFound || UserAddressNotFound || UserIdNotFound ||
-                UserBagIdNotFound
-            ):
+            case BagIdNotFound:
+            case BagBagIdNotFound:
+            case FileIdNotFound:
+            case ProviderIdNotFound:
+            case ProviderAddressNotFound:
+            case ProviderBagIdNotFound:
+            case TorrentBagIdNotFound:
+            case UserAddressNotFound:
+            case UserIdNotFound:
+            case UserBagIdNotFound:
                 status = 404
                 break
-            case TorrentCreateError || TorrentGetByBagIdError || TorrentRemoveByBagIdError:
+            case TorrentCreateError:
+            case TorrentGetByBagIdError:
+            case TorrentRemoveByBagIdError:
                 status = 400
+                break
             default:
                 status = 500
         }
