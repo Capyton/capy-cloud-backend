@@ -5,10 +5,10 @@ import { User } from "@src/application/user/dto"
 import { UserReader } from "@src/application/user/interfaces"
 import { GetUserById, GetUserByIdHandler } from "@src/application/user/queries/get-user-by-id"
 
-@Controller("user")
+@Controller("users")
 export class UserController {
     @Get("me")
-    getMe(
+    getUser(
         @ParamUserReader() userReader: UserReader,
         @UserPayloadFromAuthToken() userPayload: UserPayload,
     ): Promise<User> {
