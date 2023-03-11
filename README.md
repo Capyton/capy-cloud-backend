@@ -6,6 +6,7 @@ This is the backend of the **CapyCloud** project
 
 - Install [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
 - Clone this repository `git clone https://github.com/Capyton/capy-cloud-backend.git`
+- Init mainnet or testnet config `./global_configs/init.sh mainnet` or `./global_configs/init.sh testnet`
 - Copy `.env.template` to `.env` and fill it with your data
 - Run `docker-compose up -d` to start the project
 
