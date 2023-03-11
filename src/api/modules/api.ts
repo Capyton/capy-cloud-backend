@@ -4,8 +4,9 @@ import { API_CONFIG } from "@src/inject-constants"
 import TonstorageCLI from "tonstorage-cli"
 import { DataSource } from "typeorm"
 import { AuthModule } from "./auth"
-import { TorrentModule } from "./torrent"
-import { UserModule } from "./user"
+import { BagModule } from "./bags"
+import { TorrentModule } from "./torrents"
+import { UserModule } from "./users"
 
 @Module({})
 export class APIModule {
@@ -20,6 +21,7 @@ export class APIModule {
                 AuthModule.forRoot(config.authAndTokens, dataSource),
                 TorrentModule.forRoot(config.files, dataSource, storageDaemonCLI),
                 UserModule.forRoot(),
+                BagModule.forRoot(),
             ],
             providers: [
                 {
@@ -33,6 +35,7 @@ export class APIModule {
                 AuthModule,
                 TorrentModule,
                 UserModule,
+                BagModule,
             ]
         }
     }
