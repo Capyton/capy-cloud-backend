@@ -28,7 +28,7 @@ export class ProviderBagReaderImpl implements ProviderBagReader {
     async getProviderBagById(id: UUID): Promise<ProviderBagDTO> {
         const providerBag = await this.queryRunner.manager.findOne(ProviderBagModel, { where: { id: id } })
         if (!providerBag) {
-            throw new ProviderBagIdNotFound(`Provider bag with id ${id} not found`)
+            throw new ProviderBagIdNotFound()
         }
         return providerBag
     }

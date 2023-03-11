@@ -12,7 +12,7 @@ export class FileRepoImpl implements FileRepo {
     async getFileById(id: UUID): Promise<File> {
         const file = await this.queryRunner.manager.findOne(FileModel, { where: { id: id } })
         if (!file) {
-            throw new FileIdNotFound(`File with id ${id} not found`)
+            throw new FileIdNotFound()
         }
         return file
     }
@@ -36,7 +36,7 @@ export class FileReaderImpl implements FileReader {
     async getFileById(id: UUID): Promise<FileDTO> {
         const file = await this.queryRunner.manager.findOne(FileModel, { where: { id: id } })
         if (!file) {
-            throw new FileIdNotFound(`File with id ${id} not found`)
+            throw new FileIdNotFound()
         }
         return file
     }

@@ -13,7 +13,7 @@ export class UserRepoImpl implements UserRepo {
     async getUserById(id: UUID): Promise<User> {
         const user = await this.queryRunner.manager.findOne(UserModel, { where: { id: id } })
         if (!user) {
-            throw new UserAddressNotFound(`User with id ${id} not found`)
+            throw new UserAddressNotFound()
         }
         return user
     }
@@ -37,7 +37,7 @@ export class UserReaderImpl implements UserReader {
     async getUserById(id: UUID): Promise<UserDTO> {
         const user = await this.queryRunner.manager.findOne(UserModel, { where: { id: id } })
         if (!user) {
-            throw new UserAddressNotFound(`User with id ${id} not found`)
+            throw new UserAddressNotFound()
         }
         return user
     }
@@ -45,7 +45,7 @@ export class UserReaderImpl implements UserReader {
     async getUserByAddress(address: TonAddress): Promise<UserDTO> {
         const user = await this.queryRunner.manager.findOne(UserModel, { where: { address: address } })
         if (!user) {
-            throw new UserAddressNotFound(`User with address ${address} not found`)
+            throw new UserAddressNotFound()
         }
         return user
     }

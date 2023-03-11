@@ -13,7 +13,7 @@ export class BagRepoImpl implements BagRepo {
     async getBagById(id: UUID): Promise<Bag> {
         const bag = await this.queryRunner.manager.findOne(BagModel, { where: { id: id } })
         if (!bag) {
-            throw new BagIdNotFound(`Bag with id ${id} not found`)
+            throw new BagIdNotFound()
         }
         return bag
     }
@@ -37,7 +37,7 @@ export class BagReaderImpl implements BagReader {
     async getBagById(id: UUID): Promise<BagDTO> {
         const bag = await this.queryRunner.manager.findOne(BagModel, { where: { id: id } })
         if (!bag) {
-            throw new BagIdNotFound(`Bag with id ${id} not found`)
+            throw new BagIdNotFound()
         }
         return bag
     }
@@ -45,7 +45,7 @@ export class BagReaderImpl implements BagReader {
     async getBagByBagId(bagId: BagId): Promise<BagDTO> {
         const bag = await this.queryRunner.manager.findOne(BagModel, { where: { bagId: bagId } })
         if (!bag) {
-            throw new BagBagIdNotFound(`Bag with bag id ${bagId} not found`)
+            throw new BagBagIdNotFound
         }
         return bag
     }

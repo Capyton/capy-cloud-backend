@@ -11,7 +11,7 @@ export class UserRepoImpl implements UserRepo {
     async getUserByAddress(address: TonAddress): Promise<User> {
         const user = await this.queryRunner.manager.findOne(UserModel, { where: { address: address } })
         if (!user) {
-            throw new UserAddressNotFound(`User with address ${address} not found`)
+            throw new UserAddressNotFound()
         }
         return user
     }

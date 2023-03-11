@@ -27,7 +27,7 @@ export class ProviderReaderImpl implements ProviderReader {
     async getProviderById(id: string): Promise<ProviderDTO> {
         const provider = await this.queryRunner.manager.findOne(ProviderModel, { where: { id: id } })
         if (!provider) {
-            throw new ProviderIdNotFound(`Provider with id ${id} not found`)
+            throw new ProviderIdNotFound()
         }
         return provider
     }
@@ -35,7 +35,7 @@ export class ProviderReaderImpl implements ProviderReader {
     async getProviderByAddress(address: string): Promise<ProviderDTO> {
         const provider = await this.queryRunner.manager.findOne(ProviderModel, { where: { address: address } })
         if (!provider) {
-            throw new ProviderAddressNotFound(`Provider with address ${address} not found`)
+            throw new ProviderAddressNotFound()
         }
         return provider
     }

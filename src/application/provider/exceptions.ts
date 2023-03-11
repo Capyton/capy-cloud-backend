@@ -1,5 +1,13 @@
-import { ApplicationException } from "../common/exceptions";
+import { ApplicationException } from "../common/exceptions"
 
-export class ProviderAddressNotFound extends ApplicationException { }
+export class ProviderAddressNotFound extends ApplicationException {
+    constructor(cause?: Error, meatadata?: unknown) {
+        super("Provider address not found", cause, meatadata)
+    }
+}
 
-export class ProviderIdNotFound extends ApplicationException { }
+export class ProviderIdNotFound extends ApplicationException {
+    constructor(cause?: Error, meatadata?: unknown) {
+        super("Provider id not found", cause, meatadata)
+    }
+}

@@ -1,4 +1,4 @@
-import { ApplicationException } from "../common/exceptions";
+import { ApplicationException } from "../common/exceptions"
 
 export class NonceIsExpired extends ApplicationException {
   constructor(cause?: Error, meatadata?: unknown) {

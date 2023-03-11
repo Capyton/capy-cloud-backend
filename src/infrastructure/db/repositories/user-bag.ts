@@ -27,7 +27,7 @@ export class UserBagReaderImpl implements UserBagReader {
     async getUserBagById(id: string): Promise<UserBagDTO> {
         const userBag = await this.queryRunner.manager.findOne(UserBagModel, { where: { id: id } })
         if (!userBag) {
-            throw new UserBagIdNotFound(`User bag with id ${id} not found`)
+            throw new UserBagIdNotFound()
         }
         return userBag
     }
