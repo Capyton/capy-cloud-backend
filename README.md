@@ -10,6 +10,12 @@ This is the backend of the **CapyCloud** project
 - Copy `.env.template` to `.env` and fill it with your data
 - Run `docker-compose up -d` to start the project
 
+## Endpoints
+
+### Swagger
+
+Path: `/api/v1/swagger`
+
 ## Dependencies
 
 ### Infrastructure
