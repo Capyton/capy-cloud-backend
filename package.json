@@ -4,12 +4,10 @@
   "description": "Backend for Capy Cloud",
   "main": "src/main.ts",
   "scripts": {
-    "start": "yarn ts-node src/main.ts"
+    "start": "yarn ts-node src/main.ts",
+    "lint": "yarn run eslint src/"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Capyton/capy-cloud-backend.git"
-  },
+  "repository": "git+https://github.com/Capyton/capy-cloud-backend.git",
   "author": "Capyton",
   "license": "Apache-2.0",
   "bugs": {
@@ -34,9 +32,12 @@
     "typeorm": "^0.3.12"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "@typescript-eslint/parser": "^5.54.1",
     "@types/express": "^4.17.17",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/node": "^18.13.0",
+    "eslint": "^8.36.0",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.2",
     "typescript": "^4.9.5"
