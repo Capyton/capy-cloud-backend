@@ -1,5 +1,5 @@
 export class AuthPayload {
-  constructor(
-    readonly nonce: string,
-  ) {}
+    constructor(
+        readonly nonce: string,
+    ) { }
 }

@@ -1,6 +1,6 @@
+import { UUID } from "@src/utils/uuid"
 import { UserBag } from "@src/application/user_bag/dto/user-bag"
 import { UserBagReader } from "@src/application/user_bag/interfaces/persistence"
-import { UUID } from "@src/utils/uuid"
 
 export class GetUserBagsByUserId {
     constructor(
@@ -13,7 +13,7 @@ export class GetUserBagsByUserIdHandler {
         readonly userBagReader: UserBagReader,
     ) { }
 
-    async execute(command: GetUserBagsByUserId): Promise<UserBag[]> {
-        return await this.userBagReader.getUserBagsByUserId(command.id)
+    execute(command: GetUserBagsByUserId): Promise<UserBag[]> {
+        return this.userBagReader.getUserBagsByUserId(command.id)
     }
 }

@@ -1,1 +1,1 @@
-export { ProviderBag } from "./provider-bag";
+export { ProviderBag } from "./provider-bag"

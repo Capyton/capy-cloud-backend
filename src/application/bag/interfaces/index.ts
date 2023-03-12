@@ -1,1 +1,1 @@
-export { BagReader, BagRepo } from "./persistence";
+export { BagReader, BagRepo } from "./persistence"

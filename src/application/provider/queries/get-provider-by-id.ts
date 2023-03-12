@@ -13,7 +13,7 @@ export class GetProviderByIdHandler {
         readonly providerReader: ProviderReader,
     ) { }
 
-    async execute(command: GetProviderById): Promise<Provider> {
-        return await this.providerReader.getProviderById(command.id)
+    execute(command: GetProviderById): Promise<Provider> {
+        return this.providerReader.getProviderById(command.id)
     }
 }

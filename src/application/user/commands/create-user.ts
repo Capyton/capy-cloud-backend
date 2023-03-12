@@ -1,8 +1,8 @@
-import { UnitOfWork } from "@src/application/common/interfaces"
-import { UserRepo } from "@src/application/user/interfaces/persistence"
-import { User } from "@src/domain/user/entities"
 import { TonAddress } from "@src/domain/user/types"
 import { UUID } from "@src/utils/uuid"
+import { UnitOfWork } from "@src/application/common/interfaces"
+import { User } from "@src/domain/user/entities"
+import { UserRepo } from "@src/application/user/interfaces/persistence"
 
 export class CreateUser {
     constructor(

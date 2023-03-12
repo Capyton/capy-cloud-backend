@@ -1,4 +1,7 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common"
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+import { ExecutionContext, createParamDecorator } from "@nestjs/common"
+
 import { UnitOfWork as BaseUnitOfWork } from "@src/application/common/interfaces"
 import { Request } from "express"
 
@@ -9,5 +12,5 @@ export const UnitOfWork = createParamDecorator(
         const uow: BaseUnitOfWork = request.app.locals.uow
 
         return uow
-    }
+    },
 )

@@ -1,3 +1,3 @@
-import { AppExceptions } from "@src/domain/common/exceptions";
+import { AppExceptions } from "@src/domain/common/exceptions"
 
-export class ApplicationException extends AppExceptions {}
+export class ApplicationException extends AppExceptions { }

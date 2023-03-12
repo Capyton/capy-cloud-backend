@@ -1,17 +1,18 @@
-import { Controller, Get, Param } from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse } from "@nestjs/swagger"
+import { Controller, Get, Param } from "@nestjs/common"
+import { GetBagByBagId, GetBagByBagIdHandler } from "@src/application/bag/queries/get-bag-by-bag-id"
+import { GetUserBagsByUserId, GetUserBagsByUserIdHandler } from "@src/application/user_bag/queries/get-user-bags-by-user-id"
 import {
     BagReader as ParamBagReader,
     UserBagReader as ParamUserBagReader,
-    UserPayloadFromAuthToken
+    UserPayloadFromAuthToken,
 } from "@src/api/param_decorators"
-import { UserPayload } from "@src/application/auth/dto"
+
 import { Bag } from "@src/application/bag/dto"
-import { BagReader } from "@src/application/bag/interfaces"
-import { GetBagByBagId, GetBagByBagIdHandler } from "@src/application/bag/queries/get-bag-by-bag-id"
-import { UserBagReader } from "@src/application/user_bag/interfaces"
-import { GetUserBagsByUserId, GetUserBagsByUserIdHandler } from "@src/application/user_bag/queries/get-user-bags-by-user-id"
 import { BagId } from "@src/domain/bag/types"
+import { BagReader } from "@src/application/bag/interfaces"
+import { UserBagReader } from "@src/application/user_bag/interfaces"
+import { UserPayload } from "@src/application/auth/dto"
 
 @Controller("bags")
 export class BagController {
@@ -42,16 +43,16 @@ export class BagController {
             "Unknown JWT token error"
         ),
     })
-    @Get("me")
-    async getUserBags(
+    @Get("ids")
+    getUserBagIds(
         @ParamUserBagReader() userBagReader: UserBagReader,
         @UserPayloadFromAuthToken() userPayload: UserPayload,
     ): Promise<BagId[]> {
         const userBagHandler = new GetUserBagsByUserIdHandler(userBagReader)
-        const userBags = userBagHandler.execute(new GetUserBagsByUserId(userPayload.id))
+        const userBagIds = userBagHandler.execute(new GetUserBagsByUserId(userPayload.id))
             .then((userBags) => userBags.map((userBag) => userBag.bagId))
 
-        return userBags
+        return userBagIds
     }
 
     /**
@@ -121,7 +122,7 @@ export class BagController {
         status: 404,
         description: "Bag bag id not found",
     })
-    @Get("info/:bagId")
+    @Get(":bagId")
     getBag(
         @ParamBagReader() bagReader: BagReader,
         @Param("bagId") bagId: BagId,

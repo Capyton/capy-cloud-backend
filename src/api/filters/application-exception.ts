@@ -1,20 +1,28 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from "@nestjs/common"
-import {
-    InvalidJwtToken, InvalidNonce, InvalidProofSignature,
-    JwtTokenIsExpired, NonceIsExpired, UnknownJwtTokenError, UnknownNonceError
-} from "@src/application/auth/exceptions"
 import { BagBagIdNotFound, BagIdNotFound } from "@src/application/bag/exceptions"
-import { ApplicationException } from "@src/application/common/exceptions"
-import { FileIdNotFound } from "@src/application/file/exceptions"
-import { ProviderAddressNotFound, ProviderIdNotFound } from "@src/application/provider/exceptions"
-import { ProviderBagIdNotFound } from "@src/application/provider_bag/exceptions"
 import {
-    TorrentBagIdNotFound, TorrentCreateError, TorrentGetByBagIdError,
-    TorrentRemoveByBagIdError
+    InvalidJwtToken,
+    InvalidNonce,
+    InvalidProofSignature,
+    JwtTokenIsExpired,
+    NonceIsExpired,
+    UnknownJwtTokenError,
+    UnknownNonceError,
+} from "@src/application/auth/exceptions"
+import { ProviderAddressNotFound, ProviderIdNotFound } from "@src/application/provider/exceptions"
+import { Request, Response } from "express"
+import {
+    TorrentBagIdNotFound,
+    TorrentCreateError,
+    TorrentGetByBagIdError,
+    TorrentRemoveByBagIdError,
 } from "@src/application/torrent/exceptions"
 import { UserAddressNotFound, UserIdNotFound } from "@src/application/user/exceptions"
+
+import { ApplicationException } from "@src/application/common/exceptions"
+import { FileIdNotFound } from "@src/application/file/exceptions"
+import { ProviderBagIdNotFound } from "@src/application/provider_bag/exceptions"
 import { UserBagIdNotFound } from "@src/application/user_bag/exceptions"
-import { Request, Response } from "express"
 
 @Catch(ApplicationException)
 export class ApplicationExceptionFilter implements ExceptionFilter {

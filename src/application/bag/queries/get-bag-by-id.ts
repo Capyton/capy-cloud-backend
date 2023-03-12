@@ -13,7 +13,7 @@ export class GetBagByIdHandler {
         readonly bagReader: BagReader,
     ) { }
 
-    async execute(command: GetBagById): Promise<Bag> {
-        return await this.bagReader.getBagById(command.id)
+    execute(command: GetBagById): Promise<Bag> {
+        return this.bagReader.getBagById(command.id)
     }
 }

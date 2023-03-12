@@ -1,7 +1,8 @@
+import { AUTH_AND_TOKENS_CONFIG, DATA_SOURCE } from "@src/inject-constants"
 import { DynamicModule, Module, Scope } from "@nestjs/common"
+
 import { AuthAndTokensConfig } from "@src/api/config"
 import { AuthController } from "@src/api/controllers"
-import { AUTH_AND_TOKENS_CONFIG, DATA_SOURCE } from "@src/inject-constants"
 import { DataSource } from "typeorm"
 
 @Module({})

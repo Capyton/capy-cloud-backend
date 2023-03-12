@@ -1,6 +1,6 @@
+import { UUID } from "@src/utils/uuid"
 import { UnitOfWork } from "@src/application/common/interfaces"
 import { UserRepo } from "@src/application/user/interfaces/persistence"
-import { UUID } from "@src/utils/uuid"
 
 export class DeleteUserById {
     constructor(

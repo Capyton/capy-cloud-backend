@@ -1,6 +1,6 @@
 import { Provider } from "@src/application/provider/dto/provider"
-import { ProviderReader } from "@src/application/provider/interfaces/persistence"
 import { ProviderAddress } from "@src/domain/provider/types"
+import { ProviderReader } from "@src/application/provider/interfaces/persistence"
 
 export class GetProviderByAddress {
     constructor(
@@ -13,7 +13,7 @@ export class GetProviderByAddressHandler {
         readonly providerReader: ProviderReader,
     ) { }
 
-    async execute(command: GetProviderByAddress): Promise<Provider> {
-        return await this.providerReader.getProviderByAddress(command.address)
+    execute(command: GetProviderByAddress): Promise<Provider> {
+        return this.providerReader.getProviderByAddress(command.address)
     }
 }

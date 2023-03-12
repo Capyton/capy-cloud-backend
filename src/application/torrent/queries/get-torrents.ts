@@ -8,7 +8,7 @@ export class GetTorrentsHandler {
         readonly torrentReader: TorrentReader,
     ) { }
 
-    async execute(command: GetTorrents): Promise<Torrent[]> {
-        return await this.torrentReader.getTorrents()
+    execute(_command: GetTorrents): Promise<Torrent[]> {
+        return this.torrentReader.getTorrents()
     }
 }

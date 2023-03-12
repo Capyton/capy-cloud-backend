@@ -1,7 +1,10 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common"
-import { TorrentReaderImpl } from "@src/infrastructure/torrent-reader"
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+import { ExecutionContext, createParamDecorator } from "@nestjs/common"
+
 import { Request } from "express"
 import TonstorageCLI from "tonstorage-cli"
+import { TorrentReaderImpl } from "@src/infrastructure/torrent-reader"
 
 export const TorrentReader = createParamDecorator(
     (_data: unknown, ctx: ExecutionContext) => {
@@ -11,5 +14,5 @@ export const TorrentReader = createParamDecorator(
         const torrentReader = new TorrentReaderImpl(storageDaemonCLI)
 
         return torrentReader
-    }
+    },
 )

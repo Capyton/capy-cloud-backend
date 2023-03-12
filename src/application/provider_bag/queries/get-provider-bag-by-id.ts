@@ -13,7 +13,7 @@ export class GetProviderBagByIdHandler {
         readonly providerBagReader: ProviderBagReader,
     ) { }
 
-    async execute(command: GetProviderBagById): Promise<ProviderBag> {
-        return await this.providerBagReader.getProviderBagById(command.id)
+    execute(command: GetProviderBagById): Promise<ProviderBag> {
+        return this.providerBagReader.getProviderBagById(command.id)
     }
 }

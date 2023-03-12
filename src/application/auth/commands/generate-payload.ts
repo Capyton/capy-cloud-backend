@@ -1,18 +1,16 @@
-import { AuthPayload } from "@src/application/auth/dto/payload"
 import { AuthManager } from "@src/application/auth/interfaces"
+import { AuthPayload } from "@src/application/auth/dto/payload"
 
-
-export class GenereatePayload {
-}
+export class GenereatePayload { }
 
 
 export class GenereatePayloadHandler {
-  constructor(
-    private readonly authManager: AuthManager,
-  ) { }
+    constructor(
+        private readonly authManager: AuthManager,
+    ) { }
 
-  execute(command: GenereatePayload): AuthPayload {
-    const nonce = this.authManager.generateNonce()
-    return new AuthPayload(nonce)
-  }
+    execute(_command: GenereatePayload): AuthPayload {
+        const nonce = this.authManager.generateNonce()
+        return new AuthPayload(nonce)
+    }
 }

@@ -1,7 +1,10 @@
-import { UUID } from "@src/utils/uuid"
+/* eslint-disable indent */
+
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm"
+
 import { Bag } from "./bag"
 import { Provider } from "./provider"
+import { UUID } from "@src/utils/uuid"
 
 @Entity({ name: "providers_bags" })
 export class ProviderBag {

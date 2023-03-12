@@ -1,10 +1,11 @@
 import { TorrentCreateError, TorrentRemoveByBagIdError } from "@src/application/torrent/exceptions"
-import { TorrentManager } from "@src/application/torrent/interfaces"
+
 import { BagId } from "@src/domain/bag/types"
-import { TorrentFull } from "@src/domain/torrent/entities"
-import { TorrentFile } from "@src/domain/torrent_file/entities"
-import { hexEncodeFromString } from "@src/utils/hex"
 import TonstorageCLI from "tonstorage-cli"
+import { TorrentFile } from "@src/domain/torrent_file/entities"
+import { TorrentFull } from "@src/domain/torrent/entities"
+import { TorrentManager } from "@src/application/torrent/interfaces"
+import { hexEncodeFromString } from "@src/utils/hex"
 
 export class TorrentManagerImpl implements TorrentManager {
     constructor(private readonly storageDaemonCLI: TonstorageCLI) { }
@@ -19,26 +20,27 @@ export class TorrentManagerImpl implements TorrentManager {
             throw new TorrentCreateError(`Torrent create error: \`${torrent.error}\``)
         }
 
-        const torrentResult = torrent.result["torrent"]
-        const bagHash = torrentResult["hash"]
+        const torrentResult = torrent.result.torrent as Record<string, unknown>
+        const bagHash = torrentResult.hash as string
         const bagId = hexEncodeFromString(bagHash)
-        const bagSize = torrentResult["total_size"]
-        const filesCount = torrentResult["files_count"]
-        const includedSize = torrentResult["included_size"]
-        const downloadedSize = torrentResult["downloaded_size"]
-        const activeDownload = torrentResult["active_download"]
-        const activeUpload = torrentResult["active_upload"]
-        const completed = torrentResult["completed"]
-        const downloadSpeed = torrentResult["download_speed"]
-        const uploadSpeed = torrentResult["upload_speed"]
-        const fatalError = torrentResult["fatal_error"]
+        const bagSize = torrentResult.total_size as number
+        const filesCount = torrentResult.files_count as number
+        const includedSize = torrentResult.included_size as number
+        const downloadedSize = torrentResult.downloaded_size as number
+        const activeDownload = torrentResult.active_download as boolean
+        const activeUpload = torrentResult.active_upload as boolean
+        const completed = torrentResult.completed as boolean
+        const downloadSpeed = torrentResult.download_speed as number
+        const uploadSpeed = torrentResult.upload_speed as number
+        const fatalError = torrentResult.fatal_error as string
 
-        const bagFiles = torrent.result["files"].map((file: Record<string, any>) => {
+        const torrentFiles = torrentResult.files as Record<string, unknown>[]
+        const bagFiles = torrentFiles.map((file: Record<string, unknown>) => {
             return TorrentFile.create(
-                file["name"],
-                file["size"],
-                file["priority"],
-                file["downloaded_size"]
+                file.name as string,
+                file.size as number,
+                file.priority as number,
+                file.downloaded_size as number,
             )
         })
 

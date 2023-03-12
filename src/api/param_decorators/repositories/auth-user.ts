@@ -1,7 +1,10 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common"
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+import { ExecutionContext, createParamDecorator } from "@nestjs/common"
+
 import { AuthUserRepoImpl } from "@src/infrastructure/db/repositories"
-import { Request } from "express"
 import { QueryRunner } from "typeorm"
+import { Request } from "express"
 
 export const AuthUserRepo = createParamDecorator(
     (_data: unknown, ctx: ExecutionContext) => {
@@ -11,5 +14,5 @@ export const AuthUserRepo = createParamDecorator(
         const authUser = new AuthUserRepoImpl(queryRunner)
 
         return authUser
-    }
+    },
 )

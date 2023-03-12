@@ -1,4 +1,4 @@
 export interface UnitOfWork {
-  commit(): Promise<void>
-  rollback(): Promise<void>
+    commit(): Promise<void>
+    rollback(): Promise<void>
 }

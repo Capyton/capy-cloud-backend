@@ -1,7 +1,6 @@
 import { TonAddress } from "@src/domain/user/types"
 import { UUID } from "@src/utils/uuid"
 
-
 export class User {
     constructor(
         readonly id: UUID,

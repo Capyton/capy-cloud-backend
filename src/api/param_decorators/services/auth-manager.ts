@@ -1,6 +1,9 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common"
-import { Config } from "@src/api/config"
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+import { ExecutionContext, createParamDecorator } from "@nestjs/common"
+
 import { AuthManagerImpl } from "@src/infrastructure/auth-manager"
+import { Config } from "@src/api/config"
 import { Request } from "express"
 
 export const AuthManager = createParamDecorator(
@@ -12,5 +15,5 @@ export const AuthManager = createParamDecorator(
         const authManager = new AuthManagerImpl(authAndTokensConfig.privateKey, authAndTokensConfig.nonceExpirationTime)
 
         return authManager
-    }
+    },
 )

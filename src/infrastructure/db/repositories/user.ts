@@ -1,11 +1,12 @@
-import { User as UserDTO } from "@src/application/user/dto"
-import { UserAddressNotFound } from "@src/application/user/exceptions"
 import { UserReader, UserRepo } from "@src/application/user/interfaces"
-import { User } from "@src/domain/user/entities"
-import { TonAddress } from "@src/domain/user/types"
-import { User as UserModel } from "@src/infrastructure/db/models"
-import { UUID } from "@src/utils/uuid"
+
 import { QueryRunner } from "typeorm"
+import { TonAddress } from "@src/domain/user/types"
+import { UUID } from "@src/utils/uuid"
+import { User } from "@src/domain/user/entities"
+import { UserAddressNotFound } from "@src/application/user/exceptions"
+import { User as UserDTO } from "@src/application/user/dto"
+import { User as UserModel } from "@src/infrastructure/db/models"
 
 export class UserRepoImpl implements UserRepo {
     constructor(private readonly queryRunner: QueryRunner) { }

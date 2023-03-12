@@ -1,8 +1,7 @@
-import { User as UserDTO } from "@src/application/user/dto"
-import { User } from "@src/domain/user/entities"
 import { TonAddress } from "@src/domain/user/types"
 import { UUID } from "@src/utils/uuid"
-
+import { User } from "@src/domain/user/entities"
+import { User as UserDTO } from "@src/application/user/dto"
 
 export interface UserRepo {
     getUserById(id: UUID): Promise<User>

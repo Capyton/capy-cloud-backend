@@ -1,4 +1,7 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common"
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+import { ExecutionContext, createParamDecorator } from "@nestjs/common"
+
 import { JwtManager as IJwtManager } from "@src/application/auth/interfaces"
 import { Request } from "express"
 
@@ -9,5 +12,5 @@ export const JwtManager = createParamDecorator(
         const jwtManager: IJwtManager = request.app.locals.jwtManager
 
         return jwtManager
-    }
+    },
 )

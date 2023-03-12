@@ -8,7 +8,7 @@ export {
     ProviderBagReader, ProviderBagRepo,
     ProviderReader, ProviderRepo,
     UserBagReader, UserBagRepo,
-    UserReader, UserRepo
+    UserReader, UserRepo,
 } from "./repositories"
 export { AuthManager, JwtManager, TorrentManager, TorrentReader } from "./services"
 export { UnitOfWork } from "./uow"

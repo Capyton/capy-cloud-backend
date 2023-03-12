@@ -6,7 +6,7 @@ export class GetProvidersHandler {
         readonly providerReader: ProviderReader,
     ) { }
 
-    async execute(): Promise<Provider[]> {
-        return await this.providerReader.getProviders()
+    execute(): Promise<Provider[]> {
+        return this.providerReader.getProviders()
     }
 }

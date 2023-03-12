@@ -1,4 +1,5 @@
 import { DynamicModule, Module } from "@nestjs/common"
+
 import { UserController } from "@src/api/controllers"
 
 @Module({})

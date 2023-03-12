@@ -1,7 +1,10 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common"
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+import { ExecutionContext, createParamDecorator } from "@nestjs/common"
 import { FileReaderImpl, FileRepoImpl } from "@src/infrastructure/db/repositories"
-import { Request } from "express"
+
 import { QueryRunner } from "typeorm"
+import { Request } from "express"
 
 export const FileRepo = createParamDecorator(
     (_data: unknown, ctx: ExecutionContext) => {
@@ -11,7 +14,7 @@ export const FileRepo = createParamDecorator(
         const file = new FileRepoImpl(queryRunner)
 
         return file
-    }
+    },
 )
 
 export const FileReader = createParamDecorator(
@@ -22,5 +25,5 @@ export const FileReader = createParamDecorator(
         const file = new FileReaderImpl(queryRunner)
 
         return file
-    }
+    },
 )

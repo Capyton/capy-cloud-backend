@@ -1,4 +1,4 @@
-import { Config as DatabaseConfig } from "@src/infrastructure/db/config";
+import { Config as DatabaseConfig } from "@src/infrastructure/db/config"
 
 export class APIConfig {
     constructor(

@@ -1,9 +1,9 @@
-import { UserRepo } from "@src/application/auth/interfaces"
-import { UserAddressNotFound } from "@src/application/user/exceptions"
-import { User } from "@src/domain/user/entities"
-import { TonAddress } from "@src/domain/user/types"
-import { User as UserModel } from "@src/infrastructure/db/models"
 import { QueryRunner } from "typeorm"
+import { TonAddress } from "@src/domain/user/types"
+import { User } from "@src/domain/user/entities"
+import { UserAddressNotFound } from "@src/application/user/exceptions"
+import { User as UserModel } from "@src/infrastructure/db/models"
+import { UserRepo } from "@src/application/auth/interfaces"
 
 export class UserRepoImpl implements UserRepo {
     constructor(private readonly queryRunner: QueryRunner) { }

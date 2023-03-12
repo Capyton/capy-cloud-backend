@@ -1,10 +1,11 @@
+import { ProviderBagReader, ProviderBagRepo } from "@src/application/provider_bag/interfaces"
+
+import { ProviderBag } from "@src/domain/provider_bag/entities"
 import { ProviderBag as ProviderBagDTO } from "@src/application/provider_bag/dto"
 import { ProviderBagIdNotFound } from "@src/application/provider_bag/exceptions"
-import { ProviderBagReader, ProviderBagRepo } from "@src/application/provider_bag/interfaces"
-import { UUID } from "@src/utils/uuid"
-import { ProviderBag } from "@src/domain/provider_bag/entities"
 import { ProviderBag as ProviderBagModel } from "@src/infrastructure/db/models"
 import { QueryRunner } from "typeorm"
+import { UUID } from "@src/utils/uuid"
 
 export class ProviderBagRepoImpl implements ProviderBagRepo {
     constructor(private readonly queryRunner: QueryRunner) { }

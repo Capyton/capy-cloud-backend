@@ -1,4 +1,6 @@
-type JSONResult = Record<string, any>
+/* eslint-disable max-lines */
+
+type JSONResult = Record<string, unknown>
 
 type CLIResult<T> = (
     { ok: true, result: T, code: 0 } |

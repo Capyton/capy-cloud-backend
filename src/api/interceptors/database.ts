@@ -1,9 +1,10 @@
 import { CallHandler, ExecutionContext, Inject, Injectable, NestInterceptor } from "@nestjs/common"
-import { TypeORMUnitOfWork } from "@src/infrastructure/db/uow"
+import { DataSource, QueryRunner } from "typeorm"
+import { Observable, tap } from "rxjs"
+
 import { DATA_SOURCE } from "@src/inject-constants"
 import { Request } from "express"
-import { Observable, tap } from "rxjs"
-import { DataSource, QueryRunner } from "typeorm"
+import { TypeORMUnitOfWork } from "@src/infrastructure/db/uow"
 
 @Injectable()
 export class DatabaseInterceptor implements NestInterceptor {
@@ -22,7 +23,7 @@ export class DatabaseInterceptor implements NestInterceptor {
         return queryRunner
     }
 
-    async intercept(context: ExecutionContext, next: CallHandler<any>): Promise<Observable<any>> {
+    async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<unknown>> {
         const queryRunner = await this.getQueryRunner()
         const uow = new TypeORMUnitOfWork(queryRunner)
 
@@ -36,7 +37,8 @@ export class DatabaseInterceptor implements NestInterceptor {
             tap(() => {
                 // Release the `QueryRunner` after the request is done
                 queryRunner.release()
-            })
+                    .catch((err) => console.error("Failed to release the QueryRunner: ", err))
+            }),
         )
     }
 }

@@ -1,11 +1,12 @@
-import { Bag as BagDTO } from "@src/application/bag/dto"
 import { BagBagIdNotFound, BagIdNotFound } from "@src/application/bag/exceptions"
 import { BagReader, BagRepo } from "@src/application/bag/interfaces"
+
 import { Bag } from "@src/domain/bag/entities"
+import { Bag as BagDTO } from "@src/application/bag/dto"
 import { BagId } from "@src/domain/bag/types"
 import { Bag as BagModel } from "@src/infrastructure/db/models"
-import { UUID } from "@src/utils/uuid"
 import { QueryRunner } from "typeorm"
+import { UUID } from "@src/utils/uuid"
 
 export class BagRepoImpl implements BagRepo {
     constructor(private readonly queryRunner: QueryRunner) { }

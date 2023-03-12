@@ -1,6 +1,5 @@
-import { UUID } from "@src/utils/uuid"
 import { ProviderAddress } from "@src/domain/provider/types"
-
+import { UUID } from "@src/utils/uuid"
 
 export class Provider {
     constructor(

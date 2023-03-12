@@ -1,5 +1,5 @@
-import { TorrentManager } from "@src/application/torrent/interfaces"
 import { TorrentFull } from "@src/domain/torrent/entities"
+import { TorrentManager } from "@src/application/torrent/interfaces"
 
 export class CreateTorrent {
     constructor(
@@ -13,8 +13,7 @@ export class CreateTorrentHandler {
         readonly torrentManager: TorrentManager,
     ) { }
 
-    async execute(command: CreateTorrent): Promise<TorrentFull> {
-        const torrent = await this.torrentManager.addTorrent(command.bagDescription, command.bagDir)
-        return torrent
+    execute(command: CreateTorrent): Promise<TorrentFull> {
+        return this.torrentManager.addTorrent(command.bagDescription, command.bagDir)
     }
 }

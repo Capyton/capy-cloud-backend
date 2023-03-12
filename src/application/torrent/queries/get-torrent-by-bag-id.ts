@@ -1,6 +1,6 @@
+import { BagId } from "@src/domain/bag/types"
 import { TorrentFull } from "@src/application/torrent/dto/torrent-full"
 import { TorrentReader } from "@src/application/torrent/interfaces"
-import { BagId } from "@src/domain/bag/types"
 
 export class GetTorrentByBagId {
     constructor(
@@ -13,7 +13,7 @@ export class GetTorrentByBagIdHandler {
         readonly torrentReader: TorrentReader,
     ) { }
 
-    async execute(command: GetTorrentByBagId): Promise<TorrentFull> {
-        return await this.torrentReader.getTorrentByBagId(command.bagId)
+    execute(command: GetTorrentByBagId): Promise<TorrentFull> {
+        return this.torrentReader.getTorrentByBagId(command.bagId)
     }
 }

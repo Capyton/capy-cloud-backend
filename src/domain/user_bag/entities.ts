@@ -1,6 +1,5 @@
 import { UUID } from "@src/utils/uuid"
 
-
 export class UserBag {
     constructor(
         readonly id: UUID,

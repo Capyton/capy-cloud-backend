@@ -1,4 +1,7 @@
-import { createParamDecorator, ExecutionContext, UnauthorizedException } from "@nestjs/common"
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+import { ExecutionContext, UnauthorizedException, createParamDecorator } from "@nestjs/common"
+
 import { JwtManager } from "@src/application/auth/interfaces"
 import { Request } from "express"
 
@@ -17,5 +20,5 @@ export const UserPayloadFromAuthToken = createParamDecorator(
         const userPayload = jwtManager.validateToken(authToken)
 
         return userPayload
-    }
+    },
 )

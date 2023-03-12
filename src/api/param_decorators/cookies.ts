@@ -1,5 +1,10 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common";
-import { Request } from "express";
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+import { ExecutionContext, createParamDecorator } from "@nestjs/common"
+
+import { Request } from "express"
 
 /**
  * Decorator for injecting the cookies from the request
@@ -12,4 +17,4 @@ export const Cookies = createParamDecorator(
 
         return cookieKey ? cookies[cookieKey] : cookies
     },
-);
+)

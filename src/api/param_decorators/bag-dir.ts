@@ -1,4 +1,7 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common"
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+import { ExecutionContext, createParamDecorator } from "@nestjs/common"
+
 import { Request } from "express"
 
 export const BagDir = createParamDecorator(
@@ -8,5 +11,5 @@ export const BagDir = createParamDecorator(
         const bagDir: string = request.app.locals.bagDir
 
         return bagDir
-    }
+    },
 )

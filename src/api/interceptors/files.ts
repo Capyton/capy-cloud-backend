@@ -1,12 +1,14 @@
-import { CallHandler, ExecutionContext, Inject, Injectable, NestInterceptor } from "@nestjs/common"
-import { FilesConfig } from "@src/api/config"
-import { BagId } from "@src/domain/bag/types"
-import { FILES_CONFIG, FILES_FIELD_KEY } from "@src/inject-constants"
-import { uuid7 } from "@src/utils/uuid"
-import { Request, Response } from "express"
 import * as fs from "fs"
+
+import { CallHandler, ExecutionContext, Inject, Injectable, NestInterceptor } from "@nestjs/common"
+import { FILES_CONFIG, FILES_FIELD_KEY } from "@src/inject-constants"
+import { Observable, catchError, throwError } from "rxjs"
+import { Request, Response } from "express"
+
+import { BagId } from "@src/domain/bag/types"
+import { FilesConfig } from "@src/api/config"
 import multer from "multer"
-import { catchError, Observable, throwError } from "rxjs"
+import { uuid7 } from "@src/utils/uuid"
 
 /**
  * Files interceptor.
@@ -41,7 +43,7 @@ export class FilesInterceptor implements NestInterceptor {
             },
             filename: (_req, file, cb) => {
                 cb(null, file.originalname)
-            }
+            },
         })
     }
 
@@ -56,7 +58,7 @@ export class FilesInterceptor implements NestInterceptor {
         })
     }
 
-    async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
+    async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<unknown>> {
         const ctx = context.switchToHttp()
         const req = ctx.getRequest<Request>()
         const res = ctx.getResponse<Response>()
@@ -97,13 +99,13 @@ export class FilesInterceptor implements NestInterceptor {
                             break
                     }
                 } else if (err) {
-                    console.error(`Unknown error uploading files: ${err.message}`)
+                    console.error("Unknown error uploading files: ", err)
 
                     reject(err)
 
-                    res.status(500).send(err.message)
+                    res.status(500).send("Unknown error uploading files")
                 } else {
-                    console.debug(`Files uploaded successfully`)
+                    console.debug("Files uploaded successfully")
 
                     resolve()
                 }
@@ -115,7 +117,7 @@ export class FilesInterceptor implements NestInterceptor {
 
         return next.handle().pipe(
             catchError((err) => {
-                console.error(`Error in handler: ${err.message}`)
+                console.error("Error in handler: ", err)
 
                 fs.rm(bagDir, { recursive: true }, (err) => {
                     if (err) {
@@ -125,8 +127,9 @@ export class FilesInterceptor implements NestInterceptor {
                     }
                 })
 
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-return
                 return throwError(() => err)
-            })
+            }),
         )
     }
 }

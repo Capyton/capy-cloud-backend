@@ -1,7 +1,10 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common"
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+import { ExecutionContext, createParamDecorator } from "@nestjs/common"
 import { ProviderReaderImpl, ProviderRepoImpl } from "@src/infrastructure/db/repositories"
-import { Request } from "express"
+
 import { QueryRunner } from "typeorm"
+import { Request } from "express"
 
 export const ProviderRepo = createParamDecorator(
     (_data: unknown, ctx: ExecutionContext) => {
@@ -11,7 +14,7 @@ export const ProviderRepo = createParamDecorator(
         const provider = new ProviderRepoImpl(queryRunner)
 
         return provider
-    }
+    },
 )
 
 export const ProviderReader = createParamDecorator(
@@ -22,5 +25,5 @@ export const ProviderReader = createParamDecorator(
         const provider = new ProviderReaderImpl(queryRunner)
 
         return provider
-    }
+    },
 )

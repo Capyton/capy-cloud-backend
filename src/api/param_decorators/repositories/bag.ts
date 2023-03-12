@@ -1,7 +1,10 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common"
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import { BagReaderImpl, BagRepoImpl } from "@src/infrastructure/db/repositories"
-import { Request } from "express"
+import { ExecutionContext, createParamDecorator } from "@nestjs/common"
+
 import { QueryRunner } from "typeorm"
+import { Request } from "express"
 
 export const BagRepo = createParamDecorator(
     (_data: unknown, ctx: ExecutionContext) => {
@@ -11,7 +14,7 @@ export const BagRepo = createParamDecorator(
         const bag = new BagRepoImpl(queryRunner)
 
         return bag
-    }
+    },
 )
 
 export const BagReader = createParamDecorator(
@@ -22,5 +25,5 @@ export const BagReader = createParamDecorator(
         const bag = new BagReaderImpl(queryRunner)
 
         return bag
-    }
+    },
 )

@@ -1,6 +1,5 @@
-import { UUID } from "@src/utils/uuid"
 import { BagId } from "./types"
-
+import { UUID } from "@src/utils/uuid"
 
 export class Bag {
     constructor(

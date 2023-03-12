@@ -1,7 +1,10 @@
+/* eslint-disable indent */
+
+import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm"
+
+import { Bag } from "./bag"
 import { TonAddress } from "@src/domain/user/types"
 import { UUID } from "@src/utils/uuid"
-import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm"
-import { Bag } from "./bag"
 
 @Entity({ name: "users" })
 export class User {

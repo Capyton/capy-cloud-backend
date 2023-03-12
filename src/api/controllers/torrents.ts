@@ -1,9 +1,16 @@
-import {
-    BadRequestException, Body, Controller, Get,
-    Param, Post, UploadedFiles, UseInterceptors
-} from "@nestjs/common"
+/* eslint-disable max-lines */
+
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse } from "@nestjs/swagger"
-import { FilesInterceptor } from "@src/api/interceptors"
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Get,
+    Param,
+    Post,
+    UploadedFiles,
+    UseInterceptors,
+} from "@nestjs/common"
 import {
     BagDir,
     BagId as ParamBagId,
@@ -13,23 +20,26 @@ import {
     TorrentReader as ParamTorrentReader,
     UnitOfWork as ParamUnitOfWork,
     UserBagRepo as ParamUserBagRepo,
-    UserPayloadFromAuthToken
+    UserPayloadFromAuthToken,
 } from "@src/api/param_decorators"
-import { UserPayload } from "@src/application/auth/dto"
 import { CreateBag, CreateBagHandler } from "@src/application/bag/commands/create-bag"
-import { BagRepo } from "@src/application/bag/interfaces"
-import { UnitOfWork } from "@src/application/common/interfaces"
 import { CreateFile, CreateFileHandler } from "@src/application/file/commands/create-file"
-import { FileRepo } from "@src/application/file/interfaces"
 import { CreateTorrent, CreateTorrentHandler } from "@src/application/torrent/commands/create-torrent"
-import { TorrentManager, TorrentReader } from "@src/application/torrent/interfaces"
-import { GetTorrentByBagId, GetTorrentByBagIdHandler } from "@src/application/torrent/queries/get-torrent-by-bag-id"
 import { CreateUserBag, CreateUserBagHandler } from "@src/application/user_bag/commands/create-user-bag"
-import { UserBagRepo } from "@src/application/user_bag/interfaces"
-import { BagId } from "@src/domain/bag/types"
-import { TorrentFull } from "@src/domain/torrent/entities"
-import { uuid7 } from "@src/utils/uuid"
+import { GetTorrentByBagId, GetTorrentByBagIdHandler } from "@src/application/torrent/queries/get-torrent-by-bag-id"
 import { IsNotEmpty, IsOptional, IsString, validateOrReject } from "class-validator"
+import { TorrentManager, TorrentReader } from "@src/application/torrent/interfaces"
+
+import { BagId } from "@src/domain/bag/types"
+import { BagRepo } from "@src/application/bag/interfaces"
+import { FileRepo } from "@src/application/file/interfaces"
+import { FilesInterceptor } from "@src/api/interceptors"
+import { TorrentFull } from "@src/domain/torrent/entities"
+import { UnitOfWork } from "@src/application/common/interfaces"
+import { UserBagRepo } from "@src/application/user_bag/interfaces"
+import { UserPayload } from "@src/application/auth/dto"
+
+import { uuid7 } from "@src/utils/uuid"
 
 class FileInfoDTO {
     @IsNotEmpty()
@@ -81,7 +91,7 @@ function convertAttrsToFilesInfo(
         throw new BadRequestException("Filenames, descriptions and path dirs should have the same length")
     }
 
-    let filesInfo: FileInfoDTO[] = []
+    const filesInfo: FileInfoDTO[] = []
     for (let index = 0; index < filesNamesLength; index++) {
         const filename = filenames[index]
         const description = descriptions[index]

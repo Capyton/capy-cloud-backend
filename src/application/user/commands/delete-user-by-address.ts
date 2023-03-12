@@ -1,10 +1,10 @@
+import { TonAddress } from "@src/domain/user/types"
 import { UnitOfWork } from "@src/application/common/interfaces"
 import { UserRepo } from "@src/application/user/interfaces/persistence"
-import { TonAddress } from "@src/domain/user/types"
 
 export class DeleteUserByAddress {
     constructor(
-        readonly address: TonAddress
+        readonly address: TonAddress,
     ) { }
 }
 

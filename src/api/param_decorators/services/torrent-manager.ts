@@ -1,7 +1,10 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common"
-import { TorrentManagerImpl } from "@src/infrastructure/torrent-manager"
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+import { ExecutionContext, createParamDecorator } from "@nestjs/common"
+
 import { Request } from "express"
 import TonstorageCLI from "tonstorage-cli"
+import { TorrentManagerImpl } from "@src/infrastructure/torrent-manager"
 
 export const TorrentManager = createParamDecorator(
     (_data: unknown, ctx: ExecutionContext) => {
@@ -11,5 +14,5 @@ export const TorrentManager = createParamDecorator(
         const torrentManager = new TorrentManagerImpl(storageDaemonCLI)
 
         return torrentManager
-    }
+    },
 )

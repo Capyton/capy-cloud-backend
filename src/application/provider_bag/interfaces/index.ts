@@ -1,1 +1,1 @@
-export { ProviderBagReader, ProviderBagRepo } from "./persistence";
+export { ProviderBagReader, ProviderBagRepo } from "./persistence"

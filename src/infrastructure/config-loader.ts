@@ -1,4 +1,5 @@
 import { APIConfig, AuthAndTokensConfig, Config, FilesConfig, TonStorageDaemonCLI } from "@src/api/config"
+
 import { Config as DatabaseConfig } from "@src/infrastructure/db/config"
 
 export function loadConfigFromEnv(): Config {

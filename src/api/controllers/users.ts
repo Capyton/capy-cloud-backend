@@ -1,10 +1,11 @@
-import { Controller, Get } from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiResponse } from "@nestjs/swagger"
-import { UserPayloadFromAuthToken, UserReader as ParamUserReader } from "@src/api/param_decorators"
-import { UserPayload } from "@src/application/auth/dto"
-import { User } from "@src/application/user/dto"
-import { UserReader } from "@src/application/user/interfaces"
+import { Controller, Get } from "@nestjs/common"
 import { GetUserById, GetUserByIdHandler } from "@src/application/user/queries/get-user-by-id"
+import { UserReader as ParamUserReader, UserPayloadFromAuthToken } from "@src/api/param_decorators"
+
+import { User } from "@src/application/user/dto"
+import { UserPayload } from "@src/application/auth/dto"
+import { UserReader } from "@src/application/user/interfaces"
 
 @Controller("users")
 export class UserController {
@@ -12,7 +13,7 @@ export class UserController {
      * Get user info by auth token
      * @returns User
      */
-    @ApiOperation({ summary: "Get user info by auth token" })
+    @ApiOperation({ summary: "Get user info by an auth token" })
     @ApiBearerAuth()
     @ApiResponse({
         status: 200,
@@ -57,7 +58,7 @@ export class UserController {
         status: 404,
         description: "User id not found",
     })
-    @Get("me")
+    @Get()
     getUser(
         @ParamUserReader() userReader: UserReader,
         @UserPayloadFromAuthToken() userPayload: UserPayload,

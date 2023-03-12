@@ -1,5 +1,5 @@
-import { TorrentManager } from "@src/application/torrent/interfaces"
 import { BagId } from "@src/domain/bag/types"
+import { TorrentManager } from "@src/application/torrent/interfaces"
 
 export class DeleteTorrent {
     constructor(
@@ -12,7 +12,7 @@ export class DeleteTorrentHandler {
         readonly torrentManager: TorrentManager,
     ) { }
 
-    async execute(command: DeleteTorrent): Promise<void> {
-        await this.torrentManager.deleteTorrentByBagId(command.bagId)
+    execute(command: DeleteTorrent): Promise<void> {
+        return this.torrentManager.deleteTorrentByBagId(command.bagId)
     }
 }

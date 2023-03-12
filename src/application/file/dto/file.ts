@@ -1,6 +1,5 @@
 import { UUID } from "@src/utils/uuid"
 
-
 export class File {
     constructor(
         readonly id: UUID,

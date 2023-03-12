@@ -1,1 +1,1 @@
-export { ProviderReader, ProviderRepo } from "./persistence";
+export { ProviderReader, ProviderRepo } from "./persistence"

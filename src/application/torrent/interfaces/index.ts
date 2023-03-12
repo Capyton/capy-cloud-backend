@@ -1,1 +1,1 @@
-export { TorrentManager, TorrentReader } from "./persistence";
+export { TorrentManager, TorrentReader } from "./persistence"

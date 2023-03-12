@@ -1,6 +1,9 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common"
-import { UUID } from "@src/utils/uuid"
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+import { ExecutionContext, createParamDecorator } from "@nestjs/common"
+
 import { Request } from "express"
+import { UUID } from "@src/utils/uuid"
 
 export const BagId = createParamDecorator(
     (_data: unknown, ctx: ExecutionContext) => {
@@ -9,5 +12,5 @@ export const BagId = createParamDecorator(
         const bagId: UUID = request.app.locals.bagId
 
         return bagId
-    }
+    },
 )

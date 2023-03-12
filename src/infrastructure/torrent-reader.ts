@@ -1,12 +1,12 @@
+import { BagId } from "@src/domain/bag/types"
+import TonstorageCLI from "tonstorage-cli"
 import { Torrent as TorrentDTO } from "@src/application/torrent/dto/torrent"
+import { TorrentFile } from "@src/domain/torrent_file/entities"
+import { TorrentFull } from "@src/domain/torrent/entities"
 import { TorrentFull as TorrentFullDTO } from "@src/application/torrent/dto/torrent-full"
 import { TorrentGetByBagIdError } from "@src/application/torrent/exceptions"
 import { TorrentReader } from "@src/application/torrent/interfaces"
-import { BagId } from "@src/domain/bag/types"
-import { TorrentFull } from "@src/domain/torrent/entities"
-import { TorrentFile } from "@src/domain/torrent_file/entities"
 import { hexEncodeFromString } from "@src/utils/hex"
-import TonstorageCLI from "tonstorage-cli"
 
 export class TorrentReaderImpl implements TorrentReader {
     constructor(private readonly storageDaemonCLI: TonstorageCLI) { }
@@ -17,26 +17,27 @@ export class TorrentReaderImpl implements TorrentReader {
             throw new TorrentGetByBagIdError(`Torrent get by bag id error: \`${torrent.error}\``)
         }
 
-        const torrentResult = torrent.result["torrent"]
-        const bagHash = torrentResult["hash"]
-        const bagSize = torrentResult["total_size"]
-        const bagDescription = torrentResult["description"]
-        const filesCount = torrentResult["files_count"]
-        const includedSize = torrentResult["included_size"]
-        const downloadedSize = torrentResult["downloaded_size"]
-        const activeDownload = torrentResult["active_download"]
-        const activeUpload = torrentResult["active_upload"]
-        const completed = torrentResult["completed"]
-        const downloadSpeed = torrentResult["download_speed"]
-        const uploadSpeed = torrentResult["upload_speed"]
-        const fatalError = torrentResult["fatal_error"]
+        const torrentResult = torrent.result.torrent as Record<string, unknown>
+        const bagHash = torrentResult.hash as string
+        const bagSize = torrentResult.total_size as number
+        const bagDescription = torrentResult.description as string | null
+        const filesCount = torrentResult.files_count as number
+        const includedSize = torrentResult.included_size as number
+        const downloadedSize = torrentResult.downloaded_size as number
+        const activeDownload = torrentResult.active_download as boolean
+        const activeUpload = torrentResult.active_upload as boolean
+        const completed = torrentResult.completed as boolean
+        const downloadSpeed = torrentResult.download_speed as number
+        const uploadSpeed = torrentResult.upload_speed as number
+        const fatalError = torrentResult.fatal_error as string
 
-        const bagFiles = torrent.result["files"].map((file: Record<string, any>) => {
+        const torrentFiles = torrentResult.files as Record<string, unknown>[]
+        const bagFiles = torrentFiles.map((file: Record<string, unknown>) => {
             return TorrentFile.create(
-                file["name"],
-                file["size"],
-                file["priority"],
-                file["downloaded_size"]
+                file.name as string,
+                file.size as number,
+                file.priority as number,
+                file.downloaded_size as number,
             )
         })
 
@@ -55,22 +56,22 @@ export class TorrentReaderImpl implements TorrentReader {
             throw new TorrentGetByBagIdError(`Torrent get by bag id error: \`${torrents.error}\``)
         }
 
-        const torrentsResult = torrents.result["torrents"]
+        const torrentsResult = torrents.result.torrents as Record<string, unknown>[]
 
-        return torrentsResult.map((torrentResult: Record<string, any>) => {
-            const bagId = hexEncodeFromString(torrentResult["hash"])
-            const bagHash = torrentResult["hash"]
-            const bagSize = torrentResult["total_size"]
-            const bagDescription = torrentResult["description"]
-            const filesCount = torrentResult["files_count"]
-            const includedSize = torrentResult["included_size"]
-            const downloadedSize = torrentResult["downloaded_size"]
-            const activeDownload = torrentResult["active_download"]
-            const activeUpload = torrentResult["active_upload"]
-            const completed = torrentResult["completed"]
-            const downloadSpeed = torrentResult["download_speed"]
-            const uploadSpeed = torrentResult["upload_speed"]
-            const fatalError = torrentResult["fatal_error"]
+        return torrentsResult.map((torrentResult: Record<string, unknown>) => {
+            const bagId = hexEncodeFromString(torrentResult.hash as string)
+            const bagHash = torrentResult.hash as string
+            const bagSize = torrentResult.total_size as number
+            const bagDescription = torrentResult.description as string | null
+            const filesCount = torrentResult.files_count as number
+            const includedSize = torrentResult.included_size as number
+            const downloadedSize = torrentResult.downloaded_size as number
+            const activeDownload = torrentResult.active_download as boolean
+            const activeUpload = torrentResult.active_upload as boolean
+            const completed = torrentResult.completed as boolean
+            const downloadSpeed = torrentResult.download_speed as number
+            const uploadSpeed = torrentResult.upload_speed as number
+            const fatalError = torrentResult.fatal_error as string
 
             return TorrentDTO.create(
                 bagId, bagHash, bagSize, bagDescription,

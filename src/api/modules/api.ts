@@ -1,10 +1,11 @@
 import { DynamicModule, Module, Scope } from "@nestjs/common"
-import { Config } from "@src/api/config"
+
 import { API_CONFIG } from "@src/inject-constants"
-import TonstorageCLI from "tonstorage-cli"
-import { DataSource } from "typeorm"
 import { AuthModule } from "./auth"
 import { BagModule } from "./bags"
+import { Config } from "@src/api/config"
+import { DataSource } from "typeorm"
+import TonstorageCLI from "tonstorage-cli"
 import { TorrentModule } from "./torrents"
 import { UserModule } from "./users"
 
@@ -36,7 +37,7 @@ export class ApiModule {
                 TorrentModule,
                 UserModule,
                 BagModule,
-            ]
+            ],
         }
     }
 }
