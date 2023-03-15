@@ -1,4 +1,4 @@
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger"
 import { Controller, Get, Param } from "@nestjs/common"
 import { GetBagByBagId, GetBagByBagIdHandler } from "@src/application/bag/queries/get-bag-by-bag-id"
 import { GetUserBagsByUserId, GetUserBagsByUserIdHandler } from "@src/application/user_bag/queries/get-user-bags-by-user-id"
@@ -14,6 +14,7 @@ import { BagReader } from "@src/application/bag/interfaces"
 import { UserBagReader } from "@src/application/user_bag/interfaces"
 import { UserPayload } from "@src/application/auth/dto"
 
+@ApiTags("Bags")
 @Controller("bags")
 export class BagController {
     /**

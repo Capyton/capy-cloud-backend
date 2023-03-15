@@ -1,4 +1,4 @@
-import { ApiOperation, ApiParam, ApiResponse } from "@nestjs/swagger"
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger"
 import { Controller, Get, Param } from "@nestjs/common"
 import {
     GetProviderParamsByAddress,
@@ -17,6 +17,7 @@ import { BagId } from "@src/domain/bag/types"
 import { NewContractMessageResponse } from "@src/application/provider/dto/provider"
 import { ProviderAddress } from "@src/domain/provider/types"
 
+@ApiTags("Providers")
 @Controller("providers")
 export class ProviderController {
     /**

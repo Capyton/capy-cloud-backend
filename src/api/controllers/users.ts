@@ -1,4 +1,4 @@
-import { ApiBearerAuth, ApiOperation, ApiResponse } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger"
 import { Controller, Get } from "@nestjs/common"
 import { GetUserById, GetUserByIdHandler } from "@src/application/user/queries/get-user-by-id"
 import { UserReader as ParamUserReader, UserPayloadFromAuthToken } from "@src/api/param_decorators"
@@ -7,6 +7,7 @@ import { User } from "@src/application/user/dto"
 import { UserPayload } from "@src/application/auth/dto"
 import { UserReader } from "@src/application/user/interfaces"
 
+@ApiTags("Users")
 @Controller("users")
 export class UserController {
     /**

@@ -1,4 +1,4 @@
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger"
 import { AuthManager, JwtManager, UserRepo } from "@src/application/auth/interfaces"
 import { AuthPayload, AuthToken, UserPayload } from "@src/application/auth/dto"
 import { BadRequestException, Body, Controller, Get, Post } from "@nestjs/common"
@@ -15,6 +15,7 @@ import { TonAddress, TonNetwork } from "@src/domain/user/types"
 
 import { UnitOfWork } from "@src/application/common/interfaces"
 
+@ApiTags("Auth")
 @Controller("auth")
 export class AuthController {
     /**

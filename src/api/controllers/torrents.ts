@@ -1,4 +1,4 @@
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger"
 import {
     BadRequestException,
     Body,
@@ -101,6 +101,7 @@ function convertAttrsToFilesInfo(
     return filesInfo
 }
 
+@ApiTags("Torrents")
 @Controller("torrens")
 export class TorrentController {
     /**
