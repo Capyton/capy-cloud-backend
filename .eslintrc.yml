@@ -34,7 +34,7 @@ rules:
   semi: [warn, never]
   semi-spacing: [warn, { before: false, after: true }]
   quotes: [warn, double]
-  max-lines: [warn, { max: 200, skipBlankLines: false, skipComments: false }]
+  max-lines: [warn, { max: 800, skipBlankLines: false, skipComments: false }]
   indent: [warn, 4, {
       SwitchCase: 1,
       VariableDeclarator: 1,

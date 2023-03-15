@@ -17,14 +17,14 @@ import { UserPayload } from "@src/application/auth/dto"
 @Controller("bags")
 export class BagController {
     /**
-     * Get all bag ids of the user by user auth token
+     * Get all bags ids of the user by user auth token
      * @returns Bag ids
      */
-    @ApiOperation({ summary: "Get all bag ids of the user by user auth token" })
+    @ApiOperation({ summary: "Get all bags ids of the user by user auth token" })
     @ApiBearerAuth()
     @ApiResponse({
         status: 200,
-        description: "Bag ids",
+        description: "Bags ids",
         schema: {
             type: "array",
             items: {
@@ -44,15 +44,15 @@ export class BagController {
         ),
     })
     @Get("ids")
-    getUserBagIds(
+    getUserBagsIds(
         @ParamUserBagReader() userBagReader: UserBagReader,
         @UserPayloadFromAuthToken() userPayload: UserPayload,
     ): Promise<BagId[]> {
         const userBagHandler = new GetUserBagsByUserIdHandler(userBagReader)
-        const userBagIds = userBagHandler.execute(new GetUserBagsByUserId(userPayload.id))
+        const userBagsIds = userBagHandler.execute(new GetUserBagsByUserId(userPayload.id))
             .then((userBags) => userBags.map((userBag) => userBag.bagId))
 
-        return userBagIds
+        return userBagsIds
     }
 
     /**

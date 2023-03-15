@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse } from "@nestjs/swagger"
 import {
     BadRequestException,

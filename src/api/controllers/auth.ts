@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse } from "@nestjs/swagger"
 import { AuthManager, JwtManager, UserRepo } from "@src/application/auth/interfaces"
 import { AuthPayload, AuthToken, UserPayload } from "@src/application/auth/dto"
