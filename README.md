@@ -14,7 +14,7 @@ This is the backend of the **CapyCloud** project
 
 ### Swagger
 
-Path: `/api/v1/swagger`
+Path: `/swagger`
 
 ## Dependencies
 

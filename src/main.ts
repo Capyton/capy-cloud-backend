@@ -88,7 +88,7 @@ async function main(): Promise<void> {
         .build()
     const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig)
     SwaggerModule.setup("swagger", app, swaggerDocument, {
-        useGlobalPrefix: true,
+        useGlobalPrefix: false,
     })
 
     console.log(`Starting server on \`${config.api.host}:${config.api.port}\``)
