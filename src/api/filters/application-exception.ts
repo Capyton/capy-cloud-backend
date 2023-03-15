@@ -1,5 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from "@nestjs/common"
 import { BagBagIdNotFound, BagIdNotFound } from "@src/application/bag/exceptions"
+import { GetProviderParamsByAddressError, NewContractMessageError, ProviderAddressNotFound, ProviderIdNotFound } from "@src/application/provider/exceptions"
 import {
     InvalidJwtToken,
     InvalidNonce,
@@ -9,7 +10,6 @@ import {
     UnknownJwtTokenError,
     UnknownNonceError,
 } from "@src/application/auth/exceptions"
-import { ProviderAddressNotFound, ProviderIdNotFound } from "@src/application/provider/exceptions"
 import { Request, Response } from "express"
 import {
     TorrentBagIdNotFound,
@@ -57,6 +57,8 @@ export class ApplicationExceptionFilter implements ExceptionFilter {
             case TorrentCreateError:
             case TorrentGetByBagIdError:
             case TorrentRemoveByBagIdError:
+            case NewContractMessageError:
+            case GetProviderParamsByAddressError:
                 status = 400
                 break
             default:

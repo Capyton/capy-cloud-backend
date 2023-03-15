@@ -1,1 +1,1 @@
-export { Provider } from "./provider"
+export { Provider, NewContractMessageResponse, ProviderParams } from "./provider"

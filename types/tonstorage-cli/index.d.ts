@@ -192,11 +192,24 @@ declare module "tonstorage-cli" {
             maxFileSize: number,
         ): Promise<CLIResult<{ message: "success" }>>
 
+        /**
+         * Example return value
+         * ```json
+         * {
+         *     "@type" : "storage.daemon.provider.params",
+         *     "accept_new_contracts" : true,
+         *     "rate_per_mb_day" : "100000",
+         *     "max_span" : 86400,
+         *     "minimal_file_size" : "1024",
+         *     "maximal_file_size" : "25000000"
+         * }
+         * ```
+         */
         getProviderParams(providerAddress: string | null): Promise<CLIResult<JSONResult>>
 
         newContractMessage(
             torrent: string,
-            queryId: string,
+            queryId: number,
             providerAddress: string,
         ): Promise<CLIResult<{
             payload: string,

@@ -11,3 +11,7 @@ export class ProviderIdNotFound extends ApplicationException {
         super("Provider id not found", cause, meatadata)
     }
 }
+
+export class GetProviderParamsByAddressError extends ApplicationException { }
+
+export class NewContractMessageError extends ApplicationException { }

@@ -10,5 +10,5 @@ export {
     UserBagReader, UserBagRepo,
     UserReader, UserRepo,
 } from "./repositories"
-export { AuthManager, JwtManager, TorrentManager, TorrentReader } from "./services"
+export { AuthManager, JwtManager, TorrentManager, TorrentReader, ProviderManager } from "./services"
 export { UnitOfWork } from "./uow"
