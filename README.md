@@ -10,6 +10,8 @@ This is the backend of the **CapyCloud** project
 - Copy `.env.template` to `.env` and fill it with your data
 - Run `docker-compose up -d` to start the project
 
+If you want to get your public IP for `.env` file, you can run `./get-public-ip.sh`
+
 ## Endpoints
 
 ### Swagger
