@@ -1,3 +1,4 @@
+import { AddTorrentByBagId, AddTorrentByBagIdHandler } from "@src/application/torrent/commands/add-torrent-by-bag-id"
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger"
 import {
     BadRequestException,
@@ -68,7 +69,7 @@ function convertAttrsToFilesInfo(
 }
 
 @ApiTags("Torrents")
-@Controller("torrens")
+@Controller("torrents")
 export class TorrentController {
     @ApiOperation({ summary: "Create a torrent from a bag of files" })
     @ApiBearerAuth()
@@ -182,11 +183,23 @@ export class TorrentController {
                     type: "number",
                     description: "Included size of the bag",
                 },
+                dirName: {
+                    nullable: false,
+                    title: "Directory name",
+                    type: "string",
+                    description: "Directory name in the bag",
+                },
                 downloadedSize: {
                     nullable: false,
                     title: "Downloaded size",
                     type: "number",
                     description: "Downloaded size of the bag",
+                },
+                rootDir: {
+                    nullable: false,
+                    title: "Root directory",
+                    type: "string",
+                    description: "Root directory of the bag",
                 },
                 activeDownload: {
                     nullable: false,
@@ -385,11 +398,23 @@ export class TorrentController {
                     type: "number",
                     description: "Included size of the bag",
                 },
+                dirName: {
+                    nullable: false,
+                    title: "Directory name",
+                    type: "string",
+                    description: "Directory name in the bag",
+                },
                 downloadedSize: {
                     nullable: false,
                     title: "Downloaded size",
                     type: "number",
                     description: "Downloaded size of the bag",
+                },
+                rootDir: {
+                    nullable: false,
+                    title: "Root directory",
+                    type: "string",
+                    description: "Root directory of the bag",
                 },
                 activeDownload: {
                     nullable: false,
@@ -477,6 +502,183 @@ export class TorrentController {
         const getTorrentByBagIdHandler = new GetTorrentByBagIdHandler(torrentManager)
 
         const torrent = getTorrentByBagIdHandler.execute(new GetTorrentByBagId(bagId))
+
+        return torrent
+    }
+
+    @ApiOperation({ summary: "Add a torrent by bag id" })
+    @ApiParam({
+        schema: {
+            nullable: false,
+            title: "Bag id",
+            type: "string",
+            description: "Bag id of the torrent",
+        },
+        name: "bagId",
+    })
+    @ApiParam({
+        schema: {
+            nullable: false,
+            default: [],
+            title: "Filenames",
+            type: "array",
+            items: {
+                nullable: false,
+                type: "string",
+                description: "Filename of the file to download from the torrent",
+            },
+        },
+        name: "filenames",
+    })
+    @ApiResponse({
+        status: 200,
+        description: "Torrent",
+        schema: {
+            nullable: false,
+            type: "object",
+            properties: {
+                bagId: {
+                    nullable: false,
+                    title: "Bag id",
+                    type: "string",
+                    description: "Id of the bag",
+                },
+                bagHash: {
+                    nullable: false,
+                    title: "Bag hash",
+                    type: "string",
+                    description: "Hash of the bag",
+                },
+                totalSize: {
+                    nullable: false,
+                    title: "Total size",
+                    type: "number",
+                    description: "Total size of the bag",
+                },
+                description: {
+                    nullable: true,
+                    title: "Description",
+                    type: "string",
+                    description: "Description of the bag",
+                },
+                filesCount: {
+                    nullable: false,
+                    title: "Files count",
+                    type: "number",
+                    description: "Count of files of the bag",
+                },
+                includedSize: {
+                    nullable: false,
+                    title: "Included size",
+                    type: "number",
+                    description: "Included size of the bag",
+                },
+                dirName: {
+                    nullable: false,
+                    title: "Directory name",
+                    type: "string",
+                    description: "Directory name in the bag",
+                },
+                downloadedSize: {
+                    nullable: false,
+                    title: "Downloaded size",
+                    type: "number",
+                    description: "Downloaded size of the bag",
+                },
+                rootDir: {
+                    nullable: false,
+                    title: "Root directory",
+                    type: "string",
+                    description: "Root directory of the bag",
+                },
+                activeDownload: {
+                    nullable: false,
+                    title: "Active download",
+                    type: "boolean",
+                    description: "Active download of the bag",
+                },
+                activeUpload: {
+                    nullable: false,
+                    title: "Active upload",
+                    type: "boolean",
+                    description: "Active upload of the bag",
+                },
+                completed: {
+                    nullable: false,
+                    title: "Completed",
+                    type: "boolean",
+                    description: "Completed of the bag",
+                },
+                downloadSpeed: {
+                    nullable: false,
+                    title: "Download speed",
+                    type: "number",
+                    description: "Download speed of the bag",
+                },
+                uploadSpeed: {
+                    nullable: false,
+                    title: "Upload speed",
+                    type: "number",
+                    description: "Upload speed of the bag",
+                },
+                fatalError: {
+                    nullable: true,
+                    title: "Fatal error",
+                    type: "string",
+                    description: "Fatal error of the bag",
+                },
+                files: {
+                    nullable: false,
+                    title: "Files",
+                    type: "array",
+                    items: {
+                        nullable: false,
+                        type: "object",
+                        properties: {
+                            name: {
+                                nullable: false,
+                                title: "Name",
+                                type: "string",
+                                description: "Name of the file",
+                            },
+                            size: {
+                                nullable: false,
+                                title: "Size",
+                                type: "number",
+                                description: "Size of the file",
+                            },
+                            priority: {
+                                nullable: false,
+                                title: "Priority",
+                                type: "number",
+                                description: "Priority of the file",
+                            },
+                            downloadedSize: {
+                                nullable: false,
+                                title: "Downloaded size",
+                                type: "number",
+                                description: "Downloaded size of the file",
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    })
+    @ApiResponse({
+        status: 400,
+        description: "Torrent add by bag id error",
+    })
+    @Post("add-by-bag-id/:bagId")
+    addTorrentByBagId(
+        @ParamTorrentManager() torrentManager: TorrentManager,
+        @Param("bagId") bagId: BagId,
+        @Body("filenames") filenames: string[] = [],
+    ): Promise<TorrentFull> {
+        const rootDir = null
+
+        const addTorrentHandler = new AddTorrentByBagIdHandler(torrentManager)
+        const torrent = addTorrentHandler.execute(new AddTorrentByBagId(bagId, rootDir, filenames))
 
         return torrent
     }

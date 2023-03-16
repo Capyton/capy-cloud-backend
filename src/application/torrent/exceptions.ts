@@ -7,3 +7,5 @@ export class TorrentCreateError extends ApplicationException { }
 export class TorrentRemoveByBagIdError extends ApplicationException { }
 
 export class TorrentGetByBagIdError extends ApplicationException { }
+
+export class TorrentAddByBagIdError extends ApplicationException { }

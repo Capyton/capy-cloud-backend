@@ -8,7 +8,9 @@ export class Torrent {
         readonly description: string | null,
         readonly filesCount: number,
         readonly includedSize: number,
+        readonly dirName: string,
         readonly downloadedSize: number,
+        readonly rootDir: string,
         readonly activeDownload: boolean,
         readonly activeUpload: boolean,
         readonly completed: boolean,
@@ -16,26 +18,4 @@ export class Torrent {
         readonly uploadSpeed: number,
         readonly fatalError: string | null,
     ) { }
-
-    static create(
-        bagId: BagId,
-        badHash: BagHash,
-        totalSize: number,
-        description: string | null,
-        filesCount: number,
-        includedSize: number,
-        downloadedSize: number,
-        activeDownload: boolean,
-        activeUpload: boolean,
-        completed: boolean,
-        downloadSpeed: number,
-        uploadSpeed: number,
-        fatalError: string | null,
-    ): Torrent {
-        return new Torrent(
-            bagId, badHash, totalSize, description, filesCount,
-            includedSize, downloadedSize, activeDownload, activeUpload,
-            completed, downloadSpeed, uploadSpeed, fatalError,
-        )
-    }
 }

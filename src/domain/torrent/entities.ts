@@ -10,7 +10,9 @@ export class TorrentFull {
         readonly description: string | null,
         readonly filesCount: number,
         readonly includedSize: number,
+        readonly dirName: string,
         readonly downloadedSize: number,
+        readonly rootDir: string,
         readonly activeDownload: boolean,
         readonly activeUpload: boolean,
         readonly completed: boolean,
@@ -27,7 +29,9 @@ export class TorrentFull {
         description: string | null,
         filesCount: number,
         includedSize: number,
+        dirName: string,
         downloadedSize: number,
+        rootDir: string,
         activeDownload: boolean,
         activeUpload: boolean,
         completed: boolean,
@@ -38,8 +42,9 @@ export class TorrentFull {
     ): TorrentFull {
         return new TorrentFull(
             bagId, badHash, totalSize, description, filesCount,
-            includedSize, downloadedSize, activeDownload, activeUpload,
-            completed, downloadSpeed, uploadSpeed, fatalError, files,
+            includedSize, dirName, downloadedSize, rootDir,
+            activeDownload, activeUpload, completed, downloadSpeed,
+            uploadSpeed, fatalError, files,
         )
     }
 }
@@ -52,7 +57,9 @@ export class Torrent {
         readonly description: string | null,
         readonly filesCount: number,
         readonly includedSize: number,
+        readonly dirName: string,
         readonly downloadedSize: number,
+        readonly rootDir: string,
         readonly activeDownload: boolean,
         readonly activeUpload: boolean,
         readonly completed: boolean,
@@ -68,7 +75,9 @@ export class Torrent {
         description: string | null,
         filesCount: number,
         includedSize: number,
+        dirName: string,
         downloadedSize: number,
+        rootDir: string,
         activeDownload: boolean,
         activeUpload: boolean,
         completed: boolean,
@@ -78,8 +87,9 @@ export class Torrent {
     ): Torrent {
         return new Torrent(
             bagId, badHash, totalSize, description, filesCount,
-            includedSize, downloadedSize, activeDownload, activeUpload,
-            completed, downloadSpeed, uploadSpeed, fatalError,
+            includedSize, dirName, downloadedSize, rootDir,
+            activeDownload, activeUpload, completed, downloadSpeed,
+            uploadSpeed, fatalError,
         )
     }
 }

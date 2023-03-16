@@ -107,6 +107,37 @@ declare module "tonstorage-cli" {
          * @param upload - Default `true`
          * @param rootDir - Default `null`
          * @param partialFiles - Default `[]`
+         * * Example return value
+         * ```json
+         * {
+         *     "@type" : "storage.daemon.torrentFull",
+         *     "torrent" : {
+         *         "@type" : "storage.daemon.torrent",
+         *         "hash" : "HZzHVhC7ayP02Inwe2r7CpVgHEriyz6BcpM6+tf/75A=",
+         *         "flags" : 3,
+         *         "total_size" : "49",
+         *         "description" : "",
+         *         "files_count" : "1",
+         *         "included_size" : "49",
+         *         "dir_name" : "",
+         *         "downloaded_size" : "49",
+         *         "root_dir" : "/usr/src/app/uploads/",
+         *         "active_download" : false,
+         *         "active_upload" : true,
+         *         "completed" : true,
+         *         "download_speed" : 0.000000,
+         *         "upload_speed" : 0.000000,
+         *         "fatal_error" : ""
+         *     },
+         *     "files" : [{
+         *         "@type" : "storage.daemon.fileInfo",
+         *         "name" : "a",
+         *         "size" : "0",
+         *         "priority" : 1,
+         *         "downloaded_size" : "0"
+         *     }]
+         * }
+         * ```
          */
         addByHash(hash: string, options?: {
             download: boolean,
@@ -120,6 +151,37 @@ declare module "tonstorage-cli" {
          * @param upload - Default `true`
          * @param rootDir - Default `null`
          * @param partialFiles - Default `[]`
+         * * Example return value
+         * ```json
+         * {
+         *     "@type" : "storage.daemon.torrentFull",
+         *     "torrent" : {
+         *         "@type" : "storage.daemon.torrent",
+         *         "hash" : "HZzHVhC7ayP02Inwe2r7CpVgHEriyz6BcpM6+tf/75A=",
+         *         "flags" : 3,
+         *         "total_size" : "49",
+         *         "description" : "",
+         *         "files_count" : "1",
+         *         "included_size" : "49",
+         *         "dir_name" : "",
+         *         "downloaded_size" : "49",
+         *         "root_dir" : "/usr/src/app/uploads/",
+         *         "active_download" : false,
+         *         "active_upload" : true,
+         *         "completed" : true,
+         *         "download_speed" : 0.000000,
+         *         "upload_speed" : 0.000000,
+         *         "fatal_error" : ""
+         *     },
+         *     "files" : [{
+         *         "@type" : "storage.daemon.fileInfo",
+         *         "name" : "a",
+         *         "size" : "0",
+         *         "priority" : 1,
+         *         "downloaded_size" : "0"
+         *     }]
+         * }
+         * ```
          */
         addByMeta(path: string, options?: {
             download: boolean,
