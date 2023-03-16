@@ -10,10 +10,6 @@ import { UserReader } from "@src/application/user/interfaces"
 @ApiTags("Users")
 @Controller("users")
 export class UserController {
-    /**
-     * Get user info by auth token
-     * @returns User
-     */
     @ApiOperation({ summary: "Get user info by an auth token" })
     @ApiBearerAuth()
     @ApiResponse({

@@ -20,10 +20,6 @@ import { ProviderAddress } from "@src/domain/provider/types"
 @ApiTags("Providers")
 @Controller("providers")
 export class ProviderController {
-    /**
-     * Get all providers
-     * @returns Providers
-     */
     @ApiOperation({ summary: "Get all providers" })
     @ApiResponse({
         status: 200,
@@ -81,11 +77,6 @@ export class ProviderController {
         return providers
     }
 
-    /**
-     * Get provider params by provider address
-     * @param providerAddress - Provider address of the provider
-     * @returns Provider params
-     */
     @ApiOperation({ summary: "Get provider params by provider address" })
     @ApiParam({
         schema: {
@@ -151,11 +142,6 @@ export class ProviderController {
         return providerParams
     }
 
-    /**
-     * New contract message for a provider
-     * @param bagId - Bag id
-     * @param providerAddress - Provider address
-     */
     @ApiOperation({ summary: "New contract message for a provider" })
     @ApiParam({
         schema: {

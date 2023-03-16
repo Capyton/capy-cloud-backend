@@ -70,24 +70,6 @@ function convertAttrsToFilesInfo(
 @ApiTags("Torrents")
 @Controller("torrens")
 export class TorrentController {
-    /**
-     * Create a torrent from a bag of files
-     * @param files - Files to upload as files of the bag
-     * @param bagDescription - Description of the bag
-     * @param filenames -
-     * Filenames of files.
-     * If only one filename is uploaded, this will be represented as an array with one element.
-     * If filenames less than files, the rest of files will have original name of the file.
-     * @param descriptions -
-     * Descriptions of files.
-     * If only one description is uploaded, this will be represented as an array with one element.
-     * If descriptions less than files, the rest of files will have default value `null`.
-     * @param pathDirs -
-     * Path dirs of files in the bag.
-     * If only one path dir is uploaded, this will be represented as an array with one element.
-     * If path dirs less than files, the rest of files will have default value root path dir.
-     * @returns Created torrent
-     */
     @ApiOperation({ summary: "Create a torrent from a bag of files" })
     @ApiBearerAuth()
     @ApiBody({
@@ -350,11 +332,6 @@ export class TorrentController {
         return torrent
     }
 
-    /**
-     * Get a torrent by bag id
-     * @param bagId - Bag id of the torrent
-     * @returns Torrent
-     */
     @ApiOperation({ summary: "Get a torrent by bag id" })
     @ApiParam({
         schema: {

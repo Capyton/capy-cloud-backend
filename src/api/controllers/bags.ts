@@ -17,10 +17,6 @@ import { UserPayload } from "@src/application/auth/dto"
 @ApiTags("Bags")
 @Controller("bags")
 export class BagController {
-    /**
-     * Get all bags ids of the user by user auth token
-     * @returns Bag ids
-     */
     @ApiOperation({ summary: "Get all bags ids of the user by user auth token" })
     @ApiBearerAuth()
     @ApiResponse({
@@ -56,11 +52,6 @@ export class BagController {
         return userBagsIds
     }
 
-    /**
-     * Get a bag by bag id
-     * @param bagId - Bag id of the bag
-     * @returns Bag
-     */
     @ApiOperation({ summary: "Get a bag by bag id" })
     @ApiParam({
         schema: {
