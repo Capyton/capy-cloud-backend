@@ -51,44 +51,12 @@ class FileInfoDTO {
 }
 
 function convertAttrsToFilesInfo(
-    filenames: Array<string> | string,
-    descriptions: Array<string | null> | string | null = null,
-    pathDirs: Array<string> | string = "/",
+    filenames: Array<string>,
+    descriptions: Array<string | null>,
+    pathDirs: Array<string>,
 ): FileInfoDTO[] {
-    let filesNamesLength: number
-    let descriptionsLength: number
-    let pathDirsLength: number
-
-    if (typeof filenames === "string") {
-        filenames = [filenames]
-        filesNamesLength = 1
-    } else {
-        filesNamesLength = filenames.length
-    }
-    if (typeof descriptions === "string" || descriptions === null) {
-        descriptions = [descriptions]
-        descriptionsLength = 1
-    } else {
-        descriptionsLength = descriptions.length
-    }
-    if (typeof pathDirs === "string") {
-        pathDirs = [pathDirs]
-        pathDirsLength = 1
-    } else {
-        pathDirsLength = pathDirs.length
-    }
-
-    const equalsLength = (
-        filesNamesLength === descriptionsLength
-        && descriptionsLength === pathDirsLength
-    )
-
-    if (!equalsLength) {
-        throw new BadRequestException("Filenames, descriptions and path dirs should have the same length")
-    }
-
     const filesInfo: FileInfoDTO[] = []
-    for (let index = 0; index < filesNamesLength; index++) {
+    for (let index = 0; index < filenames.length; index++) {
         const filename = filenames[index]
         const description = descriptions[index]
         const pathDir = pathDirs[index]
@@ -106,9 +74,18 @@ export class TorrentController {
      * Create a torrent from a bag of files
      * @param files - Files to upload as files of the bag
      * @param bagDescription - Description of the bag
-     * @param filenames - Filenames of files of the bag. If only one file is uploaded, this can be a string.
-     * @param descriptions - Descriptions of files of the bag. If only one file is uploaded, this can be a string and have default value.
-     * @param pathDirs - Path dirs of files of the bag. If only one file is uploaded, this can be a string and have default value.
+     * @param filenames -
+     * Filenames of files.
+     * If only one filename is uploaded, this will be represented as an array with one element.
+     * If filenames less than files, the rest of files will have original name of the file.
+     * @param descriptions -
+     * Descriptions of files.
+     * If only one description is uploaded, this will be represented as an array with one element.
+     * If descriptions less than files, the rest of files will have default value `null`.
+     * @param pathDirs -
+     * Path dirs of files in the bag.
+     * If only one path dir is uploaded, this will be represented as an array with one element.
+     * If path dirs less than files, the rest of files will have default value root path dir.
      * @returns Created torrent
      */
     @ApiOperation({ summary: "Create a torrent from a bag of files" })
@@ -134,13 +111,18 @@ export class TorrentController {
                     description: "Description of the bag",
                 },
                 filenames: {
-                    nullable: false,
+                    nullable: true,
                     title: "Filenames",
                     type: "array",
                     items: {
                         type: "string",
                     },
-                    description: "Filenames of files of the bag. If only one file is uploaded, this can be a string.",
+                    description: (
+                        "Filenames of files. " +
+                        "If only one filename is uploaded, this will be represented as an array with one element. " +
+                        "If filenames less than files, the rest of files will have original name of the file. " +
+                        "If filenames is empty, the rest of files will have original name of the file."
+                    ),
                 },
                 descriptions: {
                     nullable: true,
@@ -150,8 +132,10 @@ export class TorrentController {
                         type: "string",
                     },
                     description: (
-                        "Descriptions of files of the bag. " +
-                        "If only one file is uploaded, this can be a string and have default value."
+                        "Descriptions of files. " +
+                        "If only one description is uploaded, this will be represented as an array with one element. " +
+                        "If descriptions less than files, the rest of files will have default value `null`. " +
+                        "If descriptions is empty, the rest of files will have default value `null`."
                     ),
                     default: null,
                 },
@@ -163,8 +147,10 @@ export class TorrentController {
                         type: "string",
                     },
                     description: (
-                        "Path dirs of files of the bag. " +
-                        "If only one file is uploaded, this can be a string and have default value."
+                        "Path dirs of files in the bag. " +
+                        "If only one path dir is uploaded, this will be represented as an array with one element. " +
+                        "If path dirs less than files, the rest of files will have default value `/`. " +
+                        "If path dirs is empty, the rest of files will have default value `/`."
                     ),
                     default: "/",
                 },
@@ -297,9 +283,7 @@ export class TorrentController {
     @ApiResponse({
         status: 400,
         description: (
-            "Filename(s) are required | " +
-            "Filenames, descriptions and path dirs should have the same length | " +
-            "Files and files info should have the same length | " +
+            "No files have been uploaded | " +
             "Files info validation failed | " +
             "Torrent create error"
         ),
@@ -323,27 +307,19 @@ export class TorrentController {
         @ParamTorrentManager() torrentManager: TorrentManager,
         @ParamBagId() bagId: BagId,
         @BagDir() bagDir: string,
-        @UploadedFiles() files: Express.Multer.File[],
         @UserPayloadFromAuthToken() userPayload: UserPayload,
+        @Body("filenames") filenames: Array<string>,
+        @Body("descriptions") descriptions: Array<string | null>,
+        @Body("pathDirs") pathDirs: Array<string>,
         @Body("bagDescription") bagDescription: string | null = null,
-        @Body("filenames") filenames?: Array<string> | string,
-        @Body("descriptions") descriptions: Array<string | null> | string | null = null,
-        @Body("pathDirs") pathDirs: Array<string> | string = "/",
+        @UploadedFiles() files: Express.Multer.File[],
     ): Promise<TorrentFull> {
-        if (!filenames) {
-            throw new BadRequestException("Filename(s) are required")
-        }
-
         const filesInfo = convertAttrsToFilesInfo(filenames, descriptions, pathDirs)
-        if (files.length !== filesInfo.length) {
-            throw new BadRequestException("Files and files info should have the same length")
-        } else {
-            validateOrReject(filesInfo).catch(errors => {
-                console.error(`Files info validation failed: \`${JSON.stringify(errors)}\``)
+        validateOrReject(filesInfo).catch(errors => {
+            console.error(`Files info validation failed: \`${JSON.stringify(errors)}\``)
 
-                throw new BadRequestException("Files info validation failed")
-            })
-        }
+            throw new BadRequestException("Files info validation failed")
+        })
 
         const createTorrentHandler = new CreateTorrentHandler(torrentManager)
         const createBagHandler = new CreateBagHandler(bagRepo, uow)

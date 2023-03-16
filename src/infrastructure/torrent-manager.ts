@@ -14,8 +14,8 @@ export class TorrentManagerImpl implements TorrentManager {
 
     async addTorrent(bagDescription: string | null, bagDir: string): Promise<TorrentFull> {
         const torrent = await this.storageDaemonCLI.create(bagDir, {
-            upload: false,
-            copy: false,
+            upload: true,
+            copy: true,
             description: bagDescription,
         })
         if (!torrent.ok) {
