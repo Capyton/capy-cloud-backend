@@ -5,6 +5,7 @@ import { AuthModule } from "./auth"
 import { BagModule } from "./bags"
 import { Config } from "@src/api/config"
 import { DataSource } from "typeorm"
+import { FileModule } from "./files"
 import { ProviderModule } from "./providers"
 import TonstorageCLI from "tonstorage-cli"
 import { TorrentModule } from "./torrents"
@@ -25,6 +26,7 @@ export class ApiModule {
                 UserModule.forRoot(),
                 BagModule.forRoot(),
                 ProviderModule.forRoot(),
+                FileModule.forRoot(),
             ],
             providers: [
                 {
@@ -40,6 +42,7 @@ export class ApiModule {
                 UserModule,
                 BagModule,
                 ProviderModule,
+                FileModule,
             ],
         }
     }

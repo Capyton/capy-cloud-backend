@@ -211,7 +211,7 @@ export class FilesInterceptor implements NestInterceptor {
                     if (err) {
                         console.error(`Error delete directory \`${bagDir}\`: ${err.message}`)
                     } else {
-                        console.debug(`Directory \`${bagDir}\` have been deleted successfully`)
+                        console.debug(`Directory \`${bagDir}\` has been deleted successfully`)
                     }
                 })
 
