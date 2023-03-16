@@ -1,14 +1,14 @@
 import { Torrent } from "@src/application/torrent/dto/torrent"
-import { TorrentReader } from "@src/application/torrent/interfaces"
+import { TorrentManager } from "@src/application/torrent/interfaces"
 
 export class GetTorrents { }
 
 export class GetTorrentsHandler {
     constructor(
-        readonly torrentReader: TorrentReader,
+        readonly torrentManager: TorrentManager,
     ) { }
 
     execute(_command: GetTorrents): Promise<Torrent[]> {
-        return this.torrentReader.getTorrents()
+        return this.torrentManager.getTorrents()
     }
 }

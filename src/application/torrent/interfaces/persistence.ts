@@ -6,9 +6,6 @@ import { TorrentFull as TorrentFullDTO } from "@src/application/torrent/dto/torr
 export interface TorrentManager {
     addTorrent(bagDescription: string | null, bagDir: string): Promise<TorrentFull>
     deleteTorrentByBagId(bagId: BagId): Promise<void>
-}
-
-export interface TorrentReader {
     getTorrentByBagId(bagId: BagId): Promise<TorrentFullDTO>
     getTorrents(): Promise<TorrentDTO[]>
 }

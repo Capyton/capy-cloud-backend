@@ -1,6 +1,6 @@
 import { BagId } from "@src/domain/bag/types"
 import { TorrentFull } from "@src/application/torrent/dto/torrent-full"
-import { TorrentReader } from "@src/application/torrent/interfaces"
+import { TorrentManager } from "@src/application/torrent/interfaces"
 
 export class GetTorrentByBagId {
     constructor(
@@ -10,10 +10,10 @@ export class GetTorrentByBagId {
 
 export class GetTorrentByBagIdHandler {
     constructor(
-        readonly torrentReader: TorrentReader,
+        readonly torrentManager: TorrentManager,
     ) { }
 
     execute(command: GetTorrentByBagId): Promise<TorrentFull> {
-        return this.torrentReader.getTorrentByBagId(command.bagId)
+        return this.torrentManager.getTorrentByBagId(command.bagId)
     }
 }

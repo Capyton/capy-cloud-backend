@@ -15,7 +15,6 @@ import {
     BagRepo as ParamBagRepo,
     FileRepo as ParamFileRepo,
     TorrentManager as ParamTorrentManager,
-    TorrentReader as ParamTorrentReader,
     UnitOfWork as ParamUnitOfWork,
     UserBagRepo as ParamUserBagRepo,
     UserPayloadFromAuthToken,
@@ -26,17 +25,16 @@ import { CreateTorrent, CreateTorrentHandler } from "@src/application/torrent/co
 import { CreateUserBag, CreateUserBagHandler } from "@src/application/user_bag/commands/create-user-bag"
 import { GetTorrentByBagId, GetTorrentByBagIdHandler } from "@src/application/torrent/queries/get-torrent-by-bag-id"
 import { IsNotEmpty, IsOptional, IsString, validateOrReject } from "class-validator"
-import { TorrentManager, TorrentReader } from "@src/application/torrent/interfaces"
 
 import { BagId } from "@src/domain/bag/types"
 import { BagRepo } from "@src/application/bag/interfaces"
 import { FileRepo } from "@src/application/file/interfaces"
 import { FilesInterceptor } from "@src/api/interceptors"
 import { TorrentFull } from "@src/domain/torrent/entities"
+import { TorrentManager } from "@src/application/torrent/interfaces"
 import { UnitOfWork } from "@src/application/common/interfaces"
 import { UserBagRepo } from "@src/application/user_bag/interfaces"
 import { UserPayload } from "@src/application/auth/dto"
-
 import { uuid7 } from "@src/utils/uuid"
 
 class FileInfoDTO {
@@ -520,10 +518,10 @@ export class TorrentController {
     })
     @Get(":bagId")
     getTorrent(
-        @ParamTorrentReader() torrentReader: TorrentReader,
+        @ParamTorrentManager() torrentManager: TorrentManager,
         @Param("bagId") bagId: BagId,
     ): Promise<TorrentFull> {
-        const getTorrentByBagIdHandler = new GetTorrentByBagIdHandler(torrentReader)
+        const getTorrentByBagIdHandler = new GetTorrentByBagIdHandler(torrentManager)
 
         const torrent = getTorrentByBagIdHandler.execute(new GetTorrentByBagId(bagId))
 
