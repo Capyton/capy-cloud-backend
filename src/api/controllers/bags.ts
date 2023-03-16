@@ -74,11 +74,11 @@ export class BagController {
                     title: "Bag id",
                     type: "string",
                     format: "uuid",
-                    description: "Bag id",
+                    description: "Bag id in database",
                 },
                 bagId: {
                     nullable: false,
-                    title: "Bag bag id",
+                    title: "Bag id",
                     type: "string",
                     description: "Bag id",
                 },
@@ -112,7 +112,7 @@ export class BagController {
     })
     @ApiResponse({
         status: 404,
-        description: "Bag bag id not found",
+        description: "Bag id not found",
     })
     @Get(":bagId")
     getBag(

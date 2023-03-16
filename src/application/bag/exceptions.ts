@@ -2,7 +2,7 @@ import { ApplicationException } from "../common/exceptions"
 
 export class BagBagIdNotFound extends ApplicationException {
     constructor(cause?: Error, meatadata?: unknown) {
-        super("Bag bag id not found", cause, meatadata)
+        super("Bag id not found", cause, meatadata)
     }
 }
 

@@ -46,7 +46,7 @@ export class BagReaderImpl implements BagReader {
     async getBagByBagId(bagId: BagId): Promise<BagDTO> {
         const bag = await this.queryRunner.manager.findOne(BagModel, { where: { bagId: bagId } })
         if (!bag) {
-            throw new BagBagIdNotFound
+            throw new BagBagIdNotFound()
         }
         return bag
     }
