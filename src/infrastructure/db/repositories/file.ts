@@ -1,5 +1,6 @@
 import { FileReader, FileRepo } from "@src/application/file/interfaces"
 
+import { BagId } from "@src/domain/bag/types"
 import { File } from "@src/domain/file/entities"
 import { File as FileDTO } from "@src/application/file/dto"
 import { FileIdNotFound } from "@src/application/file/exceptions"
@@ -40,5 +41,9 @@ export class FileReaderImpl implements FileReader {
             throw new FileIdNotFound()
         }
         return file
+    }
+
+    getFilesByBagId(bagId: BagId): Promise<FileDTO[]> {
+        return this.queryRunner.manager.find(FileModel, { where: { bag: { bagId: bagId } } })
     }
 }

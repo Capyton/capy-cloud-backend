@@ -13,7 +13,7 @@ export class GetFileByIdHandler {
         readonly fileReader: FileReader,
     ) { }
 
-    async execute(command: GetFileById): Promise<File> {
-        return await this.fileReader.getFileById(command.id)
+    execute(command: GetFileById): Promise<File> {
+        return this.fileReader.getFileById(command.id)
     }
 }
