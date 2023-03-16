@@ -20,7 +20,7 @@ import { ProviderAddress } from "@src/domain/provider/types"
 @ApiTags("Providers")
 @Controller("providers")
 export class ProviderController {
-    @ApiOperation({ summary: "Get all providers" })
+    @ApiOperation({ summary: "Get providers" })
     @ApiResponse({
         status: 200,
         description: "Providers",
@@ -68,7 +68,7 @@ export class ProviderController {
         },
     })
     @Get()
-    getProvidersAddresses(
+    getProviders(
         @ParamProviderReader() providerReader: ProviderReader,
     ): Promise<Provider[]> {
         const providersHandler = new GetProvidersHandler(providerReader)
@@ -77,7 +77,7 @@ export class ProviderController {
         return providers
     }
 
-    @ApiOperation({ summary: "Get provider params by provider address" })
+    @ApiOperation({ summary: "Get provider params by a provider address" })
     @ApiParam({
         schema: {
             nullable: false,
@@ -131,7 +131,7 @@ export class ProviderController {
         status: 400,
         description: "Get provider params by address error",
     })
-    @Get("params/:providerAddress")
+    @Get(":providerAddress/params")
     getProviderParamsByAddress(
         @ParamProviderManager() providerManager: ProviderManager,
         @Param("providerAddress") providerAddress: ProviderAddress,
@@ -193,7 +193,7 @@ export class ProviderController {
         status: 400,
         description: "New contract message error",
     })
-    @Get("new-contract-message/:providerAddress/:bagId")
+    @Get(":providerAddress/bags/:bagId/new-contract-message")
     newContractMessageForProvider(
         @ParamProviderManager() providerManager: ProviderManager,
         @Param("providerAddress") providerAddress: ProviderAddress,

@@ -18,9 +18,9 @@ import { UnitOfWork } from "@src/application/common/interfaces"
 @ApiTags("Auth")
 @Controller("auth")
 export class AuthController {
-    @ApiOperation({ summary: "Get auth payload for TON proof signature" })
+    @ApiOperation({ summary: "Generate an auth payload for TON proof signature" })
     @ApiResponse({
-        status: 200,
+        status: 201,
         description: "Auth payload",
         schema: {
             nullable: false,
@@ -35,8 +35,8 @@ export class AuthController {
             },
         },
     })
-    @Get("payload")
-    getAuthPayload(
+    @Post("payload")
+    generateAuthPayload(
         @ParamAuthManager() authManager: AuthManager,
     ): AuthPayload {
         const payloadHandler = new GenereatePayloadHandler(authManager)
@@ -45,7 +45,7 @@ export class AuthController {
         return payload
     }
 
-    @ApiOperation({ summary: "Get user payload by an auth token" })
+    @ApiOperation({ summary: "Get a user payload by an auth token" })
     @ApiBearerAuth()
     @ApiResponse({
         status: 200,
@@ -79,16 +79,14 @@ export class AuthController {
             "Unknown JWT token error"
         ),
     })
-    @Get()
+    @Get("payload")
     getUserPayload(
         @UserPayloadFromAuthToken() userPayload: UserPayload,
     ): UserPayload {
         return userPayload
     }
 
-    @ApiOperation({
-        summary: "Get auth token by user address and generated payload, signed TON proof signature and user address",
-    })
+    @ApiOperation({ summary: "Generate an auth token by a user payload and TON proof signature" })
     @ApiBody({
         schema: {
             type: "object",
@@ -158,7 +156,7 @@ export class AuthController {
         ),
     })
     @Post()
-    authUser(
+    generateAuthToken(
         @ParamAuthUserRepo() userRepo: UserRepo,
         @ParamAuthManager() authManager: AuthManager,
         @ParamJwtManager() jwtManager: JwtManager,

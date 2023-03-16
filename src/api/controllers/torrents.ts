@@ -345,7 +345,7 @@ export class TorrentController {
         return torrent
     }
 
-    @ApiOperation({ summary: "Get a torrent by bag id" })
+    @ApiOperation({ summary: "Get a torrent by a bag id" })
     @ApiParam({
         schema: {
             nullable: false,
@@ -506,7 +506,7 @@ export class TorrentController {
         return torrent
     }
 
-    @ApiOperation({ summary: "Add a torrent by bag id" })
+    @ApiOperation({ summary: "Add a torrent by a bag id" })
     @ApiParam({
         schema: {
             nullable: false,
@@ -669,7 +669,7 @@ export class TorrentController {
         status: 400,
         description: "Torrent add by bag id error",
     })
-    @Post("add-by-bag-id/:bagId")
+    @Post(":bagId/add-by-bag-id")
     addTorrentByBagId(
         @ParamTorrentManager() torrentManager: TorrentManager,
         @Param("bagId") bagId: BagId,

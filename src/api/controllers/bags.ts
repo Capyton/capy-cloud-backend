@@ -1,6 +1,7 @@
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger"
 import { Controller, Get, Param } from "@nestjs/common"
 import { GetBagByBagId, GetBagByBagIdHandler } from "@src/application/bag/queries/get-bag-by-bag-id"
+import { GetFilesByBagId, GetFilesByBagIdHandler } from "@src/application/file/queries/get-files-by-bag-id"
 import { GetUserBagsByUserId, GetUserBagsByUserIdHandler } from "@src/application/user_bag/queries/get-user-bags-by-user-id"
 import {
     BagReader as ParamBagReader,
@@ -11,13 +12,16 @@ import {
 import { Bag } from "@src/application/bag/dto"
 import { BagId } from "@src/domain/bag/types"
 import { BagReader } from "@src/application/bag/interfaces"
+import { File } from "@src/application/file/dto"
+import { FileReader } from "@src/application/file/interfaces"
+import { FileReader as ParamFileReader } from "@src/api/param_decorators"
 import { UserBagReader } from "@src/application/user_bag/interfaces"
 import { UserPayload } from "@src/application/auth/dto"
 
 @ApiTags("Bags")
 @Controller("bags")
 export class BagController {
-    @ApiOperation({ summary: "Get all bags ids of the user by user auth token" })
+    @ApiOperation({ summary: "Get user bags ids by an auth token" })
     @ApiBearerAuth()
     @ApiResponse({
         status: 200,
@@ -52,7 +56,7 @@ export class BagController {
         return userBagsIds
     }
 
-    @ApiOperation({ summary: "Get a bag by bag id" })
+    @ApiOperation({ summary: "Get a bag by a bag id" })
     @ApiParam({
         schema: {
             nullable: false,
@@ -123,5 +127,78 @@ export class BagController {
         const bag = bagHandler.execute(new GetBagByBagId(bagId))
 
         return bag
+    }
+
+    @ApiOperation({ summary: "Get bag files by bag id" })
+    @ApiParam({
+        schema: {
+            nullable: false,
+            title: "Bag id",
+            type: "string",
+            description: "Bag id of the bag",
+        },
+        name: "bagId",
+    })
+    @ApiResponse({
+        status: 200,
+        description: "Files",
+        schema: {
+            nullable: false,
+            type: "array",
+            items: {
+                nullable: false,
+                type: "object",
+                properties: {
+                    id: {
+                        nullable: false,
+                        type: "string",
+                        format: "uuid",
+                        description: "File id",
+                    },
+                    bagId: {
+                        nullable: false,
+                        type: "string",
+                        format: "uuid",
+                        description: "Bag id",
+                    },
+                    filename: {
+                        nullable: false,
+                        type: "string",
+                        description: "Filename",
+                    },
+                    description: {
+                        nullable: true,
+                        type: "string",
+                        description: "Description of the file",
+                    },
+                    pathDir: {
+                        nullable: false,
+                        type: "string",
+                        description: "Path directory of the file in the bag",
+                    },
+                    size: {
+                        nullable: false,
+                        type: "number",
+                        description: "Size of the file in bytes",
+                    },
+                    createdAt: {
+                        nullable: false,
+                        type: "string",
+                        format: "date-time",
+                        description: "Date of creation of the file",
+                    },
+                },
+            },
+        },
+    })
+    @Get(":bagId/files")
+    getFilesByBagId(
+        @ParamFileReader() fileReader: FileReader,
+        @Param("bagId") bagId: BagId,
+    ): Promise<File[]> {
+        const filesHandler = new GetFilesByBagIdHandler(fileReader)
+        const files = filesHandler.execute(new GetFilesByBagId(bagId))
+
+        return files
     }
 }

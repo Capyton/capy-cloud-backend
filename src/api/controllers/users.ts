@@ -10,7 +10,7 @@ import { UserReader } from "@src/application/user/interfaces"
 @ApiTags("Users")
 @Controller("users")
 export class UserController {
-    @ApiOperation({ summary: "Get user info by an auth token" })
+    @ApiOperation({ summary: "Get a user by an auth token" })
     @ApiBearerAuth()
     @ApiResponse({
         status: 200,
@@ -56,7 +56,7 @@ export class UserController {
         description: "User id not found",
     })
     @Get()
-    getUser(
+    getUserByAuthToken(
         @ParamUserReader() userReader: UserReader,
         @UserPayloadFromAuthToken() userPayload: UserPayload,
     ): Promise<User> {
