@@ -5,3 +5,7 @@ export class FileIdNotFound extends ApplicationException {
         super("File id not found", cause, meatadata)
     }
 }
+
+export class FileNameNotFound extends ApplicationException { }
+
+export class FileNotDownloaded extends ApplicationException { }

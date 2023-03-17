@@ -1,5 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from "@nestjs/common"
 import { BagBagIdNotFound, BagIdNotFound } from "@src/application/bag/exceptions"
+import { FileIdNotFound, FileNameNotFound, FileNotDownloaded } from "@src/application/file/exceptions"
 import {
     GetProviderParamsByAddressError,
     NewContractMessageError,
@@ -26,7 +27,6 @@ import {
 import { UserAddressNotFound, UserIdNotFound } from "@src/application/user/exceptions"
 
 import { ApplicationException } from "@src/application/common/exceptions"
-import { FileIdNotFound } from "@src/application/file/exceptions"
 import { ProviderBagIdNotFound } from "@src/application/provider_bag/exceptions"
 import { UserBagIdNotFound } from "@src/application/user_bag/exceptions"
 
@@ -51,6 +51,7 @@ export class ApplicationExceptionFilter implements ExceptionFilter {
             case BagIdNotFound:
             case BagBagIdNotFound:
             case FileIdNotFound:
+            case FileNameNotFound:
             case ProviderIdNotFound:
             case ProviderAddressNotFound:
             case ProviderBagIdNotFound:
@@ -60,6 +61,7 @@ export class ApplicationExceptionFilter implements ExceptionFilter {
             case UserBagIdNotFound:
                 status = 404
                 break
+            case FileNotDownloaded:
             case TorrentCreateError:
             case TorrentGetByBagIdError:
             case TorrentRemoveByBagIdError:

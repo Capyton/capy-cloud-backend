@@ -1,15 +1,6 @@
 import { AddTorrentByBagId, AddTorrentByBagIdHandler } from "@src/application/torrent/commands/add-torrent-by-bag-id"
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger"
-import {
-    BadRequestException,
-    Body,
-    Controller,
-    Get,
-    Param,
-    Post,
-    UploadedFiles,
-    UseInterceptors,
-} from "@nestjs/common"
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger"
+import { BadRequestException, Body, Controller, Get, Param, Post, Query, Res, UploadedFiles, UseInterceptors } from "@nestjs/common"
 import {
     BagDir,
     BagId as ParamBagId,
@@ -24,6 +15,7 @@ import { CreateBag, CreateBagHandler } from "@src/application/bag/commands/creat
 import { CreateFile, CreateFileHandler } from "@src/application/file/commands/create-file"
 import { CreateTorrent, CreateTorrentHandler } from "@src/application/torrent/commands/create-torrent"
 import { CreateUserBag, CreateUserBagHandler } from "@src/application/user_bag/commands/create-user-bag"
+import { FileNameNotFound, FileNotDownloaded } from "@src/application/file/exceptions"
 import { GetTorrentByBagId, GetTorrentByBagIdHandler } from "@src/application/torrent/queries/get-torrent-by-bag-id"
 import { IsNotEmpty, IsOptional, IsString, validateOrReject } from "class-validator"
 
@@ -31,11 +23,14 @@ import { BagId } from "@src/domain/bag/types"
 import { BagRepo } from "@src/application/bag/interfaces"
 import { FileRepo } from "@src/application/file/interfaces"
 import { FilesInterceptor } from "@src/api/interceptors"
+import { Response } from "express"
 import { TorrentFull } from "@src/domain/torrent/entities"
 import { TorrentManager } from "@src/application/torrent/interfaces"
 import { UnitOfWork } from "@src/application/common/interfaces"
 import { UserBagRepo } from "@src/application/user_bag/interfaces"
 import { UserPayload } from "@src/application/auth/dto"
+import { createReadStream } from "fs"
+import { join } from "path"
 import { uuid7 } from "@src/utils/uuid"
 
 class FileInfoDTO {
@@ -499,9 +494,8 @@ export class TorrentController {
         @ParamTorrentManager() torrentManager: TorrentManager,
         @Param("bagId") bagId: BagId,
     ): Promise<TorrentFull> {
-        const getTorrentByBagIdHandler = new GetTorrentByBagIdHandler(torrentManager)
-
-        const torrent = getTorrentByBagIdHandler.execute(new GetTorrentByBagId(bagId))
+        const getTorrentHandler = new GetTorrentByBagIdHandler(torrentManager)
+        const torrent = getTorrentHandler.execute(new GetTorrentByBagId(bagId))
 
         return torrent
     }
@@ -681,5 +675,111 @@ export class TorrentController {
         const torrent = addTorrentHandler.execute(new AddTorrentByBagId(bagId, rootDir, filenames))
 
         return torrent
+    }
+
+    @ApiOperation({ summary: "Download a file from a torrent by bag id" })
+    @ApiParam({
+        schema: {
+            nullable: false,
+            title: "Bag id",
+            type: "string",
+            description: "Bag id of the torrent",
+        },
+        name: "bagId",
+    })
+    @ApiParam({
+        schema: {
+            nullable: false,
+            title: "Name",
+            type: "string",
+            description: (
+                "Name of the file to download from the torrent. " +
+                "Use \`/{bagId}/files\` to get the files of the bag " +
+                "and use one of the pair \`pathDir\` + \`name\` or name to download the file, " +
+                "for example: \`/pathDir/filename\` or \`filename\`."
+            ),
+        },
+        name: "name",
+    })
+    // @ApiQuery({
+    //     schema: {
+    //         nullable: true,
+    //         title: "Minimum downloaded size",
+    //         type: "number",
+    //         description: (
+    //             "Minimum downloaded size of the file. " +
+    //             "If the downloaded size of the file is less than this value, " +
+    //             "then exception \`FileNotDownloaded\` will be raised."
+    //         ),
+    //     },
+    //     name: "minDownloadedSize",
+    // })
+    @ApiResponse({
+        status: 200,
+        description: "File stream from a torrent by bag id",
+        content: {
+            "application/octet-stream": {
+                schema: {
+                    nullable: false,
+                    title: "File stream",
+                    type: "string",
+                    format: "binary",
+                    description: "File stream from a torrent by bag id",
+                },
+            },
+        },
+    })
+    @ApiResponse({
+        status: 400,
+        description: (
+            "Torrent get by bag id error | " +
+            "File not downloaded"
+        ),
+    })
+    @ApiResponse({
+        status: 404,
+        description: "File name not found",
+    })
+    @Get(":bagId/files/:name([a-zA-Z0-9_\\-\\.\\/]+)/download-file-by-name")
+    async downalodFileFromTorrentByBagId(
+        @Res() response: Response,
+        @ParamTorrentManager() torrentManager: TorrentManager,
+        @Param("bagId") bagId: BagId,
+        @Param("name") name: string,
+        // @Query("minDownloadedSize") minDownloadedSize?: number,
+    ) {
+        const getTorrentHandler = new GetTorrentByBagIdHandler(torrentManager)
+        const torrent = await getTorrentHandler.execute(new GetTorrentByBagId(bagId))
+
+        const file = torrent.files.find((file) => file.name === name)
+        if (!file) {
+            throw new FileNameNotFound(
+                "File name not found. " +
+                `Use /${bagId}/files to get the files of the bag ` +
+                "and use one of the pair \`pathDir\` + \`name\` or name to download the file, " +
+                "for example: \`/pathDir/filename\` or \`filename\`.",
+            )
+        }
+
+        // if (minDownloadedSize && file.downloadedSize < minDownloadedSize) {
+        //     throw new FileNotDownloaded(
+        //         "File not downloaded. " +
+        //         `Downloaded size of the file is ${file.downloadedSize} and ` +
+        //         `is less than the minimum size ${minDownloadedSize}. ` +
+        //         "This means that the file is not downloaded yet. ",
+        //     )
+        // }
+
+        const dirPath = join(torrent.rootDir, torrent.dirName)
+        const filePath = join(dirPath, file.name)
+        const fileStream = createReadStream(filePath)
+
+        response.set({
+            "Content-Type": "application/octet-stream",
+            "Content-Disposition": `attachment; filename=${file.name}`,
+            "Content-Length": file.size,
+        })
+
+        fileStream.pipe(response)
     }
 }
