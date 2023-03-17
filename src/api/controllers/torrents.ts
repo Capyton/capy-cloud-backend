@@ -701,19 +701,19 @@ export class TorrentController {
         },
         name: "name",
     })
-    // @ApiQuery({
-    //     schema: {
-    //         nullable: true,
-    //         title: "Minimum downloaded size",
-    //         type: "number",
-    //         description: (
-    //             "Minimum downloaded size of the file. " +
-    //             "If the downloaded size of the file is less than this value, " +
-    //             "then exception \`FileNotDownloaded\` will be raised."
-    //         ),
-    //     },
-    //     name: "minDownloadedSize",
-    // })
+    @ApiQuery({
+        schema: {
+            nullable: true,
+            title: "Minimum downloaded size",
+            type: "number",
+            description: (
+                "Minimum downloaded size of the file. " +
+                "If the downloaded size of the file is less than this value, " +
+                "then exception \`FileNotDownloaded\` will be raised."
+            ),
+        },
+        name: "minDownloadedSize",
+    })
     @ApiResponse({
         status: 200,
         description: "File stream from a torrent by bag id",
@@ -746,7 +746,7 @@ export class TorrentController {
         @ParamTorrentManager() torrentManager: TorrentManager,
         @Param("bagId") bagId: BagId,
         @Param("name") name: string,
-        // @Query("minDownloadedSize") minDownloadedSize?: number,
+        @Query("minDownloadedSize") minDownloadedSize?: number,
     ) {
         const getTorrentHandler = new GetTorrentByBagIdHandler(torrentManager)
         const torrent = await getTorrentHandler.execute(new GetTorrentByBagId(bagId))
@@ -761,14 +761,14 @@ export class TorrentController {
             )
         }
 
-        // if (minDownloadedSize && file.downloadedSize < minDownloadedSize) {
-        //     throw new FileNotDownloaded(
-        //         "File not downloaded. " +
-        //         `Downloaded size of the file is ${file.downloadedSize} and ` +
-        //         `is less than the minimum size ${minDownloadedSize}. ` +
-        //         "This means that the file is not downloaded yet. ",
-        //     )
-        // }
+        if (minDownloadedSize && file.downloadedSize < minDownloadedSize) {
+            throw new FileNotDownloaded(
+                "File not downloaded. " +
+                `Downloaded size of the file is ${file.downloadedSize} and ` +
+                `is less than the minimum size ${minDownloadedSize}. ` +
+                "This means that the file is not downloaded yet. ",
+            )
+        }
 
         const dirPath = join(torrent.rootDir, torrent.dirName)
         const filePath = join(dirPath, file.name)

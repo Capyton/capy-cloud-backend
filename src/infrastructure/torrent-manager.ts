@@ -20,7 +20,7 @@ export class TorrentManagerImpl implements TorrentManager {
     async addTorrent(bagDescription: string | null, bagDir: string): Promise<TorrentFull> {
         const torrent = await this.storageDaemonCLI.create(bagDir, {
             upload: true,
-            copy: false,
+            copy: true,
             description: bagDescription,
         })
         if (!torrent.ok) {
@@ -88,7 +88,7 @@ export class TorrentManagerImpl implements TorrentManager {
         const includedSize = torrentResult.included_size as number
         const dirName = torrentResult.dir_name as string
         const downloadedSize = torrentResult.downloaded_size as number
-        rootDir = rootDir || torrentResult.root_dir as string
+        rootDir ||= torrentResult.root_dir as string
         const activeDownload = torrentResult.active_download as boolean
         const activeUpload = torrentResult.active_upload as boolean
         const completed = torrentResult.completed as boolean
