@@ -510,19 +510,24 @@ export class TorrentController {
         },
         name: "bagId",
     })
-    @ApiParam({
+    @ApiQuery({
         schema: {
             nullable: false,
             default: [],
-            title: "Filenames",
+            title: "Names",
             type: "array",
             items: {
                 nullable: false,
                 type: "string",
-                description: "Filename of the file to download from the torrent",
+                description: (
+                    "Name of the file to download with the torrent. " +
+                    "Use \`/{bagId}/files\` to get the files of the bag " +
+                    "and use one of the pair \`pathDir\` + \`name\` or name to select the file, " +
+                    "for example: \`/pathDir/filename\` or \`filename\`."
+                ),
             },
         },
-        name: "filenames",
+        name: "names",
     })
     @ApiResponse({
         status: 200,
@@ -667,12 +672,12 @@ export class TorrentController {
     addTorrentByBagId(
         @ParamTorrentManager() torrentManager: TorrentManager,
         @Param("bagId") bagId: BagId,
-        @Body("filenames") filenames: string[] = [],
+        @Query("names") names: string[] = [],
     ): Promise<TorrentFull> {
         const rootDir = null
 
         const addTorrentHandler = new AddTorrentByBagIdHandler(torrentManager)
-        const torrent = addTorrentHandler.execute(new AddTorrentByBagId(bagId, rootDir, filenames))
+        const torrent = addTorrentHandler.execute(new AddTorrentByBagId(bagId, rootDir, names))
 
         return torrent
     }

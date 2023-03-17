@@ -66,13 +66,13 @@ export class TorrentManagerImpl implements TorrentManager {
     async addByBagId(
         bagId: BagId,
         rootDir: string | null,
-        filenames: string[],
+        names: string[],
     ): Promise<TorrentFull> {
         const torrent = await this.storageDaemonCLI.addByHash(bagId, {
             download: true,
             upload: false,
             rootDir: rootDir,
-            partialFiles: filenames,
+            partialFiles: names,
         })
         if (!torrent.ok) {
             throw new TorrentAddByBagIdError(`Torrent add by bag id error: \`${torrent.error}\``)
