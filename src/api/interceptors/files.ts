@@ -68,12 +68,12 @@ export class FilesInterceptor implements NestInterceptor {
                 const bodyPathDirs = body.pathDirs as string[] | string | undefined
 
                 if (!bodyPathDirs) {
-                    pathDirs.push(bagDir)
+                    pathDirs.push("/")
                     cb(null, bagDir)
                 } else if (typeof bodyPathDirs === "string") {
                     if (indexOfFile >= 1) {
-                        pathDirs.push(bagDir)
-                        cb(null, "/")
+                        pathDirs.push("/")
+                        cb(null, bagDir)
                     } else {
                         const bodyPathDir = `/${trim(bodyPathDirs, " /")}`
                         const pathDir = `${bagDir}${bodyPathDir}`
@@ -111,7 +111,7 @@ export class FilesInterceptor implements NestInterceptor {
                     filenames.push(filename)
                     cb(null, filename)
                 } else if (typeof bodyFilenames === "string") {
-                    if (indexOfFile > 1) {
+                    if (indexOfFile >= 1) {
                         const filename = file.originalname
 
                         filenames.push(filename)
@@ -135,8 +135,6 @@ export class FilesInterceptor implements NestInterceptor {
                         cb(null, filename)
                     }
                 }
-
-                indexOfFile++
             },
         })
 
