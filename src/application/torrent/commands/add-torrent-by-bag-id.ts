@@ -5,7 +5,6 @@ import { TorrentManager } from "@src/application/torrent/interfaces"
 export class AddTorrentByBagId {
     constructor(
         readonly bagId: BagId,
-        readonly rootDir: string | null,
         readonly names: string[],
     ) { }
 }
@@ -16,6 +15,6 @@ export class AddTorrentByBagIdHandler {
     ) { }
 
     execute(command: AddTorrentByBagId): Promise<TorrentFull> {
-        return this.torrentManager.addByBagId(command.bagId, command.rootDir, command.names)
+        return this.torrentManager.addByBagId(command.bagId, command.names)
     }
 }

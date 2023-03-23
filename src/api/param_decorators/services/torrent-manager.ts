@@ -11,7 +11,7 @@ export const TorrentManager = createParamDecorator(
         const request: Request = ctx.switchToHttp().getRequest()
         // Get the `TonstorageCLI` from the request, which was set in a ton storage middleware
         const storageDaemonCLI: TonstorageCLI = request.app.locals.storageDaemonCLI
-        const torrentManager = new TorrentManagerImpl(storageDaemonCLI)
+        const torrentManager = new TorrentManagerImpl(storageDaemonCLI, null)
 
         return torrentManager
     },

@@ -15,7 +15,10 @@ import { TorrentManager } from "@src/application/torrent/interfaces"
 import { hexEncodeFromString } from "@src/utils/hex"
 
 export class TorrentManagerImpl implements TorrentManager {
-    constructor(private readonly storageDaemonCLI: TonstorageCLI) { }
+    constructor(
+        private readonly storageDaemonCLI: TonstorageCLI,
+        private readonly rootDir: string | null = null,
+    ) { }
 
     async addTorrent(bagDescription: string | null, bagDir: string): Promise<TorrentFull> {
         const torrent = await this.storageDaemonCLI.create(bagDir, {
@@ -65,13 +68,12 @@ export class TorrentManagerImpl implements TorrentManager {
 
     async addByBagId(
         bagId: BagId,
-        rootDir: string | null,
         names: string[],
     ): Promise<TorrentFull> {
         const torrent = await this.storageDaemonCLI.addByHash(bagId, {
             download: true,
             upload: false,
-            rootDir: rootDir,
+            rootDir: this.rootDir,
             partialFiles: names,
         })
         if (!torrent.ok) {
@@ -88,7 +90,7 @@ export class TorrentManagerImpl implements TorrentManager {
         const includedSize = torrentResult.included_size as number
         const dirName = torrentResult.dir_name as string
         const downloadedSize = torrentResult.downloaded_size as number
-        rootDir ||= torrentResult.root_dir as string
+        const rootDir = torrentResult.root_dir as string
         const activeDownload = torrentResult.active_download as boolean
         const activeUpload = torrentResult.active_upload as boolean
         const completed = torrentResult.completed as boolean

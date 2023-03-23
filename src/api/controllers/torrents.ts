@@ -674,10 +674,8 @@ export class TorrentController {
         @Param("bagId") bagId: BagId,
         @Query("names") names: string[] = [],
     ): Promise<TorrentFull> {
-        const rootDir = null
-
         const addTorrentHandler = new AddTorrentByBagIdHandler(torrentManager)
-        const torrent = addTorrentHandler.execute(new AddTorrentByBagId(bagId, rootDir, names))
+        const torrent = addTorrentHandler.execute(new AddTorrentByBagId(bagId, names))
 
         return torrent
     }
