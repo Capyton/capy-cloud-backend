@@ -1,10 +1,9 @@
 import { GetProviderParamsByAddressError, NewContractMessageError } from "@src/application/provider/exceptions"
 
+import { NewContractMessageResponse, ProviderParams } from "@src/application/provider/dto"
 import { BagId } from "@src/domain/bag/types"
-import { NewContractMessageResponse } from "@src/application/provider/dto"
 import { ProviderAddress } from "@src/domain/provider/types"
 import { ProviderManager } from "@src/application/provider/interfaces"
-import { ProviderParams } from "@src/application/provider/dto"
 import TonstorageCLI from "tonstorage-cli"
 
 export class ProviderManagerImpl implements ProviderManager {
