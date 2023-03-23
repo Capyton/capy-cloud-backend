@@ -5,7 +5,7 @@ import { TorrentFile } from "@src/domain/torrent_file/entities"
 export class TorrentFull {
     constructor(
         readonly bagId: BagId,
-        readonly badHash: BagHash,
+        readonly bagHash: BagHash,
         readonly totalSize: number,
         readonly description: string | null,
         readonly filesCount: number,
@@ -24,7 +24,7 @@ export class TorrentFull {
 
     static create(
         bagId: BagId,
-        badHash: BagHash,
+        bagHash: BagHash,
         totalSize: number,
         description: string | null,
         filesCount: number,
@@ -41,7 +41,7 @@ export class TorrentFull {
         files: TorrentFile[],
     ): TorrentFull {
         return new TorrentFull(
-            bagId, badHash, totalSize, description, filesCount,
+            bagId, bagHash, totalSize, description, filesCount,
             includedSize, dirName, downloadedSize, rootDir,
             activeDownload, activeUpload, completed, downloadSpeed,
             uploadSpeed, fatalError, files,
@@ -52,7 +52,7 @@ export class TorrentFull {
 export class Torrent {
     constructor(
         readonly bagId: BagId,
-        readonly badHash: BagHash,
+        readonly bagHash: BagHash,
         readonly totalSize: number,
         readonly description: string | null,
         readonly filesCount: number,
@@ -70,7 +70,7 @@ export class Torrent {
 
     static create(
         bagId: BagId,
-        badHash: BagHash,
+        bagHash: BagHash,
         totalSize: number,
         description: string | null,
         filesCount: number,
@@ -86,7 +86,7 @@ export class Torrent {
         fatalError: string | null,
     ): Torrent {
         return new Torrent(
-            bagId, badHash, totalSize, description, filesCount,
+            bagId, bagHash, totalSize, description, filesCount,
             includedSize, dirName, downloadedSize, rootDir,
             activeDownload, activeUpload, completed, downloadSpeed,
             uploadSpeed, fatalError,

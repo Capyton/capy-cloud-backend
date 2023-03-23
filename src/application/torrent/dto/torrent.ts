@@ -3,7 +3,7 @@ import { BagHash, BagId } from "@src/domain/bag/types"
 export class Torrent {
     constructor(
         readonly bagId: BagId,
-        readonly badHash: BagHash,
+        readonly bagHash: BagHash,
         readonly totalSize: number,
         readonly description: string | null,
         readonly filesCount: number,

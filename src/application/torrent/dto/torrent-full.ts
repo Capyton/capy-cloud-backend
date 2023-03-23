@@ -5,7 +5,7 @@ import { TorrentFile } from "./torrent-file"
 export class TorrentFull {
     constructor(
         readonly bagId: BagId,
-        readonly badHash: BagHash,
+        readonly bagHash: BagHash,
         readonly totalSize: number,
         readonly description: string | null,
         readonly filesCount: number,
