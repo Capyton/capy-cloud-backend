@@ -1,5 +1,5 @@
 import { Bag, File, Provider, ProviderBag, User, UserBag } from "@src/infrastructure/db/models"
-import { ConfigMiddleware, JwtManagerMiddleware, TonStorageMiddleware } from "@src/api/middlewares"
+import { ConfigMiddleware, LoggingMiddleware, JwtManagerMiddleware, TonStorageMiddleware } from "@src/api/middlewares"
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 
 import { ApiModule } from "@src/api/modules"
@@ -49,10 +49,12 @@ async function main(): Promise<void> {
     const app = await NestFactory.create(ApiModule.forRoot(config, dataSource, storageDaemonCLI))
     app.setGlobalPrefix("/api/v1")
 
+    const loggingMiddleware = new LoggingMiddleware()
     const configMiddleware = new ConfigMiddleware(config)
     const tonStorageMiddleware = new TonStorageMiddleware(storageDaemonCLI)
     const jwtManagerMiddleware = new JwtManagerMiddleware(config.authAndTokens)
 
+    app.use(loggingMiddleware.use.bind(loggingMiddleware))
     app.use(configMiddleware.use.bind(configMiddleware))
     app.use(tonStorageMiddleware.use.bind(tonStorageMiddleware))
     app.use(jwtManagerMiddleware.use.bind(jwtManagerMiddleware))
