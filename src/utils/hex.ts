@@ -2,8 +2,7 @@ import * as base64 from "base64-js"
 
 export function hexEncodeFromBytes(bytes: Uint8Array): string {
     const hexCodes: string[] = []
-    for (let index = 0; index < bytes.length; index++) {
-        const code = bytes[index]
+    for (const code of bytes) {
         const hexCode = code.toString(16)
         const paddedHexCode = hexCode.padStart(2, "0")
         hexCodes.push(paddedHexCode)
