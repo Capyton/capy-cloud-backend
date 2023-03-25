@@ -24,14 +24,15 @@ export class UpdateBagHandler {
 
     async execute(command: UpdateBag): Promise<void> {
         const bag = await this.bagRepo.getBagById(command.id)
-        const updatedBag = Bag.create(
+
+        await this.bagRepo.updateBad(new Bag(
             bag.id,
             bag.bagId,
             bag.description,
             bag.size,
             (command.bagData.isUploaded != null) ? command.bagData.isUploaded : bag.isUploaded,
-        )
-        await this.bagRepo.updateBad(updatedBag)
+            bag.createdAt,
+        ))
         await this.uow.commit()
     }
 }
