@@ -37,7 +37,9 @@ async function main(): Promise<void> {
     const dataSource = getDataSource(config.database)
     dataSource.initialize()
         .then(() => console.log("Database initialized"))
-        .catch((err) => console.error(`Database initialization failed with error: \`${err}\``))
+        .catch((err) => {
+            throw new Error(`Database initialization failed with error: \`${err}\``)
+        })
 
     const storageDaemonCLI = new TonstorageCLI({
         bin: config.tonStorageDaemonCLI.bin,
