@@ -1,17 +1,30 @@
 import { InvalidJwtToken, JwtTokenIsExpired, UnknownJwtTokenError } from "@src/application/auth/exceptions"
 
 import { JwtManager } from "@src/application/auth/interfaces"
+import { RefreshToken } from "@src/domain/refresh-token/entities"
 import { UserPayload } from "@src/application/auth/dto"
 import jwt from "jsonwebtoken"
+import { uuid7 } from "@src/utils/uuid"
 
 export class JwtManagerImpl implements JwtManager {
     constructor(
         private readonly privateKey: string,
-        private readonly expiresIn: number = 3600,  // default value is 1 hour
+        private readonly accessTokenExpiresIn: number = 3600,  // default value is 1 hour
+        private readonly refreshTokenExpiresIn: number = 7776000,  // default value is 90 days
     ) { }
 
-    generateToken(userPayload: UserPayload): string {
-        return jwt.sign(userPayload, this.privateKey, { algorithm: "HS256", expiresIn: this.expiresIn })
+    generateAccessToken(userPayload: UserPayload): string {
+        const payload = {...userPayload}
+        return jwt.sign(payload, this.privateKey, { algorithm: "HS256", expiresIn: this.accessTokenExpiresIn })
+    }
+
+    generateRefreshToken(userPayload: UserPayload): RefreshToken {
+        const issuedAt = Math.floor(Date.now() / 1000)
+        const expiresAt = issuedAt + this.refreshTokenExpiresIn
+        const payload = { iat: issuedAt, exp: expiresAt, ...userPayload }
+        const token = jwt.sign(payload, this.privateKey, { algorithm: "HS256" })
+        const refreshToken = new RefreshToken(uuid7(), token, userPayload.id, new Date(expiresAt * 1000))
+        return refreshToken
     }
 
     validateToken(token: string): UserPayload {
