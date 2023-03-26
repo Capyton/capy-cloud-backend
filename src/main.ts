@@ -1,34 +1,14 @@
-import { Bag, File, Provider, ProviderBag, User, UserBag } from "@src/infrastructure/db/models"
 import { ConfigMiddleware, LoggingMiddleware, JwtManagerMiddleware, TonStorageMiddleware } from "@src/api/middlewares"
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 
 import { ApiModule } from "@src/api/modules"
 import { ApplicationExceptionFilter } from "@src/api/filters"
-import { DataSource } from "typeorm"
-import { Config as DatabaseConfig } from "@src/infrastructure/db/config"
 import { DatabaseInterceptor } from "@src/api/interceptors"
 import { NestFactory } from "@nestjs/core"
 import TonstorageCLI from "tonstorage-cli"
 import { ValidationPipe } from "@nestjs/common"
+import { getDataSource } from "./infrastructure/db/main"
 import { loadConfigFromEnv } from "@src/infrastructure/config-loader"
-
-function getDataSource(config: DatabaseConfig): DataSource {
-    const dataSource = new DataSource({
-        type: "postgres",
-        host: config.host,
-        port: config.port,
-        username: config.user,
-        password: config.password,
-        database: config.database,
-        synchronize: true,
-        logging: true,
-        subscribers: [],
-        migrations: [],
-        entities: [Bag, File, Provider, ProviderBag, User, UserBag],
-    })
-
-    return dataSource
-}
 
 async function main(): Promise<void> {
     const config = loadConfigFromEnv()
