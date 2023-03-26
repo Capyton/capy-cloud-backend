@@ -8,20 +8,20 @@ import { UUID } from "@src/utils/uuid"
 
 @Entity({ name: "providers_bags" })
 export class ProviderBag {
-    @PrimaryColumn({ name: "id " })
+    @PrimaryColumn({ type: "uuid", name: "id" })
     id: UUID
 
     @OneToOne(() => Provider)
     @JoinColumn({ name: "provider_id" })
     provider: Provider
 
-    @Column({ name: "provider_id" })
+    @Column({ type: "uuid", name: "provider_id" })
     providerId: UUID
 
     @OneToOne(() => Bag)
     @JoinColumn({ name: "bag_id" })
     bag: Bag
 
-    @Column({ name: "bag_id" })
+    @Column({ type: "uuid", name: "bag_id" })
     bagId: UUID
 }

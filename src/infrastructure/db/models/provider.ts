@@ -8,7 +8,7 @@ import { UUID } from "@src/utils/uuid"
 
 @Entity({ name: "providers" })
 export class Provider {
-    @PrimaryColumn({ name: "id" })
+    @PrimaryColumn({ type: "uuid", name: "id" })
     id: UUID
 
     @Column({ name: "address", unique: true, nullable: false })

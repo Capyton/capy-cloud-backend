@@ -8,14 +8,14 @@ import { User } from "./user"
 
 @Entity({ name: "users_bags" })
 export class UserBag {
-    @PrimaryColumn()
+    @PrimaryColumn({ type: "uuid", name: "id" })
     id: UUID
 
     @OneToOne(() => User)
     @JoinColumn({ name: "user_id" })
     user: User
 
-    @Column({ name: "user_id" })
+    @Column({ type: "uuid", name: "user_id" })
     userId: UUID
 
     @OneToOne(() => Bag)

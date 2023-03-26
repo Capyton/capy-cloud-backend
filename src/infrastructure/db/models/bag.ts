@@ -8,10 +8,10 @@ import { UUID } from "@src/utils/uuid"
 
 @Entity({ name: "bags" })
 export class Bag {
-    @PrimaryColumn({ name: "id" })
+    @PrimaryColumn({ type: "uuid", name: "id" })
     id: UUID
 
-    @Column({ name: "bag_id", unique: true, nullable: false })
+    @Column({ type: "uuid", name: "bag_id", unique: true, nullable: false })
     bagId: BagId
 
     @Column({ type: String, name: "description", nullable: true })

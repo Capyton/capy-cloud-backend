@@ -1,14 +1,15 @@
 /* eslint-disable indent */
 
-import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm"
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryColumn } from "typeorm"
 
 import { Bag } from "./bag"
+import { RefreshToken } from "./refresh-token"
 import { TonAddress } from "@src/domain/user/types"
 import { UUID } from "@src/utils/uuid"
 
 @Entity({ name: "users" })
 export class User {
-  @PrimaryColumn({ name: "id" })
+  @PrimaryColumn({ type: "uuid", name: "id" })
   id: UUID
 
   @Column({ name: "address", unique: true, nullable: false })
@@ -20,4 +21,7 @@ export class User {
   @ManyToMany(() => Bag, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   @JoinTable({ name: "users_bags" })
   userBags: Bag[]
+
+  @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+  refreshTokens: RefreshToken[]
 }

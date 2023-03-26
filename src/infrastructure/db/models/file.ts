@@ -7,14 +7,14 @@ import { UUID } from "@src/utils/uuid"
 
 @Entity({ name: "files" })
 export class File {
-    @PrimaryColumn({ name: "id" })
+    @PrimaryColumn({ type: "uuid", name: "id" })
     id: UUID
 
     @ManyToOne(() => Bag)
     @JoinColumn({ name: "bag_id" })
     bag: Bag
 
-    @Column({ name: "bag_id" })
+    @Column({ type: "uuid", name: "bag_id" })
     bagId: UUID
 
     @Column({ name: "filename", nullable: false })
