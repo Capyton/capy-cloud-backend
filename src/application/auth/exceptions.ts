@@ -24,6 +24,12 @@ export class InvalidProofSignature extends ApplicationException {
     }
 }
 
+export class ProofIsExpired extends ApplicationException {
+    constructor(meatadata?: unknown) {
+        super("Proof is expired", undefined, meatadata)
+    }
+}
+
 export class JwtTokenIsExpired extends ApplicationException {
     constructor(cause?: Error, meatadata?: unknown) {
         super("JWT token is expired", cause, meatadata)

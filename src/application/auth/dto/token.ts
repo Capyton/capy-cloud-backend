@@ -1,5 +1,6 @@
-export class AuthToken {
+export class AuthTokens {
     constructor(
-        readonly token: string,
+        readonly accessToken: string,
+        readonly refreshToken: string,
     ) { }
 }
