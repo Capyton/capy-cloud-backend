@@ -1,18 +1,21 @@
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger"
 import { AuthManager, JwtManager, UserRepo } from "@src/application/auth/interfaces"
-import { AuthPayload, AuthToken, UserPayload } from "@src/application/auth/dto"
+import { AuthPayload, AuthTokens, UserPayload } from "@src/application/auth/dto"
 import { BadRequestException, Body, Controller, Get, Post } from "@nestjs/common"
+import { Domain, TonApiClient } from "@src/application/auth/interfaces/auth-manager"
 import { GenereatePayload, GenereatePayloadHandler } from "@src/application/auth/commands/generate-payload"
 import {
     AuthManager as ParamAuthManager,
     AuthUserRepo as ParamAuthUserRepo,
     JwtManager as ParamJwtManager,
+    RefreshTokenRepo as ParamRefreshTokenRepo,
+    TonApiClient as ParamTonApiClient,
     UnitOfWork as ParamUnitOfWork,
     UserPayloadFromAuthToken,
 } from "@src/api/param_decorators"
 import { Proof, VerifyProof, VerifyProofHandler } from "@src/application/auth/commands/verify-proof"
 import { TonAddress, TonNetwork } from "@src/domain/user/types"
-
+import { RefreshTokenRepo } from "@src/application/auth/interfaces/persistence"
 import { UnitOfWork } from "@src/application/common/interfaces"
 
 @ApiTags("Auth")
@@ -86,7 +89,7 @@ export class AuthController {
         return userPayload
     }
 
-    @ApiOperation({ summary: "Generate an auth token by a user payload and TON proof signature" })
+    @ApiOperation({ summary: "Generate an auth tokens by a user payload and TON proof signature" })
     @ApiBody({
         schema: {
             type: "object",
@@ -117,20 +120,52 @@ export class AuthController {
                     type: "string",
                     description: "TON proof signature",
                 },
+                timestamp: {
+                    nullable: false,
+                    title: "Timestamp",
+                    type: "number",
+                    description: "Timestamp of the proof signature",
+                },
+                domainLengthBytes: {
+                    nullable: false,
+                    title: "Domain length bytes",
+                    type: "number",
+                    description: "Domain length bytes",
+                },
+                domainValue: {
+                    nullable: false,
+                    title: "Domain value",
+                    type: "string",
+                    description: "Domain value",
+                },
+                stateInit: {
+                    nullable: false,
+                    title: "State init",
+                    type: "string",
+                    description: "State init",
+                },
             },
-            required: ["payloadNonce", "address", "network", "signature"],
+            required: [
+                "payloadNonce", "address", "network", "signature", "timestamp",
+                "domainLengthBytes", "domainValue", "stateInit",
+            ],
         },
     })
     @ApiResponse({
         status: 201,
-        description: "Auth token",
+        description: "Auth tokens",
         schema: {
             nullable: false,
             type: "object",
             properties: {
-                token: {
+                accessToken: {
                     nullable: false,
-                    title: "Token",
+                    title: "Access token",
+                    type: "string",
+                },
+                refreshToken: {
+                    nullable: false,
+                    title: "Refresh token",
                     type: "string",
                 },
             },
@@ -142,7 +177,11 @@ export class AuthController {
             "Address is required | " +
             "Network is required and must be -3 or -239 | " +
             "Signature is required | " +
-            "Payload nonce is required"
+            "Payload nonce is required | " +
+            "Proof timestamp is required | " +
+            "Domain length bytes is required | " +
+            "Domain value is required | " +
+            "State init is required"
         ),
     })
     @ApiResponse({
@@ -152,36 +191,54 @@ export class AuthController {
             "Invalid nonce | " +
             "Uknown nonce error | " +
             "Invalid proof signature | " +
-            "Invalid proof signature"
+            "Payload nonce is required | " +
+            "Proof timestamp is required | " +
+            "Domain length bytes is required | " +
+            "Domain value is required | " +
+            "State init is required"
         ),
     })
     @Post()
     generateAuthToken(
         @ParamAuthUserRepo() userRepo: UserRepo,
+        @ParamRefreshTokenRepo() refreshTokenRepo: RefreshTokenRepo,
+        @ParamTonApiClient() tonApiClient: TonApiClient,
         @ParamAuthManager() authManager: AuthManager,
         @ParamJwtManager() jwtManager: JwtManager,
         @ParamUnitOfWork() uow: UnitOfWork,
         @Body("payloadNonce") payloadNonce?: string,
         @Body("address") address?: TonAddress,
         @Body("network") network?: TonNetwork,
-        @Body("signature") signature?: string,
-    ): Promise<AuthToken> {
+        @Body("signature") proofSignature?: string,
+        @Body("timestamp") proofTimestamp?: number,
+        @Body("domainLengthBytes") domainLengthBytes?: number,
+        @Body("domainValue") domainValue?: string,
+        @Body("stateInit") stateInit?: string,
+    ): Promise<AuthTokens> {
         if (!address) {
             throw new BadRequestException("Address is required")
         } else if (!network || (network !== TonNetwork.Mainnet && network !== TonNetwork.Testnet)) {
             throw new BadRequestException("Network is required and must be -3 or -239")
-        } else if (!signature) {
-            throw new BadRequestException("Signature is required")
         } else if (!payloadNonce) {
             throw new BadRequestException("Payload nonce is required")
+        } else if (!proofSignature) {
+            throw new BadRequestException("Signature is required")
+        } else if (!proofTimestamp) {
+            throw new BadRequestException("Proof timestamp is required")
+        } else if (!domainLengthBytes) {
+            throw new BadRequestException("Domain length bytes is required")
+        } else if (!domainValue) {
+            throw new BadRequestException("Domain value is required")
+        } else if (!stateInit) {
+            throw new BadRequestException("State init is required")
         }
 
         const payload = new AuthPayload(payloadNonce)
 
-        const proof = new Proof(signature, payload.nonce)
-        const tokenHandler = new VerifyProofHandler(authManager, jwtManager, userRepo, uow)
-        const token = tokenHandler.execute(new VerifyProof(address, network, proof))
-
-        return token
+        const domain: Domain = { lengthBytes: domainLengthBytes, value: domainValue }
+        const proof = new Proof(payload.nonce, proofSignature, proofTimestamp, domain)
+        const tokenHandler = new VerifyProofHandler(tonApiClient, authManager, jwtManager, userRepo, refreshTokenRepo, uow)
+        const authTokens = tokenHandler.execute(new VerifyProof(address, network, proof, stateInit))
+        return authTokens
     }
 }
