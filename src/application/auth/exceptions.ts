@@ -53,3 +53,15 @@ export class AuthSessionByRefreshTokenNotFound extends ApplicationException {
         super("Auth session by refresh token not found", cause, meatadata)
     }
 }
+
+export class WalletNotInitialized extends ApplicationException {
+    constructor(cause?: Error, meatadata?: unknown) {
+        super("Wallet not initialized", cause, meatadata)
+    }
+}
+
+export class TonApiError extends ApplicationException {
+    constructor(cause?: Error, meatadata?: unknown) {
+        super("Ton API error", cause, meatadata)
+    }
+}

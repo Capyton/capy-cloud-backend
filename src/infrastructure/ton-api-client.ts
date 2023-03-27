@@ -1,3 +1,4 @@
+import { TonApiError, WalletNotInitialized } from "@src/application/auth/exceptions"
 import axios, { AxiosInstance, AxiosResponse } from "axios"
 import { TonApiClient } from "@src/application/auth/interfaces/auth-manager"
 import { TonNetwork } from "@src/domain/user/types"
@@ -15,9 +16,12 @@ export class TonApiClientImpl implements TonApiClient {
         const response: AxiosResponse<{ publicKey: string }> = await this.client.get(
             `https://${networkPreffix}tonapi.io/v1/wallet/getWalletPublicKey?account=${encodeURI(address)}`,
         )
-        // TODO: handle the case when response data is {"error":"wallet is not initialized"}
         if (response.status !== 200) {
-            throw new Error(`TON API returned status ${response.status}`)
+            const data = response.data as { error?: string } | undefined
+            if (data && data.error === "wallet is not initialized") {
+                throw new WalletNotInitialized()
+            }
+            throw new TonApiError()
         }
         const pubKey = response.data.publicKey
         return pubKey

@@ -8,13 +8,17 @@ import {
     ProviderIdNotFound,
 } from "@src/application/provider/exceptions"
 import {
+    AuthSessionByRefreshTokenNotFound,
     InvalidJwtToken,
     InvalidNonce,
     InvalidProofSignature,
     JwtTokenIsExpired,
     NonceIsExpired,
+    ProofIsExpired,
+    TonApiError,
     UnknownJwtTokenError,
     UnknownNonceError,
+    WalletNotInitialized,
 } from "@src/application/auth/exceptions"
 import { Request, Response } from "express"
 import {
@@ -39,6 +43,8 @@ export class ApplicationExceptionFilter implements ExceptionFilter {
 
         let status: number
         switch (exception.constructor) {
+            case AuthSessionByRefreshTokenNotFound:
+            case ProofIsExpired:
             case NonceIsExpired:
             case InvalidNonce:
             case JwtTokenIsExpired:
@@ -46,6 +52,8 @@ export class ApplicationExceptionFilter implements ExceptionFilter {
             case InvalidProofSignature:
             case UnknownNonceError:
             case UnknownJwtTokenError:
+            case WalletNotInitialized:
+            case TonApiError:
                 status = 401
                 break
             case BagIdNotFound:
