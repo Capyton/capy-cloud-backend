@@ -6,16 +6,17 @@ import { Domain, TonApiClient } from "@src/application/auth/interfaces/auth-mana
 import { GenereatePayload, GenereatePayloadHandler } from "@src/application/auth/commands/generate-payload"
 import {
     AuthManager as ParamAuthManager,
-    AuthUserRepo as ParamAuthUserRepo,
+    AuthSessionRepo as ParamAuthSessionRepo,
     JwtManager as ParamJwtManager,
-    RefreshTokenRepo as ParamRefreshTokenRepo,
     TonApiClient as ParamTonApiClient,
     UnitOfWork as ParamUnitOfWork,
+    UserRepo as ParamUserRepo,
     UserPayloadFromAuthToken,
 } from "@src/api/param_decorators"
 import { Proof, VerifyProof, VerifyProofHandler } from "@src/application/auth/commands/verify-proof"
+import { RefreshToken, RefreshTokenHandler } from "@src/application/auth/commands/refresh-token"
 import { TonAddress, TonNetwork } from "@src/domain/user/types"
-import { RefreshTokenRepo } from "@src/application/auth/interfaces/persistence"
+import { AuthSessionRepo } from "@src/application/auth/interfaces/persistence"
 import { UnitOfWork } from "@src/application/common/interfaces"
 
 @ApiTags("Auth")
@@ -200,8 +201,8 @@ export class AuthController {
     })
     @Post()
     generateAuthToken(
-        @ParamAuthUserRepo() userRepo: UserRepo,
-        @ParamRefreshTokenRepo() refreshTokenRepo: RefreshTokenRepo,
+        @ParamUserRepo() userRepo: UserRepo,
+        @ParamAuthSessionRepo() authSessionRepo: AuthSessionRepo,
         @ParamTonApiClient() tonApiClient: TonApiClient,
         @ParamAuthManager() authManager: AuthManager,
         @ParamJwtManager() jwtManager: JwtManager,
@@ -237,8 +238,68 @@ export class AuthController {
 
         const domain: Domain = { lengthBytes: domainLengthBytes, value: domainValue }
         const proof = new Proof(payload.nonce, proofSignature, proofTimestamp, domain)
-        const tokenHandler = new VerifyProofHandler(tonApiClient, authManager, jwtManager, userRepo, refreshTokenRepo, uow)
+        const tokenHandler = new VerifyProofHandler(tonApiClient, authManager, jwtManager, userRepo, authSessionRepo, uow)
         const authTokens = tokenHandler.execute(new VerifyProof(address, network, proof, stateInit))
+        return authTokens
+    }
+
+    @ApiOperation({ summary: "Refresh an auth token by a refresh token" })
+    @ApiBody({
+        schema: {
+            type: "object",
+            properties: {
+                refreshToken: {
+                    nullable: false,
+                    title: "Refresh token",
+                    type: "string",
+                    description: "Refresh token",
+                },
+            },
+            required: ["refreshToken"],
+        },
+    })
+    @ApiResponse({
+        status: 201,
+        description: "Auth tokens",
+        schema: {
+            nullable: false,
+            type: "object",
+            properties: {
+                accessToken: {
+                    nullable: false,
+                    title: "Access token",
+                    type: "string",
+                },
+                refreshToken: {
+                    nullable: false,
+                    title: "Refresh token",
+                    type: "string",
+                },
+            },
+        },
+    })
+    @ApiResponse({
+        status: 400,
+        description: "Refresh token is required",
+    })
+    @ApiResponse({
+        status: 401,
+        description: "Invalid refresh token",
+    })
+    @Post("refresh")
+    refreshAuthToken(
+        @ParamAuthSessionRepo() authSessionRepo: AuthSessionRepo,
+        @ParamUserRepo() userRepo: UserRepo,
+        @ParamJwtManager() jwtManager: JwtManager,
+        @ParamUnitOfWork() uow: UnitOfWork,
+        @Body("refreshToken") refreshToken?: string,
+    ): Promise<AuthTokens> {
+        if (!refreshToken) {
+            throw new BadRequestException("Refresh token is required")
+        }
+
+        const tokenHandler = new RefreshTokenHandler(userRepo, authSessionRepo, jwtManager, uow)
+        const authTokens = tokenHandler.execute(new RefreshToken(refreshToken))
         return authTokens
     }
 }
