@@ -46,9 +46,7 @@ export class AuthManagerImpl implements AuthManager {
             payload: nonce,
             stateInit,
         })
-        console.log(pubKey, proofMessage, proofSignature)
         const isValid = signatureVerify(Buffer.from(pubKey, "hex"), proofMessage, proofSignature)
-        console.log("Is valid: ", isValid)
         if (!isValid) {
             throw new InvalidProofSignature()
         }

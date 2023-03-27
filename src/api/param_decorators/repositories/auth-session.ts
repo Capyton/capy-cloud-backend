@@ -2,16 +2,16 @@
 
 import { ExecutionContext, createParamDecorator } from "@nestjs/common"
 
+import { AuthSessionRepoImpl } from "@src/infrastructure/db/repositories/auth-session"
 import { QueryRunner } from "typeorm"
-import { RefreshTokenRepoImpl } from "@src/infrastructure/db/repositories/refresh-token"
 import { Request } from "express"
 
-export const RefreshTokenRepo = createParamDecorator(
+export const AuthSessionRepo = createParamDecorator(
     (_data: unknown, ctx: ExecutionContext) => {
         const request: Request = ctx.switchToHttp().getRequest()
         // Get the `QueryRunner` from the request, which was set in a database middleware
         const queryRunner: QueryRunner = request.app.locals.queryRunner
-        const refreshTokenRepo = new RefreshTokenRepoImpl(queryRunner)
+        const refreshTokenRepo = new AuthSessionRepoImpl(queryRunner)
 
         return refreshTokenRepo
     },

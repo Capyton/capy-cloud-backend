@@ -4,12 +4,12 @@ export { BagId } from "./bag-id"
 export { Config } from "./config"
 export { Cookies } from "./cookies"
 export {
-    AuthUserRepo, BagReader, BagRepo, FileReader, FileRepo,
+    BagReader, BagRepo, FileReader, FileRepo,
     ProviderBagReader, ProviderBagRepo,
     ProviderReader, ProviderRepo,
     UserBagReader, UserBagRepo,
     UserReader, UserRepo,
-    RefreshTokenRepo,
+    AuthSessionRepo,
 } from "./repositories"
 export { AuthManager, JwtManager, TorrentManager, ProviderManager } from "./services"
 export { TonApiClient } from "./ton-api-client"

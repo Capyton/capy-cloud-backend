@@ -3,7 +3,8 @@ import * as dto from "@src/application/auth/dto"
 import { AuthManager, JwtManager, UserRepo } from "@src/application/auth/interfaces"
 import { Domain, TonApiClient } from "@src/application/auth/interfaces/auth-manager"
 import { TonAddress, TonNetwork } from "@src/domain/user/types"
-import { RefreshTokenRepo } from "@src/application/auth/interfaces/persistence"
+import { AuthSession } from "@src/domain/auth-session/entities"
+import { AuthSessionRepo } from "@src/application/auth/interfaces/persistence"
 import { UnitOfWork } from "@src/application/common/interfaces"
 import { User } from "@src/domain/user/entities"
 import { UserAddressNotFound } from "@src/application/user/exceptions"
@@ -35,7 +36,7 @@ export class VerifyProofHandler {
         private readonly authManager: AuthManager,
         private readonly jwtManager: JwtManager,
         private readonly userRepo: UserRepo,
-        private readonly refreshTokenRepo: RefreshTokenRepo,
+        private readonly authSessionRepo: AuthSessionRepo,
         private readonly uow: UnitOfWork,
     ) { }
 
@@ -65,9 +66,11 @@ export class VerifyProofHandler {
         }
 
         const userPayload = new dto.UserPayload(user.id, user.address)
+
         const accessToken = this.jwtManager.generateAccessToken(userPayload)
         const refreshToken = this.jwtManager.generateRefreshToken(userPayload)
-        await this.refreshTokenRepo.addRefreshToken(refreshToken)
+        const authSession = AuthSession.create(uuid7(), user.id, refreshToken)
+        await this.authSessionRepo.addAuthSession(authSession)
         await this.uow.commit()
 
         return new dto.AuthTokens(accessToken, refreshToken.token)

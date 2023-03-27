@@ -1,4 +1,4 @@
-import { RefreshToken } from "@src/domain/refresh-token/entities"
+import { RefreshToken } from "@src/domain/auth-session/value_objects"
 import { UserPayload } from "@src/application/auth/dto"
 
 export interface JwtManager {

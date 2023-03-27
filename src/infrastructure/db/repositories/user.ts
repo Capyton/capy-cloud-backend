@@ -1,18 +1,26 @@
+import { UserAddressNotFound, UserIdNotFound } from "@src/application/user/exceptions"
 import { UserReader, UserRepo } from "@src/application/user/interfaces"
-
+import { UserRepo as AuthUserRepo } from "@src/application/auth/interfaces"
 import { QueryRunner } from "typeorm"
 import { TonAddress } from "@src/domain/user/types"
 import { UUID } from "@src/utils/uuid"
 import { User } from "@src/domain/user/entities"
-import { UserAddressNotFound } from "@src/application/user/exceptions"
 import { User as UserDTO } from "@src/application/user/dto"
 import { User as UserModel } from "@src/infrastructure/db/models"
 
-export class UserRepoImpl implements UserRepo {
+export class UserRepoImpl implements UserRepo, AuthUserRepo {
     constructor(private readonly queryRunner: QueryRunner) { }
 
     async getUserById(id: UUID): Promise<User> {
         const user = await this.queryRunner.manager.findOne(UserModel, { where: { id: id } })
+        if (!user) {
+            throw new UserIdNotFound()
+        }
+        return user
+    }
+
+    async getUserByAddress(address: TonAddress): Promise<User> {
+        const user = await this.queryRunner.manager.findOne(UserModel, { where: { address: address } })
         if (!user) {
             throw new UserAddressNotFound()
         }
@@ -38,7 +46,7 @@ export class UserReaderImpl implements UserReader {
     async getUserById(id: UUID): Promise<UserDTO> {
         const user = await this.queryRunner.manager.findOne(UserModel, { where: { id: id } })
         if (!user) {
-            throw new UserAddressNotFound()
+            throw new UserIdNotFound()
         }
         return user
     }

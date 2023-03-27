@@ -47,3 +47,9 @@ export class UnknownJwtTokenError extends ApplicationException {
         super("Unknown JWT token error", cause, meatadata)
     }
 }
+
+export class AuthSessionByRefreshTokenNotFound extends ApplicationException {
+    constructor(cause?: Error, meatadata?: unknown) {
+        super("Auth session by refresh token not found", cause, meatadata)
+    }
+}

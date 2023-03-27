@@ -2,8 +2,8 @@
 
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryColumn } from "typeorm"
 
+import { AuthSession } from "./auth-session"
 import { Bag } from "./bag"
-import { RefreshToken } from "./refresh-token"
 import { TonAddress } from "@src/domain/user/types"
 import { UUID } from "@src/utils/uuid"
 
@@ -22,6 +22,6 @@ export class User {
   @JoinTable({ name: "users_bags" })
   userBags: Bag[]
 
-  @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user, { onDelete: "CASCADE", onUpdate: "CASCADE" })
-  refreshTokens: RefreshToken[]
+  @OneToMany(() => AuthSession, (authSession) => authSession.user, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+  authSessions: AuthSession[]
 }

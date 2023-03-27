@@ -1,4 +1,4 @@
-export { UserRepoImpl as AuthUserRepoImpl } from "./auth-user"
+export { AuthSessionRepoImpl } from "./auth-session"
 export { BagReaderImpl, BagRepoImpl } from "./bag"
 export { FileReaderImpl, FileRepoImpl } from "./file"
 export { ProviderReaderImpl, ProviderRepoImpl } from "./provider"

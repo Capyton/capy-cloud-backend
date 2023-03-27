@@ -1,4 +1,4 @@
-import { Bag, File, Provider, ProviderBag, RefreshToken, User, UserBag } from "@src/infrastructure/db/models"
+import { AuthSession, Bag, File, Provider, ProviderBag, User, UserBag } from "@src/infrastructure/db/models"
 import { DataSource } from "typeorm"
 import { Config as DatabaseConfig } from "@src/infrastructure/db/config"
 
@@ -15,7 +15,7 @@ export function getDataSource(config: DatabaseConfig): DataSource {
         logging: true,
         subscribers: [],
         migrations: [],
-        entities: [Bag, File, Provider, ProviderBag, User, UserBag, RefreshToken],
+        entities: [Bag, File, Provider, ProviderBag, User, UserBag, AuthSession],
     })
 
     return dataSource
